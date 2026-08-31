@@ -3,6 +3,7 @@ import Base from "../layouts/Base.astro";
 import HeaderMark from "../components/HeaderMark.astro";
 import WorkCard from "../components/WorkCard.astro";
 import JobArt from "../components/JobArt.astro";
+import ActionIcon from "../components/ActionIcon.astro";
 
 const typedLines = [
   "Traced a $4.24M monthly margin deficit to product scoring",
@@ -408,9 +409,14 @@ const experience = [
                   )}
                   {(job.href || job.repo) && (
                     <p class="job-links">
-                      {job.href && <a class="job-link" href={job.href}>Read the case study</a>}
+                      {job.href && (
+                        <a class="job-link" href={job.href}><span>Read the case study</span></a>
+                      )}
                       {job.repo && (
-                        <a class="job-link" href={job.repo.href} target="_blank" rel="noopener">{job.repo.label}</a>
+                        <a class="job-link" href={job.repo.href} target="_blank" rel="noopener">
+                          <ActionIcon href={job.repo.href} />
+                          <span>{job.repo.label}</span>
+                        </a>
                       )}
                     </p>
                   )}
@@ -943,12 +949,19 @@ const experience = [
 
   .job-links { display: flex; flex-wrap: wrap; gap: .45rem .9rem; margin-top: .45rem; }
   .job-link {
+    display: inline-flex; align-items: center; gap: .42rem;
     font-family: var(--font-mono); font-size: var(--step--2);
-    letter-spacing: .07em; text-transform: uppercase; text-decoration: none;
-    color: var(--tint); border-bottom: 1px solid var(--tint);
-    width: fit-content; padding-bottom: .12rem;
+    letter-spacing: .05em; text-transform: uppercase; text-decoration: none;
+    color: var(--ink-soft);
+    border: 1px solid color-mix(in srgb, var(--ink) 34%, transparent);
+    border-radius: 6px;
+    padding: .38rem .7rem;
+    width: fit-content;
+    transition: color .25s ease, border-color .25s ease, background .25s ease;
   }
-  .job-link:hover { color: var(--ink); border-color: var(--ink); }
+  .job-link:hover { color: var(--tint); border-color: var(--tint); background: var(--tint-wash); }
+  .job-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .job-link:hover :global(.ai) { opacity: 1; }
 
   .creds {
     list-style: none;

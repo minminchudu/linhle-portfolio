@@ -1,4 +1,5 @@
 ---
+import ActionIcon from "./ActionIcon.astro";
 // One entry in Selected work. The tint encodes the dominant discipline and is
 // consistent everywhere it appears on the site. Featured cards run the full
 // width of the grid with the image beside the text.
@@ -75,7 +76,12 @@ const {
     {links.length > 0 && (
       <div class="links">
         {links.map((l, i) => (
-          <a href={l.href} class={i === 0 ? "link primary" : "link"}>{l.label}</a>
+          <a href={l.href} class={i === 0 ? "link primary" : "link"}
+             target={/^https?:/.test(l.href) ? "_blank" : undefined}
+             rel={/^https?:/.test(l.href) ? "noopener" : undefined}>
+            <ActionIcon href={l.href} />
+            <span>{l.label}</span>
+          </a>
         ))}
       </div>
     )}
@@ -161,15 +167,19 @@ const {
 
   .links { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: auto; padding-top: .5rem; }
   .link {
+    display: inline-flex; align-items: center; gap: .42rem;
     font-family: var(--font-mono); font-size: var(--step--2);
     letter-spacing: .05em; text-transform: uppercase; text-decoration: none;
     color: var(--ink-soft);
-    border: 1px solid var(--rule-strong);
+    /* a hairline with real presence: the old rule token read as disabled */
+    border: 1px solid color-mix(in srgb, var(--ink) 34%, transparent);
     border-radius: 6px;
     padding: .38rem .7rem;
     transition: border-color .18s ease, color .18s ease, background .18s ease;
   }
   .link:hover { color: var(--tint); border-color: var(--tint); background: var(--tint-wash); }
+  .link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .link:hover :global(.ai) { opacity: 1; }
   .link.primary { color: var(--paper-raised); background: var(--tint); border-color: var(--tint); }
   .link.primary:hover { background: var(--ink); border-color: var(--ink); color: var(--paper-raised); }
 
