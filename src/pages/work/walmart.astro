@@ -1,0 +1,195 @@
+---
+import CaseStudy from "../../layouts/CaseStudy.astro";
+import Figure from "../../components/Figure.astro";
+
+const metrics = [
+  { value: "68.5%", label: "Regression R², N = 2,295" },
+  { value: "2 of 5", label: "Markdowns with measurable return" },
+  { value: "5x", label: "Store size against any promotional lever" },
+  { value: "$48,799", label: "Weekly lift per store" },
+];
+
+const links = [
+  { label: "Deck (PDF)", href: "/media/Linh_Le_Walmart_Promotional_Strategy.pdf" },
+];
+---
+
+<CaseStudy
+  title="Only two of five markdown types paid for themselves"
+  description="Weekly sales across Walmart store formats, with three of five promotional levers returning nothing and store size outweighing every lever a manager can actually pull. Case study by Linh (Min) Le."
+  project="Walmart Promotional Strategy"
+  period="January to April 2026"
+  tint="viz"
+  hook="A one percent lift in chain-wide weekly revenue is worth one to two billion dollars a year, which is why it matters that most of the promotional budget was buying nothing."
+  metrics={metrics}
+  links={links}
+>
+
+  <section class="section">
+    <div class="shell">
+      <div class="prose">
+        <h2 class="h-sub">The decision this informed</h2>
+        <p>
+          Promotional spend is one of the few levers a retail management team can move inside a single
+          budget cycle, and it is spent across store formats that behave nothing alike. The question was
+          how to adjust promotional and inventory strategy across those formats to improve weekly sales,
+          which in practice means deciding what to stop funding.
+        </p>
+        <p>
+          I led the diagnostic work on a team of four, taking the analysis from raw weekly sales
+          records through to the reallocation recommendation.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="prose">
+        <h2 class="h-sub">The finding</h2>
+        <p>
+          Holding store size, store type and holiday timing constant, only two of the five markdown
+          categories produced a measurable return. MarkDown3 returns <strong>$10.12</strong> in weekly
+          store sales for every dollar spent, and MarkDown5 returns <strong>$5.25</strong>. The
+          regression carries an <strong>R&sup2; of 68.5%</strong> across <strong>2,295</strong>
+          store-week observations. The other three returned nothing statistically distinguishable from
+          zero.
+        </p>
+        <p>
+          The effect is not uniform across formats, which is where the operational instruction lives.
+          Run separately, the Type C model explains <strong>2.3%</strong> of sales variation and fails
+          its F-test at p = 0.330, so markdowns account for essentially nothing in that format. Running
+          the return calculation store by store inside it surfaced a single location, Store 30, at an
+          ROI ratio of <strong>&minus;1.60</strong> on roughly $2,534 of weekly markdown spend. The
+          other five Type C stores all showed positive expected lift, which is why the recommendation
+          cuts one store instead of writing off the segment.
+        </p>
+        <p>
+          The holiday effect, which is the assumption every retail calendar is built on, holds only in
+          the larger formats. Type A and B stores show a statistically significant seasonal lift. In
+          Type C the lift is negative and lands at p = 0.914, indistinguishable from noise, so seasonal
+          inventory and staffing built on a chain-wide holiday assumption is misallocated by
+          construction. Once the macroeconomic variables enter the full model, the holiday flag drops
+          out entirely.
+        </p>
+        <p>
+          Sitting above all of it is a variable nobody can act on. Store size carries a standardised
+          coefficient of <strong>0.848</strong>, more than <strong>five times</strong> the weight of any
+          promotional factor, against 0.152 for MarkDown3 and 0.055 for MarkDown5. It sets the ceiling
+          and cannot be changed inside a budget cycle, which is precisely why the levers underneath it
+          have to be allocated well. Two recommendations together project a <strong>$48,799</strong>
+          weekly increase per store, a <strong>4.66%</strong> lift against the $1,046,965 average
+          weekly baseline: moving a fifth of the budget out of the three dead markdown types into the
+          two that work in Type A and B stores, and cutting Store 30's markdown spend to redirect it
+          where the return is confirmed.
+        </p>
+        <Figure
+          src="/figures/walmart-revenue-scenarios.png"
+          alt="Bar chart of weekly revenue by recommendation scenario. Baseline 1,046,965 dollars, Scenario A adding 23,153, Scenario B adding 25,646, for a grand total of 1,095,764 dollars."
+          caption="The two recommendations against the $1,046,965 weekly baseline. Moving a fifth of the markdown budget into the two working types adds $23,153. Cutting Store 30 and redirecting that spend adds $25,646. Together, $48,799 a week per store."
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="prose">
+        <h2 class="h-sub">What I did, and the obvious alternative I rejected</h2>
+        <p>
+          Two rejections shaped the analysis, and the second one is the one I would defend in an
+          interview.
+        </p>
+        <p>
+          The first was ranking stores on sales volume, which is the default view in every retail
+          dashboard and which conflates two different things. Growth rate and sales volume answer
+          different questions, and the store with the strongest and most stable growth in the entire
+          chain averages about <strong>$386,000</strong> a week, under forty percent of what a typical
+          store generates. Reading that store as a success or a failure depends entirely on which
+          column you sorted by, so the analysis kept them separate and plotted growth against
+          volatility rather than collapsing them.
+        </p>
+        <Figure
+          src="/figures/walmart-growth-vs-volatility.png"
+          alt="Scatter plot of every store by growth rate on the horizontal axis and weekly sales volatility on the vertical axis, with the strongest and weakest performers annotated."
+          caption="Growth against volatility, every store plotted. Store 38 sits far right and low, the strongest and steadiest grower in the chain. A ranking by total sales would have buried it, because it is a small-format store."
+          wide
+        />
+        <div class="pull">
+          The second was treating one model as the answer. The same analysis was run again as a
+          store-level fixed-effects model, directed through an AI coding agent, replacing three store
+          type dummies with forty-four individual store dummies so each location learns its own
+          baseline. Explanatory power rose sharply, from <strong>68.5% to 93.1%</strong>, which says
+          most of what the first model left unexplained was store-specific behaviour that type-level
+          controls could not capture.
+        </div>
+        <p>
+          What did not move is the finding. Both specifications agree that MarkDown3 and MarkDown5 are
+          the significant levers, and the coefficient signs hold across every predictor. That is the
+          result worth having: two methods with different assumptions about what drives store-level
+          variation, landing on the same instruction. A richer model that had reversed the ranking would
+          have meant the first answer was an artefact of how stores were grouped.
+        </p>
+        <p>
+          Forecast validity was tested by holding out fourteen periods rather than by reporting fit on
+          the data the model had already seen. Aggregate holdout error came in at
+          <strong>&minus;0.352%</strong>, and testing stores chosen for contrasting growth and
+          volatility profiles produced errors from &minus;0.0115% to &minus;1.644%. A store's growth
+          pattern turns out to have little bearing on how well its sales can be forecast, which means
+          the reallocation projection holds across the chain rather than only in the stable stores.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <header class="section-head">
+        <p class="eyebrow">Evidence</p>
+        <h2 class="h-sub">The deck as presented</h2>
+        <p class="section-note">
+          Nineteen slides moving from descriptive through diagnostic and predictive to the
+          reallocation recommendation.
+        </p>
+      </header>
+      <div class="embed">
+        <iframe src="/media/Linh_Le_Walmart_Promotional_Strategy.pdf"
+                title="Walmart promotional strategy deck" loading="lazy"></iframe>
+      </div>
+      <p class="embed-note">
+        <a href="/media/Linh_Le_Walmart_Promotional_Strategy.pdf">Open the deck in its own tab</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="prose">
+        <h2 class="h-sub">Assumptions and limitations</h2>
+        <p>
+          The markdown categories arrive anonymised in the source data, identified by number rather
+          than by what they actually are. The analysis can say which two work and cannot say what they
+          are, which limits the recommendation to a reallocation instruction and stops it short of a
+          merchandising explanation.
+        </p>
+        <p>
+          The reallocation figure assumes spend moves into the working categories at the returns those
+          categories have already demonstrated. That holds while the shift is marginal and becomes
+          unreliable at larger volumes, where diminishing returns would bite and the historical
+          coefficients would stop describing the new spend level.
+        </p>
+        <p>
+          The $48,799 is per store per week under those conditions. It is a projection from
+          observational data rather than a measured outcome, and the honest test would be a controlled
+          reallocation in a subset of stores before committing the chain.
+        </p>
+        <p>
+          The negative-return finding rests on a single store within a format that shows no markdown
+          response overall, so it is a flag for investigation rather than a conclusion about that
+          location.
+        </p>
+      </div>
+    </div>
+  </section>
+
+</CaseStudy>

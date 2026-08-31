@@ -1,0 +1,184 @@
+---
+// One entry in Selected work. The tint encodes the dominant discipline and is
+// consistent everywhere it appears on the site. Featured cards run the full
+// width of the grid with the image beside the text.
+interface Link { label: string; href: string; }
+
+interface Props {
+  finding: string;
+  project: string;
+  context: string;
+  period: string;
+  tint: "code" | "method" | "ai" | "viz" | "finance" | "research";
+  body: string;
+  image?: string;
+  imageAlt?: string;
+  metrics?: { value: string; label: string }[];
+  links?: Link[];
+  note?: string;
+  featured?: boolean;
+}
+
+const {
+  finding, project, context, period, tint, body,
+  image, imageAlt = "", metrics = [], links = [], note, featured = false,
+} = Astro.props;
+---
+
+<article class={`card reveal tint-${tint}${featured ? " featured" : ""}`} data-tilt>
+  {image && (
+    <div class="thumb">
+      <img src={image} alt={imageAlt} loading="lazy" decoding="async" />
+    </div>
+  )}
+  {!image && (
+    <div class="thumb facets" aria-hidden="true">
+      <svg viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice">
+        <g stroke="var(--tint)" fill="var(--tint)" stroke-width="1.1" stroke-linejoin="round">
+          <polygon fill-opacity=".10" points="90,44 230,44 254,68 254,132 230,156 90,156 66,132 66,68"/>
+          <polygon fill-opacity=".08" points="106,62 214,62 234,82 234,118 214,138 106,138 86,118 86,82"/>
+          <polygon fill-opacity=".06" points="122,80 198,80 212,94 212,106 198,120 122,120 108,106 108,94"/>
+          <g fill="none" opacity=".7">
+            <line x1="90" y1="44" x2="106" y2="62"/><line x1="230" y1="44" x2="214" y2="62"/>
+            <line x1="254" y1="68" x2="234" y2="82"/><line x1="254" y1="132" x2="234" y2="118"/>
+            <line x1="230" y1="156" x2="214" y2="138"/><line x1="90" y1="156" x2="106" y2="138"/>
+            <line x1="66" y1="132" x2="86" y2="118"/><line x1="66" y1="68" x2="86" y2="82"/>
+          </g>
+        </g>
+      </svg>
+    </div>
+  )}
+
+  <div class="card-body">
+    <div class="meta">
+      <span class="project">{project}</span>
+      <span class="period figure">{period}</span>
+    </div>
+
+    <h3 class="finding">{finding}</h3>
+    <p class="context">{context}</p>
+    <p class="body">{body}</p>
+
+    {metrics.length > 0 && (
+      <dl class="metrics">
+        {metrics.map((m) => (
+          <div class="metric">
+            <dt class="metric-label">{m.label}</dt>
+            <dd class="metric-value figure">{m.value}</dd>
+          </div>
+        ))}
+      </dl>
+    )}
+
+    {note && <p class="note">{note}</p>}
+
+    {links.length > 0 && (
+      <div class="links">
+        {links.map((l, i) => (
+          <a href={l.href} class={i === 0 ? "link primary" : "link"}>{l.label}</a>
+        ))}
+      </div>
+    )}
+  </div>
+</article>
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    background: var(--paper-raised);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: transform .28s cubic-bezier(.2,.7,.3,1), box-shadow .28s ease, border-color .28s ease;
+  }
+  .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lift); border-color: var(--tint); }
+
+  .tint-code    { --tint: var(--t-code);     --tint-wash: var(--t-code-wash);     --tint-soft: var(--t-code-soft); }
+  .tint-method  { --tint: var(--t-method);   --tint-wash: var(--t-method-wash);   --tint-soft: var(--t-method-soft); }
+  .tint-ai      { --tint: var(--t-ai);       --tint-wash: var(--t-ai-wash);       --tint-soft: var(--t-ai-soft); }
+  .tint-viz     { --tint: var(--t-viz);      --tint-wash: var(--t-viz-wash);      --tint-soft: var(--t-viz-soft); }
+  .tint-finance { --tint: var(--t-finance);  --tint-wash: var(--t-finance-wash);  --tint-soft: var(--t-finance-soft); }
+  .tint-research{ --tint: var(--t-research); --tint-wash: var(--t-research-wash); --tint-soft: var(--t-research-soft); }
+
+  /* Thumbnail */
+  .thumb {
+    background: var(--paper-sunk);
+    border-bottom: 1px solid var(--rule);
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    position: relative;
+  }
+  .thumb img {
+    width: 100%; height: 100%;
+    /* the figures are charts, so show the whole chart rather than a crop of it */
+    object-fit: contain; object-position: center;
+    padding: .5rem;
+    display: block;
+    transition: transform .5s cubic-bezier(.2,.7,.3,1);
+  }
+  .card:hover .thumb img { transform: scale(1.025); }
+  .thumb.facets svg { width: 100%; height: 100%; display: block; }
+
+  .card-body {
+    display: flex; flex-direction: column; gap: .7rem;
+    padding: clamp(1.1rem, 2vw, 1.6rem);
+    flex: 1;
+  }
+
+  .meta {
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: .35rem .9rem;
+    font-family: var(--font-mono); font-size: var(--step--2);
+    letter-spacing: .1em; text-transform: uppercase;
+  }
+  .project { color: var(--tint); font-weight: 500; }
+  .period { color: var(--ink-faint); }
+
+  .finding { font-size: var(--step-1); line-height: 1.2; }
+  .context { color: var(--ink-soft); font-size: var(--step--1); font-style: italic; }
+  .body { color: var(--ink-soft); font-size: var(--step--1); }
+
+  .metrics {
+    display: flex; flex-wrap: wrap; gap: .5rem;
+    margin-block: .2rem;
+  }
+  .metric {
+    display: flex; flex-direction: column-reverse; gap: .05rem;
+    background: var(--tint-wash);
+    border: 1px solid var(--tint-wash);
+    border-radius: 7px;
+    padding: .45rem .7rem;
+    flex: 1 1 auto; min-width: max-content;
+  }
+  .metric-value { font-size: var(--step-0); color: var(--tint); font-weight: 500; line-height: 1.15; }
+  .metric-label {
+    font-family: var(--font-mono); font-size: 0.66rem;
+    text-transform: uppercase; letter-spacing: .07em; color: var(--ink-faint);
+  }
+
+  .note { font-size: var(--step--2); color: var(--ink-faint); line-height: 1.55; }
+
+  .links { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: auto; padding-top: .5rem; }
+  .link {
+    font-family: var(--font-mono); font-size: var(--step--2);
+    letter-spacing: .05em; text-transform: uppercase; text-decoration: none;
+    color: var(--ink-soft);
+    border: 1px solid var(--rule-strong);
+    border-radius: 6px;
+    padding: .38rem .7rem;
+    transition: border-color .18s ease, color .18s ease, background .18s ease;
+  }
+  .link:hover { color: var(--tint); border-color: var(--tint); background: var(--tint-wash); }
+  .link.primary { color: var(--paper-raised); background: var(--tint); border-color: var(--tint); }
+  .link.primary:hover { background: var(--ink); border-color: var(--ink); color: var(--paper-raised); }
+
+  /* Featured: image beside text, spanning the grid */
+  @media (min-width: 56rem) {
+    .card.featured { grid-column: 1 / -1; flex-direction: row; }
+    .card.featured .thumb { aspect-ratio: auto; flex: 0 0 44%; display: grid; place-items: center; border-bottom: 0; border-right: 1px solid var(--rule); }
+    .card.featured .card-body { padding: clamp(1.4rem, 2.4vw, 2.2rem); justify-content: center; }
+    .card.featured .finding { font-size: var(--step-2); }
+    .card.featured .body { font-size: var(--step-0); }
+  }
+</style>

@@ -1,0 +1,487 @@
+---
+import "../styles/global.css";
+import Divider from "../components/Divider.astro";
+import Rabbit from "../components/Rabbit.astro";
+import { ClientRouter } from "astro:transitions";
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+const year = new Date().getFullYear();
+---
+
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta name="author" content="Linh (Min) Le" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <script is:inline>
+    (function () {
+      try {
+        var t = localStorage.getItem("theme");
+        if (t === "dark" || t === "light") document.documentElement.setAttribute("data-theme", t);
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..500&family=IBM+Plex+Mono:wght@400;500&display=swap" />
+  <ClientRouter />
+</head>
+
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <div class="progress" role="presentation">
+    <div class="progress-fill" id="progress-fill"></div>
+    <span class="progress-facet" id="progress-facet"></span>
+  </div>
+
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="wordmark" href="/">Linh (Min) Le</a>
+      <nav aria-label="Sections">
+        <a class="nav-resume" href="/media/Linh_Le_Resume.pdf" target="_blank" rel="noopener">Resume</a>
+        <a href="/#work">Projects</a>
+        <a href="/#experience">Experience</a>
+        <a href="/#toolkit">Toolkit</a>
+        <a href="/#contact">Contact</a>
+        <button id="theme-toggle" type="button" class="theme-btn" aria-label="Switch to dark theme" title="Switch theme">
+          <svg viewBox="0 0 20 20" aria-hidden="true" width="15" height="15">
+            <path class="sun" d="M10 3.4v-2M10 18.6v-2M16.6 10h2M1.4 10h2M14.7 5.3l1.4-1.4M3.9 16.1l1.4-1.4M14.7 14.7l1.4 1.4M3.9 3.9l1.4 1.4"
+                  stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+            <circle class="sun" cx="10" cy="10" r="3.4" stroke="currentColor" stroke-width="1.4" fill="none"/>
+            <path class="moon" d="M15.4 12.6A6 6 0 0 1 7.4 4.6a6 6 0 1 0 8 8Z" fill="currentColor"/>
+          </svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <slot />
+  </main>
+
+  <footer class="footer">
+    <div class="shell stack" style="gap: 2rem;">
+      <div class="footer-rule"></div>
+      <div class="footer-grid">
+        <div class="stack" style="gap: .35rem;">
+          <span class="eyebrow">Contact</span>
+          <a href="mailto:minalystem@gmail.com">minalystem@gmail.com</a>
+          <a href="https://www.linkedin.com/in/linh-tt-le/">linkedin.com/in/linh-tt-le</a>
+        </div>
+        <div class="stack" style="gap: .35rem;">
+          <span class="eyebrow">Code</span>
+          <a href="https://github.com/minminchudu">github.com/minminchudu</a>
+        </div>
+        <div class="stack" style="gap: .35rem;">
+          <span class="eyebrow">Based in</span>
+          <span class="muted">Cincinnati and Columbus, Ohio</span>
+        </div>
+      </div>
+      <div class="colophon">
+        <Rabbit />
+        <p class="muted small">&copy; {year} Linh (Min) Le</p>
+      </div>
+    </div>
+  </footer>
+
+  <script is:inline>
+    (function () {
+      var root = document.documentElement;
+      var btn = document.getElementById("theme-toggle");
+      if (!btn) return;
+      function label() {
+        var dark = root.getAttribute("data-theme") === "dark";
+        btn.setAttribute("aria-label", dark ? "Switch to light theme" : "Switch to dark theme");
+      }
+      label();
+      btn.addEventListener("click", function () {
+        var dark = root.getAttribute("data-theme") === "dark";
+        var next = dark ? "light" : "dark";
+        root.setAttribute("data-theme", next);
+        try { localStorage.setItem("theme", next); } catch (e) {}
+        label();
+      });
+    })();
+  </script>
+
+  <script is:inline>
+    (function () {
+      function boot() {
+        var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        /* --- scroll reveal, staggered by position among siblings --- */
+        var items = document.querySelectorAll(".reveal, .reveal-wipe, .reveal-chart, .words, .job");
+        if (reduce || !("IntersectionObserver" in window)) {
+          items.forEach(function (el) { el.classList.add("seen"); });
+        } else {
+          var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+              if (!e.isIntersecting) return;
+              var el = e.target;
+              var sibs = el.parentElement ? [].slice.call(el.parentElement.children) : [el];
+              var i = Math.max(0, sibs.indexOf(el));
+              el.style.transitionDelay = Math.min(i, 5) * 70 + "ms";
+              el.classList.add("seen");
+              io.unobserve(el);
+            });
+          }, { rootMargin: "0px 0px -8% 0px", threshold: 0.06 });
+          items.forEach(function (el) { io.observe(el); });
+        }
+
+        /* --- count the figures up when they arrive --- */
+        var nums = document.querySelectorAll(".metric-value, .band-value");
+        if (!reduce && "IntersectionObserver" in window) {
+          var numIO = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+              if (!e.isIntersecting) return;
+              var el = e.target; numIO.unobserve(el);
+              var raw = el.textContent.trim();
+              var m = raw.match(/^([^0-9-]*)(-?[\d,]+(?:\.\d+)?)(.*)$/);
+              if (!m) return;
+              var pre = m[1], target = parseFloat(m[2].replace(/,/g, "")), post = m[3];
+              if (!isFinite(target)) return;
+              var decimals = (m[2].split(".")[1] || "").length;
+              var grouped = m[2].indexOf(",") > -1;
+              var t0 = null, dur = 900;
+              function fmt(v) {
+                var out = decimals ? v.toFixed(decimals) : String(Math.round(v));
+                if (grouped) out = Number(out).toLocaleString("en-US");
+                return pre + out + post;
+              }
+              function tick(ts) {
+                if (t0 === null) t0 = ts;
+                var p = Math.min(1, (ts - t0) / dur);
+                var eased = 1 - Math.pow(1 - p, 3);
+                el.textContent = fmt(target * eased);
+                if (p < 1) requestAnimationFrame(tick); else el.textContent = raw;
+              }
+              requestAnimationFrame(tick);
+            });
+          }, { threshold: 0.5 });
+          nums.forEach(function (el) { numIO.observe(el); });
+        }
+
+        /* --- reading progress --- */
+        var fill = document.getElementById("progress-fill");
+        var facet = document.getElementById("progress-facet");
+        if (fill) {
+          var ticking = false;
+          function draw() {
+            var h = document.documentElement.scrollHeight - window.innerHeight;
+            var p = h > 0 ? Math.min(1, window.scrollY / h) : 0;
+            fill.style.width = (p * 100) + "%";
+            if (facet) facet.style.left = "calc(" + (p * 100) + "% - 4px)";
+            ticking = false;
+          }
+          window.addEventListener("scroll", function () {
+            if (!ticking) { ticking = true; requestAnimationFrame(draw); }
+          }, { passive: true });
+          draw();
+        }
+
+        /* --- highlight the section you are in --- */
+        var links = [].slice.call(document.querySelectorAll('.topbar nav a[href*="#"]'));
+        var targets = links.map(function (a) {
+          var id = a.getAttribute("href").split("#")[1];
+          return id ? document.getElementById(id) : null;
+        });
+        if ("IntersectionObserver" in window && targets.some(Boolean)) {
+          var spy = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+              if (!e.isIntersecting) return;
+              links.forEach(function (a, i) {
+                a.classList.toggle("active", targets[i] === e.target);
+              });
+            });
+          }, { rootMargin: "-45% 0px -50% 0px" });
+          targets.forEach(function (t) { if (t) spy.observe(t); });
+        }
+
+        /* --- headings arrive a word at a time --- */
+        document.querySelectorAll("[data-words]").forEach(function (h) {
+          if (h.dataset.split === "1") return;
+          h.dataset.split = "1";
+          var words = h.textContent.trim().split(/\s+/);
+          h.textContent = "";
+          words.forEach(function (w, i) {
+            var outer = document.createElement("span");
+            outer.className = "w";
+            var inner = document.createElement("span");
+            inner.textContent = w;
+            inner.style.transitionDelay = (i * 55) + "ms";
+            outer.appendChild(inner);
+            h.appendChild(outer);
+            if (i < words.length - 1) h.appendChild(document.createTextNode(" "));
+          });
+        });
+
+        /* --- the line under the name types itself, and keeps going --- */
+        var typer = document.querySelector("[data-typer]");
+        if (typer) {
+          var lines;
+          try { lines = JSON.parse(typer.getAttribute("data-typer")); } catch (e) { lines = null; }
+          var out = typer.querySelector(".typed");
+          if (lines && lines.length && out && !typer.dataset.running) {
+            typer.dataset.running = "1";
+            var li = 0, ci = 0, erasing = false;
+            out.textContent = "";
+            (function step() {
+              var full = lines[li];
+              if (!erasing) {
+                ci++;
+                out.textContent = full.slice(0, ci);
+                if (ci >= full.length) {
+                  erasing = true;
+                  return setTimeout(step, 2600);
+                }
+                return setTimeout(step, 34 + Math.random() * 34);
+              }
+              ci -= 2;
+              if (ci <= 0) {
+                ci = 0;
+                erasing = false;
+                li = (li + 1) % lines.length;
+                out.textContent = "";
+                return setTimeout(step, 420);
+              }
+              out.textContent = full.slice(0, ci);
+              return setTimeout(step, 16);
+            })();
+          }
+        }
+
+        /* --- toolkit: pick one discipline, the rest step back --- */
+        document.querySelectorAll("[data-focus-group]").forEach(function (group) {
+          if (group.dataset.wired === "1") return;
+          group.dataset.wired = "1";
+          var cards = [].slice.call(group.querySelectorAll("[data-focusable]"));
+          cards.forEach(function (card) {
+            card.addEventListener("click", function () {
+              var was = card.getAttribute("aria-pressed") === "true";
+              cards.forEach(function (c) { c.setAttribute("aria-pressed", "false"); });
+              if (!was) card.setAttribute("aria-pressed", "true");
+              group.classList.toggle("has-focus", !was);
+            });
+          });
+        });
+
+        if (reduce) return;
+
+        /* --- cards lean toward the pointer, and catch a little light --- */
+        document.querySelectorAll("[data-tilt]").forEach(function (el) {
+          var raf = 0;
+          function move(ev) {
+            if (raf) return;
+            raf = requestAnimationFrame(function () {
+              raf = 0;
+              var r = el.getBoundingClientRect();
+              var x = (ev.clientX - r.left) / r.width;
+              var y = (ev.clientY - r.top) / r.height;
+              el.style.setProperty("--rx", ((0.5 - y) * 3.2).toFixed(2) + "deg");
+              el.style.setProperty("--ry", ((x - 0.5) * 4.2).toFixed(2) + "deg");
+              el.style.setProperty("--mx", (x * 100).toFixed(1) + "%");
+              el.style.setProperty("--my", (y * 100).toFixed(1) + "%");
+            });
+          }
+          function leave() {
+            if (raf) { cancelAnimationFrame(raf); raf = 0; }
+            el.style.setProperty("--rx", "0deg");
+            el.style.setProperty("--ry", "0deg");
+          }
+          el.addEventListener("pointermove", move, { passive: true });
+          el.addEventListener("pointerleave", leave);
+        });
+
+        /* --- every section keeps a soft light under the pointer --- */
+        document.querySelectorAll(".hero, .band").forEach(function (sec) {
+          var pending = 0;
+          sec.addEventListener("pointermove", function (ev) {
+            if (pending) return;
+            pending = requestAnimationFrame(function () {
+              pending = 0;
+              var r = sec.getBoundingClientRect();
+              sec.style.setProperty("--hx", (((ev.clientX - r.left) / r.width) * 100).toFixed(1) + "%");
+              sec.style.setProperty("--hy", (((ev.clientY - r.top) / r.height) * 100).toFixed(1) + "%");
+            });
+          }, { passive: true });
+          sec.addEventListener("pointerenter", function () { sec.classList.add("lit"); }, { passive: true });
+          sec.addEventListener("pointerleave", function () {
+            if (pending) { cancelAnimationFrame(pending); pending = 0; }
+            sec.classList.remove("lit");
+          }, { passive: true });
+        });
+
+        /* --- a little parallax: the mark and each job diagram drift as you
+               scroll past, at different rates, so the page has depth --- */
+        var floats = [].slice.call(document.querySelectorAll("[data-float]"));
+        if (floats.length) {
+          var ticking = false;
+          function place() {
+            ticking = false;
+            var vh = window.innerHeight;
+            floats.forEach(function (el) {
+              var r = el.getBoundingClientRect();
+              if (r.bottom < -80 || r.top > vh + 80) return;
+              var mid = (r.top + r.height / 2 - vh / 2) / vh;
+              var rate = parseFloat(el.getAttribute("data-float")) || 10;
+              el.style.setProperty("--fy", (-mid * rate).toFixed(1) + "px");
+            });
+          }
+          window.addEventListener("scroll", function () {
+            if (!ticking) { ticking = true; requestAnimationFrame(place); }
+          }, { passive: true });
+          window.addEventListener("resize", place, { passive: true });
+          place();
+        }
+
+        /* --- the timeline rail fills with how far down the roles you are --- */
+        var trackSec = document.querySelector("[data-track-section]");
+        var trackFill = trackSec && trackSec.querySelector("[data-track]");
+        if (trackFill) {
+          var tTick = false;
+          function trackProgress() {
+            tTick = false;
+            var r = trackSec.getBoundingClientRect();
+            var vh = window.innerHeight;
+            var span = r.height + vh * 0.35;
+            var passed = vh * 0.68 - r.top;
+            var pct = Math.max(0, Math.min(1, passed / span));
+            trackFill.style.height = (pct * 100).toFixed(1) + "%";
+          }
+          window.addEventListener("scroll", function () {
+            if (!tTick) { tTick = true; requestAnimationFrame(trackProgress); }
+          }, { passive: true });
+          window.addEventListener("resize", trackProgress, { passive: true });
+          trackProgress();
+        }
+
+        /* --- the narrative rail fills with how far you have read --- */
+        var railSec = document.querySelector("[data-rail-section]");
+        var railFill = railSec && railSec.querySelector("[data-rail]");
+        var railFacet = railSec && railSec.querySelector(".rail-facet");
+        if (railFill) {
+          var rTick = false;
+          function readProgress() {
+            rTick = false;
+            var r = railSec.getBoundingClientRect();
+            var vh = window.innerHeight;
+            /* 0 when the section top reaches 70% of the viewport,
+               1 when its bottom passes 30% */
+            var span = r.height + vh * 0.4;
+            var passed = vh * 0.7 - r.top;
+            var pct = Math.max(0, Math.min(1, passed / span));
+            railFill.style.height = (pct * 100).toFixed(1) + "%";
+            if (railFacet) railSec.style.setProperty("--rail-y", (pct * 100).toFixed(1) + "%");
+          }
+          window.addEventListener("scroll", function () {
+            if (!rTick) { rTick = true; requestAnimationFrame(readProgress); }
+          }, { passive: true });
+          window.addEventListener("resize", readProgress, { passive: true });
+          readProgress();
+        }
+      }
+      boot();
+      document.addEventListener("astro:page-load", boot);
+    })();
+  </script>
+</body>
+</html>
+
+<style>
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .topbar-inner {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-block: 0.85rem;
+  }
+  .wordmark {
+    font-family: var(--font-display);
+    font-size: var(--step-0);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .wordmark:hover { color: var(--accent-deep); }
+
+  .topbar nav .nav-resume {
+    color: var(--accent-deep);
+    border: 1px solid var(--accent-line);
+    border-radius: 5px;
+    padding: .22rem .55rem;
+    margin-right: .25rem;
+  }
+  .topbar nav .nav-resume:hover { background: var(--accent-wash); border-color: var(--accent); }
+  .topbar nav .nav-resume::after { display: none; }
+
+  .topbar nav {
+    display: flex;
+    gap: clamp(0.9rem, 2.2vw, 1.9rem);
+    font-family: var(--font-mono);
+    font-size: var(--step--2);
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+  .topbar nav a { color: var(--ink-soft); text-decoration: none; padding-block: 0.2rem; }
+  .topbar nav a:hover { color: var(--accent-deep); }
+
+  .theme-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 30px; height: 30px; padding: 0;
+    background: transparent; color: var(--ink-faint);
+    border: 1px solid var(--rule-strong); border-radius: 7px;
+    cursor: pointer; transition: color .18s ease, border-color .18s ease, background .18s ease;
+  }
+  .theme-btn:hover { color: var(--accent-deep); border-color: var(--accent); background: var(--accent-wash); }
+  .theme-btn .moon { display: none; }
+  :root[data-theme="dark"] .theme-btn .sun { display: none; }
+  :root[data-theme="dark"] .theme-btn .moon { display: block; }
+
+  .footer {
+    padding-block: 3rem 4rem;
+    margin-top: 0;
+    background: var(--g-leaf-deep);
+    color: var(--ink);
+  }
+  .footer .eyebrow { color: var(--ink-soft); }
+  .footer .eyebrow::before { background: var(--line-deep); opacity: 1; }
+  .footer-rule { height: 1px; background: var(--rule-strong); width: 100%; }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    font-size: var(--step--1);
+  }
+  .footer a { color: var(--ink); text-decoration: none; width: fit-content; }
+  .footer a:hover { color: var(--accent-deep); text-decoration: underline; }
+
+  .colophon { display: flex; flex-direction: column; align-items: center; gap: .5rem; padding-top: 1.5rem; }
+  .muted { color: var(--ink-soft); }
+  .small { font-family: var(--font-mono); font-size: var(--step--2); }
+
+  @media (max-width: 34rem) {
+    .topbar-inner { flex-direction: column; align-items: flex-start; gap: .6rem; }
+  }
+</style>

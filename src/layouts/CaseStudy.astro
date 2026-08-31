@@ -1,0 +1,127 @@
+---
+import Base from "./Base.astro";
+import Divider from "../components/Divider.astro";
+
+interface Metric { value: string; label: string; }
+interface Link { label: string; href: string; }
+
+interface Props {
+  title: string;
+  description: string;
+  project: string;
+  period: string;
+  tint: "code" | "method" | "ai" | "viz" | "finance" | "research";
+  hook: string;
+  metrics?: Metric[];
+  links?: Link[];
+}
+
+const { title, description, project, period, tint, hook, metrics = [], links = [] } = Astro.props;
+---
+
+<Base title={title} description={description}>
+  <article class={`cs tint-${tint}`}>
+    <header class="cs-head">
+      <div class="shell">
+        <a class="back" href="/#work">Back to selected work</a>
+        <p class="eyebrow">{project} &middot; {period}</p>
+        <h1>{title}</h1>
+        <p class="hook">{hook}</p>
+
+        {metrics.length > 0 && (
+          <dl class="band">
+            {metrics.map((m) => (
+              <div class="band-cell">
+                <dt class="band-label">{m.label}</dt>
+                <dd class="band-value figure">{m.value}</dd>
+              </div>
+            ))}
+          </dl>
+        )}
+      </div>
+    </header>
+
+    <slot />
+
+    {links.length > 0 && (
+      <section class="section">
+        <div class="shell">
+          <Divider />
+          <div class="outlinks">
+            {links.map((l, i) => (
+              <a class={i === 0 ? "cta" : "cta ghost"} href={l.href}>{l.label}</a>
+            ))}
+            <a class="cta ghost" href="/#work">All work</a>
+          </div>
+        </div>
+      </section>
+    )}
+  </article>
+</Base>
+
+<style is:global>
+  .cs.tint-code     { --tint: var(--t-code);     --tint-wash: var(--t-code-wash); }
+  .cs.tint-method   { --tint: var(--t-method);   --tint-wash: var(--t-method-wash); }
+  .cs.tint-ai       { --tint: var(--t-ai);       --tint-wash: var(--t-ai-wash); }
+  .cs.tint-viz      { --tint: var(--t-viz);      --tint-wash: var(--t-viz-wash); }
+  .cs.tint-finance  { --tint: var(--t-finance);  --tint-wash: var(--t-finance-wash); }
+  .cs.tint-research { --tint: var(--t-research); --tint-wash: var(--t-research-wash); }
+
+  .cs-head { padding-block: clamp(2rem, 4vw, 3.5rem) 0; }
+  .cs-head .shell { display: flex; flex-direction: column; gap: .9rem; }
+  .cs .back {
+    font-family: var(--font-mono); font-size: var(--step--2);
+    letter-spacing: .09em; text-transform: uppercase;
+    color: var(--ink-faint); text-decoration: none; width: fit-content;
+  }
+  .cs .back:hover { color: var(--accent-deep); }
+  .cs-head h1 { font-size: var(--step-3); font-weight: 400; max-width: 22ch; }
+  .cs .hook {
+    font-size: var(--step-1); color: var(--ink-soft);
+    max-width: 58ch; line-height: 1.5;
+    padding-left: 1.1rem; border-left: 2px solid var(--tint);
+  }
+
+  .cs .band {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+    gap: 1px; margin-top: 1.5rem;
+    background: var(--rule); border: 1px solid var(--rule);
+  }
+  .cs .band-cell { background: var(--paper); padding: 1rem 1.15rem; display: flex; flex-direction: column-reverse; gap: .2rem; }
+  .cs .band-value { font-size: var(--step-2); color: var(--tint); font-weight: 500; }
+  .cs .band-label {
+    font-family: var(--font-mono); font-size: var(--step--2);
+    text-transform: uppercase; letter-spacing: .09em; color: var(--ink-faint);
+  }
+
+  .cs .h-sub { font-size: var(--step-2); margin-bottom: .3rem; }
+  .cs .section-head { display: flex; flex-direction: column; gap: .5rem; margin-bottom: 1.5rem; max-width: var(--measure); }
+  .cs .section-note { color: var(--ink-soft); font-size: var(--step--1); }
+
+  .cs .pull {
+    max-width: var(--measure);
+    padding: 1.1rem 1.35rem;
+    background: var(--tint-wash);
+    border-left: 2px solid var(--tint);
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+  }
+
+  .cs .embed { border: 1px solid var(--rule); background: var(--paper-raised); aspect-ratio: 16 / 10; width: 100%; }
+  .cs .embed iframe { width: 100%; height: 100%; border: 0; display: block; }
+  .cs .embed-note { margin-top: .6rem; font-family: var(--font-mono); font-size: var(--step--2); }
+
+  .cs .outlinks { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
+  .cs .cta {
+    font-family: var(--font-mono); font-size: var(--step--2);
+    letter-spacing: .07em; text-transform: uppercase; text-decoration: none;
+    padding: .7rem 1.15rem;
+    background: var(--accent); color: var(--paper); border: 1px solid var(--accent);
+    transition: background .18s ease, color .18s ease;
+  }
+  .cs .cta:hover { background: var(--accent-deep); border-color: var(--accent-deep); color: var(--paper); }
+  .cs .cta.ghost { background: transparent; color: var(--ink-soft); border-color: var(--rule-strong); }
+  .cs .cta.ghost:hover { color: var(--accent-deep); border-color: var(--accent); background: var(--accent-wash); }
+
+  @media (max-width: 40rem) { .cs .embed { aspect-ratio: 4 / 5; } }
+</style>

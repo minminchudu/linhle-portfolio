@@ -1,0 +1,29 @@
+---
+// Hairline rule interrupted by a breathing facet. Marks a change of subject.
+---
+
+<div class="divider" role="presentation">
+  <span class="line"></span>
+  <svg class="facet" viewBox="0 0 46 22" aria-hidden="true">
+    <g stroke="var(--accent)" fill="var(--accent)" stroke-width="1">
+      <polygon class="mark" fill-opacity=".12" points="12,4 34,4 42,11 34,18 12,18 4,11"/>
+      <line x1="12" y1="4" x2="12" y2="18"/>
+      <line x1="34" y1="4" x2="34" y2="18"/>
+    </g>
+  </svg>
+  <span class="line"></span>
+</div>
+
+<style>
+  .divider { display: flex; align-items: center; gap: 1rem; width: 100%; }
+  .line { flex: 1; height: 1px; background: var(--rule); }
+  .facet { width: 46px; height: 22px; flex: none; }
+
+  @keyframes facetPulse {
+    0%, 100% { fill-opacity: .08; stroke-opacity: .55 }
+    50%      { fill-opacity: .34; stroke-opacity: 1 }
+  }
+  .mark { animation: facetPulse 5s ease-in-out infinite }
+
+  @media (prefers-reduced-motion: reduce) { .mark { animation: none } }
+</style>

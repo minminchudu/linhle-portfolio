@@ -1,0 +1,269 @@
+---
+import CaseStudy from "../../layouts/CaseStudy.astro";
+import Divider from "../../components/Divider.astro";
+import Figure from "../../components/Figure.astro";
+
+const metrics = [
+  { value: "$309.77", label: "Average shipping cost" },
+  { value: "$188.36", label: "Average order value" },
+  { value: "164.5%", label: "Break-even conversion rate" },
+  { value: "3.22%", label: "Actual conversion rate" },
+];
+
+const links = [
+  { label: "Repository", href: "https://github.com/minminchudu/ecommerce-recommendation-margin-analysis" },
+  { label: "Decision deck", href: "/media/Linh_Le_IterLight_Launch_Decision.html" },
+  { label: "Dashboard (PDF)", href: "/media/Linh_Le_IterLight_PowerBI_Dashboard.pdf" },
+  { label: "Power BI file", href: "/media/Linh_Le_IterLight_Dashboard.pbix" },
+];
+---
+
+<CaseStudy
+  title="Break-even required a 164.5% conversion rate"
+  description="An e-commerce recommendation engine was lifting conversion and eroding margin at the same time, by working exactly as designed. IterLight Lab case study by Linh (Min) Le."
+  project="IterLight Lab"
+  period="March to June 2026"
+  tint="code"
+  hook="A recommendation engine was lifting conversion and eroding gross margin at the same time, and it was doing both by working exactly as designed."
+  metrics={metrics}
+  links={links}
+>
+
+
+    <section class="section">
+      <div class="shell">
+        <div class="prose">
+          <h2 class="h-sub">The decision this informed</h2>
+          <p>
+            The work centred on an e-commerce recommendation and logistics system modelled on
+            Wayfair. Its ranking formula scores every item as predicted conversion probability
+            minus alpha times predicted shipping cost, where alpha decides how heavily an
+            expensive-to-ship item gets pushed down the ranking. Three alpha settings were
+            running against a baseline cohort, and the decision on the table was which one
+            to launch.
+          </p>
+          <p>
+            Sitting behind that question was an argument about tuning. Conversion had been climbing
+            while gross margin fell, and the prevailing explanation held that alpha was set too low,
+            letting the engine promote items that sold well and shipped expensively. The launch
+            decision was the deliverable. The answer that came back changed what the question was.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="shell">
+        <div class="prose">
+          <h2 class="h-sub">The finding</h2>
+          <p>
+            The diagnosis ran across thirteen months of platform history. Over that window the
+            platform spent an average of
+            <strong>$309.77</strong> shipping an order and collected an average of
+            <strong>$188.36</strong> when one converted. Every completed sale opened a
+            <strong>$121.41</strong> hole. Reaching break-even on those economics would have
+            required a conversion rate of <strong>164.5%</strong>, fifty-one times the
+            <strong>3.22%</strong> the platform was actually running, which is a mathematician&rsquo;s
+            way of saying the arithmetic had no solution. Rising conversion made the position worse,
+            because each additional sale realised the loss one more time.
+          </p>
+          <p>
+            Alpha was never going to close that gap. The formula governs which items appear and in
+            what order, and it has no reach into what an item costs to ship or what a customer pays
+            for it. Establishing that reframed every remaining week as loss reduction rather than a
+            route to profitability, and it moved the real fix to carrier contracts and product
+            pricing, which are procurement and Board decisions rather than algorithmic ones.
+          </p>
+          <Figure
+            src="/figures/iterlight-service-level-economics.png"
+            alt="Chart of margin per impression and cost decomposition across the GROUND, 2DAY and OVERNIGHT shipping tiers, showing linehaul and last-mile costs flat across tiers while the service premium rises steeply."
+            caption="Cost decomposition by service tier. Linehaul and last-mile costs barely move between tiers. The entire gap between GROUND and OVERNIGHT is service premium, which makes it a policy the business chose rather than a distance it has to pay for."
+          />
+          <p>
+            Within the narrower range alpha does control, the experiment returned a null under its
+            own pre-registered rules with a clear direction underneath it. Setting alpha to
+            <strong>0.25</strong> was the only arm that moved gross margin the right way, holding at
+            <strong>+$0.63 per impression</strong> once warehouse-delay contamination was removed,
+            <strong>+$0.98</strong> raw and <strong>+$2.19</strong> trimmed. At a million impressions
+            a month that direction is worth roughly <strong>$7.5M a year</strong> against a system
+            losing <strong>$4.24M a month</strong>, which is the baseline locked from the full
+            500,000-record set before the experiment opened. It still did not launch. Its conversion rate
+            landed at <strong>2.991%</strong>, beneath the <strong>3.3146%</strong> floor written
+            into the protocol before any outcome data was opened, and the experiment carried one
+            twelfth of the sample needed to confirm a signal that small.
+          </p>
+          <p>
+            The recommendation was no-go, with the blocking constraint named to a single number and
+            the follow-on sized exactly: two arms, 89,000 impressions each, roughly three months,
+            against <strong>$1.88M</strong> in forgone upside while it runs.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div class="shell"><Divider /></div>
+
+    <section class="section">
+      <div class="shell">
+        <div class="prose">
+          <h2 class="h-sub">What I did, and the obvious alternative I rejected</h2>
+          <p>
+            The primary metric was gross margin per impression, with non-conversions entered as zero.
+            Conversion rate is the reflexive choice for a recommendation experiment, and choosing it
+            would have rigged the test against the mechanism under examination, because raising alpha
+            works precisely by accepting fewer conversions in exchange for cheaper ones. A metric that
+            penalises the intended effect cannot adjudicate it. Gross margin per impression was the
+            only measure that moved with both effects at once, and the
+            <strong>r = &minus;0.711</strong> correlation between category conversion rate and category
+            margin, found earlier in the project, is the evidence that the two dimensions genuinely
+            pull against each other.
+          </p>
+          <Figure
+            src="/figures/iterlight-cvr-margin-anomaly.png"
+            alt="Bubble chart of margin per impression against conversion rate for twelve furniture categories. Bubble size is impressions and colour is average order value. A downward trend line marked r equals minus 0.71 runs from Lighting at the top left to TV Stands at the bottom right."
+            caption="The core anomaly. Every category that converts well loses more money, at r = −0.71. Bubble size is how many impressions the algorithm allocated, which shows it spending most heavily on the worst end of the line."
+            wide
+          />
+          <p>
+            The protocol carried three guardrails where five had been sketched. Five guardrails across
+            three arms produce a <strong>54%</strong> probability of blocking a sound result by chance,
+            which would have made the safety framework itself the most likely cause of a failed launch.
+            Each surviving guardrail was tied to a specific failure mode already documented in the
+            diagnostic phase, and each threshold was derived rather than chosen. The conversion floor
+            came from the Wilson confidence interval lower bound on the baseline cohort.
+          </p>
+          <p>
+            Everything arguable after the fact was committed in writing before outcome data was opened.
+            The metric, the guardrail thresholds and their derivations, the four conditions a winner had
+            to satisfy simultaneously, and a rule constraining how a null result could later be interpreted.
+          </p>
+          <p>
+            Before any of that, the shipping cost model had to be worth trusting. The supplied predicted
+            cost column correlated with actual cost at <strong>r = 0.9999</strong>, a figure no genuine
+            forecasting model reaches and a reliable signature of a value computed after the shipment
+            rather than before it. Chi-square and logistic tests across variant, conversion outcome,
+            origin region and service level returned nothing significant, which supported treating the
+            <strong>4.68%</strong> of missing values as missing completely at random and imputing them
+            from actual cost behind a transparency flag.
+ Three distinct leakage routes came out of the
+            feature set, and the price of removing them is visible in the numbers. A model retaining the
+            proxy scored <strong>RMSE $41.33</strong>; the clean 93-feature production model scored
+            <strong>$61.55</strong> with <strong>R&sup2; 0.9024</strong>. The version that looked worse
+            on paper was the only one that would survive live traffic.
+          </p>
+          <Figure
+            src="/figures/iterlight-residuals-by-segment.png"
+            alt="Chart of shipping cost model residuals broken out by segment, showing systematic under-prediction concentrated in specific regions and periods."
+            caption="Residuals by segment. The 32% under-prediction tail is not spread evenly. It sits almost entirely in the long-haul zone and the holiday peak, which is the distribution the training window never saw."
+          />
+          <p>
+            Warehouse delays hit the West Coast between November 1 and 15, inside the test window, and
+            landed unevenly across arms. Difference-in-differences was the textbook correction, and it
+            failed its own robustness check, shifting up to <strong>$2.20 per impression</strong> across
+            reasonable definitions of the delay window against a pre-registered tolerance of
+            <strong>$0.50</strong>. A mechanistic estimate put the delay&rsquo;s actual cost at
+            <strong>$9,686 a month</strong> for the worst-affected arm, comfortably under the
+            <strong>$42,379</strong> escalation threshold. Restricting the comparison to non-delayed
+            rows preserved the arm ordering across every robustness approach and became the estimate
+            of record, with the DiD result reported beside it as indeterminate.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="shell">
+        <header class="section-head">
+          <p class="eyebrow">Evidence</p>
+          <h2 class="h-sub">The executive dashboard</h2>
+          <p class="section-note">
+            Built in Power BI for the diagnostic phase and used by leadership to see where the
+            margin was going. The working file is downloadable below.
+          </p>
+        </header>
+        <Figure
+          src="/figures/iterlight-powerbi-page1.png"
+          alt="Power BI executive dashboard showing margin per impression of negative 4.51 dollars, average shipping cost of 309.77 dollars, average order value of 188.36 dollars and a 3.22 percent conversion rate, alongside charts covering the conversion-margin anomaly, service level economics and seasonal cost movement."
+          caption="Every headline on this dashboard states a finding instead of naming a metric. Higher conversion does not mean better margin. OVERNIGHT converts best and loses 35 times more than GROUND. Shipping cost rises 17% in peak season, exactly when conversion peaks."
+          wide
+        />
+        <p class="embed-note">
+          <a href="/media/Linh_Le_IterLight_PowerBI_Dashboard.pdf">Both pages as PDF</a>
+          &nbsp;&middot;&nbsp;
+          <a href="/media/Linh_Le_IterLight_Dashboard.pbix">Download the Power BI file</a>
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="shell">
+        <header class="section-head">
+          <p class="eyebrow">Evidence</p>
+          <h2 class="h-sub">The launch decision, as delivered</h2>
+          <p class="section-note">
+            Nine slides translating seven weeks of analysis into a decision, built as a
+            self-contained page. Open it full width if the frame is tight.
+          </p>
+        </header>
+        <div class="embed">
+          <iframe
+            src="/media/Linh_Le_IterLight_Launch_Decision.html"
+            title="IterLight Lab launch decision deck"
+            loading="lazy"
+          ></iframe>
+        </div>
+        <p class="embed-note">
+          <a href="/media/Linh_Le_IterLight_Launch_Decision.html">Open the deck in its own tab</a>
+        </p>
+      </div>
+    </section>
+
+    <div class="shell"><Divider /></div>
+
+    <section class="section">
+      <div class="shell">
+        <div class="prose">
+          <h2 class="h-sub">Assumptions and limitations</h2>
+          <p>
+            Gross margin here is order value minus shipping cost. It excludes cost of goods and
+            platform overhead, so the true loss is deeper than every figure above.
+          </p>
+          <p>
+            The A/B assignment was pre-existing rather than randomised for this study. A sample ratio
+            mismatch test returned <strong>&chi;&sup2; = 59.04</strong>, diagnosed as cohort-design
+            imbalance with a 100% activity rate, which leaves the arm estimates unbiased while removing
+            any claim to a clean randomisation.
+          </p>
+          <p>
+            Sample size is the binding limitation and it cannot be fixed after the fact. The baseline
+            cohort holds 5,041 in-window impressions, and because every comparison draws on that same
+            pool, the harmonic effective n is <strong>7,471</strong> against the <strong>33,268</strong>
+            the conversion target required and the <strong>89,000</strong> that confirming the
+            alpha-0.25 signal would need. The null result is what a genuine $0.63 effect looks like at
+            one twelfth of the necessary power, and it should not be read as evidence that alpha does
+            nothing.
+          </p>
+          <p>
+            The cost model has a <strong>32%</strong> under-prediction tail, concentrated almost
+            entirely in November and December. December 2025 contributed zero training rows, so the
+            model was extrapolating into a distribution it had never observed. Non-peak months sit at
+            an 8 to 10 percent noise floor.
+          </p>
+          <p>
+            Two findings are exploratory and are labelled that way. The East region result, at
+            <strong>+$4.89 per impression</strong> and p = 0.009, does not survive Bonferroni
+            correction across the sixteen segment tests run alongside it. The <strong>$1.2M a month</strong>
+            estimated from adding an order-value term to the scoring formula is observational, assumes
+            user conversion behaviour holds constant, and needs its own experiment before anyone spends
+            against it.
+          </p>
+          <p>
+            Service level accounts for <strong>66%</strong> of the cost model&rsquo;s feature importance,
+            which makes deployment conditional on that field being available at scoring time. Without it
+            the production model degrades to RMSE $189.09.
+          </p>
+        </div>
+      </div>
+    </section>
+
+</CaseStudy>

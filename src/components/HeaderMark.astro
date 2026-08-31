@@ -1,0 +1,260 @@
+---
+/* Rough to cut, on a loop.
+
+   Loose data, figures and fragments of query, drifts in the field and travels
+   right along the tail. It gathers into the shape of a step-cut stone and
+   dissolves as it lands, so the finished stone is clean line work with nothing
+   left inside it. It holds while the polish crosses, then breaks: fragments
+   push back out of the stone in waves while the cut fades behind them, until
+   only the field is left and it begins again.
+
+   The tail, the faint line and the row of points feeding the stone, is always
+   there. Positions are computed at build time, so the page ships static SVG
+   and the whole cycle runs on CSS. */
+
+const W = 880;
+const H = 210;
+
+const stone: [number, number][] = [
+  [606, 48], [754, 48], [780, 74], [780, 152],
+  [754, 178], [606, 178], [580, 152], [580, 74],
+];
+
+function inside(x: number, y: number) {
+  let hit = false;
+  for (let i = 0, j = stone.length - 1; i < stone.length; j = i++) {
+    const [xi, yi] = stone[i];
+    const [xj, yj] = stone[j];
+    if (yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) hit = !hit;
+  }
+  return hit;
+}
+
+let seed = 20260831;
+const rnd = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
+
+/* The tokens are the real vocabulary of the work: figures that appear in the
+   case studies below, and the query language they came out of. */
+const tokens = [
+  "164.5%", "$4.24M", "126k", "862k", "r=0.71", "$188.36", "3.26%", "n=500k",
+  "SELECT", "GROUP BY", "COUNT", "JOIN", "WHERE", "median", "AVG", "σ",
+  "μ", "Δ", "0.0031", "1,204", "$121.41", "46.9%", "p<.05", "12.3%",
+];
+
+/* where the fragments end up: a lattice filling the stone */
+const targets: [number, number][] = [];
+for (let y = 62; y <= 166; y += 15) {
+  for (let x = 592; x <= 770; x += 19) {
+    if (inside(x, y) && inside(x, y - 6) && inside(x, y + 6)) targets.push([x, y]);
+  }
+}
+
+const frags = targets.map(([tx, ty], i) => ({
+  tx,
+  ty,
+  sx: Math.round(20 + rnd() * (W * 0.60)),
+  sy: Math.round(12 + rnd() * (H - 24)),
+  text: tokens[Math.floor(rnd() * tokens.length)],
+  size: (5.4 + rnd() * 2.6).toFixed(1),
+  r: Math.round(-46 + rnd() * 92),
+  o0: (0.30 + rnd() * 0.40).toFixed(2),
+  /* five waves: they arrive together and leave in sequence */
+  g: i % 5,
+  hot: i % 6 === 0,
+}));
+
+/* the tail: a row of points closing up toward the stone, and the line in */
+const tailDots = Array.from({ length: 16 }, (_, i) => {
+  const t = i / 15;
+  return {
+    x: Math.round(96 + Math.pow(t, 0.72) * 452),
+    y: Math.round(113 + Math.sin(i * 1.9) * (16 - t * 15)),
+    r: (2.6 - t * 1.1).toFixed(2),
+    o: (0.3 + t * 0.55).toFixed(2),
+  };
+});
+---
+
+<svg class="mark" viewBox={`0 0 ${W} ${H}`} role="img"
+     aria-label="Loose data gathers into a cut stone, holds, then breaks back into fragments.">
+  <defs>
+    <clipPath id="stoneClip">
+      <polygon points="606,48 754,48 780,74 780,152 754,178 606,178 580,152 580,74"/>
+    </clipPath>
+    <linearGradient id="sheenGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0"  stop-color="var(--line-deep)" stop-opacity="0"/>
+      <stop offset=".5" stop-color="var(--line-deep)" stop-opacity=".5"/>
+      <stop offset="1"  stop-color="var(--line-deep)" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <g class="tail">
+    {tailDots.map((d) => (
+      <circle cx={d.x} cy={d.y} r={d.r} fill="var(--accent-mid)" opacity={d.o}/>
+    ))}
+    <line x1="556" y1="113" x2="580" y2="113" stroke="var(--accent-mid)" stroke-width="1.1" opacity=".6"/>
+  </g>
+
+  <g class="field" font-family="var(--font-mono)">
+    {frags.map((f) => (
+      <text
+        class={`frag g${f.g}${f.hot ? " hot" : ""}`}
+        x="0"
+        y="0"
+        font-size={f.size}
+        text-anchor="middle"
+        dominant-baseline="middle"
+        style={`--sx:${f.sx}px; --sy:${f.sy}px; --tx:${f.tx}px; --ty:${f.ty}px; --r:${f.r}deg; --o0:${f.o0};`}
+      >{f.text}</text>
+    ))}
+  </g>
+
+  <polygon class="body" points="606,48 754,48 780,74 780,152 754,178 606,178 580,152 580,74"/>
+
+  <g class="cut" fill="none" stroke="var(--line-deep)" stroke-width="1.5"
+     stroke-linejoin="round" stroke-linecap="round">
+    <polygon class="c1" points="606,48 754,48 780,74 780,152 754,178 606,178 580,152 580,74"/>
+    <polygon class="c2" points="618,66 742,66 762,86 762,140 742,160 618,160 598,140 598,86"/>
+    <polygon class="c3" points="630,84 730,84 744,98 744,128 730,142 630,142 616,128 616,98"/>
+    <g class="c4">
+      <line x1="606" y1="48"  x2="618" y2="66"/>
+      <line x1="754" y1="48"  x2="742" y2="66"/>
+      <line x1="780" y1="74"  x2="762" y2="86"/>
+      <line x1="780" y1="152" x2="762" y2="140"/>
+      <line x1="754" y1="178" x2="742" y2="160"/>
+      <line x1="606" y1="178" x2="618" y2="160"/>
+      <line x1="580" y1="152" x2="598" y2="140"/>
+      <line x1="580" y1="74"  x2="598" y2="86"/>
+      <line x1="618" y1="66"  x2="630" y2="84"/>
+      <line x1="742" y1="66"  x2="730" y2="84"/>
+      <line x1="762" y1="86"  x2="744" y2="98"/>
+      <line x1="762" y1="140" x2="744" y2="128"/>
+      <line x1="742" y1="160" x2="730" y2="142"/>
+      <line x1="618" y1="160" x2="630" y2="142"/>
+      <line x1="598" y1="140" x2="616" y2="128"/>
+      <line x1="598" y1="86"  x2="616" y2="98"/>
+    </g>
+  </g>
+
+  <g clip-path="url(#stoneClip)">
+    <rect class="sheen" x="-240" y="40" width="200" height="150" fill="url(#sheenGrad)"/>
+  </g>
+</svg>
+
+<style>
+  .mark { width: 100%; height: auto; overflow: visible; --cycle: 18s; }
+
+  /* The tail never leaves. It is the line the work travels along. */
+  .tail { opacity: .8; }
+
+  /* ---------- the data ---------- */
+  .frag {
+    fill: var(--accent-mid);
+    transform-box: fill-box;
+    transform-origin: center;
+    animation-duration: var(--cycle);
+    animation-iteration-count: infinite;
+    letter-spacing: .02em;
+  }
+  .frag.hot { fill: var(--line-deep); }
+
+  /* Every wave gathers on the same beat, so the stone forms at one moment.
+     They leave in sequence, so the break reads as a break and not a cut. */
+  .g0 { animation-name: wave0; animation-timing-function: cubic-bezier(.30, 0, .20, 1); }
+  .g1 { animation-name: wave1; animation-timing-function: cubic-bezier(.16, 0, .30, 1); }
+  .g2 { animation-name: wave2; animation-timing-function: cubic-bezier(.45, 0, .12, 1); }
+  .g3 { animation-name: wave3; animation-timing-function: cubic-bezier(.22, 0, .40, 1); }
+  .g4 { animation-name: wave4; animation-timing-function: cubic-bezier(.36, 0, .24, 1); }
+
+  @keyframes wave0 {
+    0%   { transform: translate(var(--sx), var(--sy)) rotate(var(--r)) scale(1); opacity: var(--o0); }
+    24%  { transform: translate(var(--tx), var(--ty)) rotate(0deg) scale(1);     opacity: .9; }
+    30%  { transform: translate(var(--tx), var(--ty)) rotate(0deg) scale(.45);   opacity: 0; }
+    56%  { transform: translate(var(--tx), var(--ty)) rotate(0deg) scale(.45);   opacity: 0; }
+    61%  { transform: translate(var(--tx), var(--ty)) rotate(0deg) scale(1);     opacity: .9; }
+    88%  { transform: translate(var(--sx), var(--sy)) rotate(var(--r)) scale(1); opacity: var(--o0); }
+    100% { transform: translate(var(--sx), var(--sy)) rotate(var(--r)) scale(1); opacity: var(--o0); }
+  }
+  @keyframes wave1 {
+    0%   { transform: translate(var(--sx), var(--sy)) rotate(var(--r)) scale(1); opacity: var(--o0); }
+    24%  { transform: translate(var(--tx), var(--ty)) rotate(0deg) scale(1);     opacity: .9; }
+    30%  { transform: translate(var(--tx), var(--ty)) rotate(0deg) scale(.45);   opacity: 0; }
+    60%  { transform: translate(var(--tx), var(--ty)) rotate(0deg) scale(.45);   opacity: 0; }
+    65%  { transform: translate(var(--tx), var(--ty)) rotate(0deg) scale(1);     opacity: .9; }
+    91%  { transform: translate(var(--sx), var(--sy)) rotate(var(--r)) scale(1); opacity: var(--o0); }
+    100% { transform: translate(var(--sx), var(--sy)) rotate(var(--r)) scale(1); opacity: var(--o0); }
+  }
+  @keyframes wave2 {
+    0%   { transform: translate(var(--sx), var(--sy)) rotate(var(--r)) scale(1); opacity: var(--o0); }
+    24%  { transform: translate(var(--tx), var(--ty)) rotate(0deg) scale(1);     opacity: .9; }
+    30%  { transform: translate(var(--tx), var(--ty)) rotate(0deg) scale(.45);   opacity: 0; }
+    64%  { transform: translate(var(--tx), var(--ty)) rotate(0deg) scale(.45);   opacity: 0; }
+    69%  { transform: translate(var(--tx), var(--ty)) rotate(0deg) scale(1);     opacity: .9; }
+    93%  { transform: translate(var(--sx), var(--sy)) rotate(var(--r)) scale(1); opacity: var(--o0); }
+    100% { transform: translate(var(--sx), var(--sy)) rotate(var(--r)) scale(1); opacity: var(--o0); }
+  }
+  @keyframes wave3 {
+    0%   { transform: translate(var(--sx), var(--sy)) rotate(var(--r)) scale(1); opacity: var(--o0); }
+    24%  { transform: translate(var(--tx), var(--ty)) rotate(0deg) scale(1);     opacity: .9; }
+    30%  { transform: translate(var(--tx), var(--ty)) rotate(0deg) scale(.45);   opacity: 0; }
+    68%  { transform: translate(var(--tx), var(--ty)) rotate(0deg) scale(.45);   opacity: 0; }
+    73%  { transform: translate(var(--tx), var(--ty)) rotate(0deg) scale(1);     opacity: .9; }
+    95%  { transform: translate(var(--sx), var(--sy)) rotate(var(--r)) scale(1); opacity: var(--o0); }
+    100% { transform: translate(var(--sx), var(--sy)) rotate(var(--r)) scale(1); opacity: var(--o0); }
+  }
+  @keyframes wave4 {
+    0%   { transform: translate(var(--sx), var(--sy)) rotate(var(--r)) scale(1); opacity: var(--o0); }
+    24%  { transform: translate(var(--tx), var(--ty)) rotate(0deg) scale(1);     opacity: .9; }
+    30%  { transform: translate(var(--tx), var(--ty)) rotate(0deg) scale(.45);   opacity: 0; }
+    72%  { transform: translate(var(--tx), var(--ty)) rotate(0deg) scale(.45);   opacity: 0; }
+    77%  { transform: translate(var(--tx), var(--ty)) rotate(0deg) scale(1);     opacity: .9; }
+    97%  { transform: translate(var(--sx), var(--sy)) rotate(var(--r)) scale(1); opacity: var(--o0); }
+    100% { transform: translate(var(--sx), var(--sy)) rotate(var(--r)) scale(1); opacity: var(--o0); }
+  }
+
+  /* The body stays faint. The stone is line work, the way the profile mark is. */
+  .body { fill: var(--accent-mid); animation: body-set var(--cycle) ease-in-out infinite; }
+  @keyframes body-set {
+    0%, 26%   { opacity: 0; }
+    34%, 60%  { opacity: .10; }
+    82%, 100% { opacity: 0; }
+  }
+
+  /* The cut draws as the data lands and fades slowly through the break, so the
+     stone is still going while the first fragments are already leaving. */
+  .c1, .c2, .c3 { stroke-dasharray: 700; stroke-dashoffset: 700; }
+  .c1 { animation: cut-draw var(--cycle) linear infinite; }
+  .c2 { animation: cut-draw var(--cycle) linear infinite; animation-delay: calc(var(--cycle) * -0.988); }
+  .c3 { animation: cut-draw var(--cycle) linear infinite; animation-delay: calc(var(--cycle) * -0.976); }
+  .c4 { opacity: 0; animation: facet-in var(--cycle) linear infinite; }
+
+  @keyframes cut-draw {
+    0%, 16%   { stroke-dashoffset: 700; opacity: 0; }
+    20%       { opacity: 1; }
+    32%       { stroke-dashoffset: 0;   opacity: 1; }
+    58%       { stroke-dashoffset: 0;   opacity: 1; }
+    84%, 100% { stroke-dashoffset: 0;   opacity: 0; }
+  }
+  @keyframes facet-in {
+    0%, 30%   { opacity: 0; }
+    38%, 60%  { opacity: .85; }
+    80%, 100% { opacity: 0; }
+  }
+
+  /* the polish, only while the stone is whole and clean */
+  .sheen { animation: polish var(--cycle) linear infinite; }
+  @keyframes polish {
+    0%, 40%   { transform: translateX(760px);  opacity: 0; }
+    42%       { opacity: 1; }
+    56%       { transform: translateX(1080px); opacity: 1; }
+    58%, 100% { transform: translateX(1080px); opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .frag { animation: none; opacity: 0; }
+    .body { animation: none; opacity: .10; }
+    .c1, .c2, .c3 { animation: none; stroke-dashoffset: 0; opacity: 1; }
+    .c4 { animation: none; opacity: .85; }
+    .sheen { display: none; }
+  }
+</style>

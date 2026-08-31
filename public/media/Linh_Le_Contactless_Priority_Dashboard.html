@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U.S. Contactless Adoption — Mastercard Enablement Intelligence</title>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<style>
+:root {
+  --red:    #EB001B;
+  --amber:  #F79E1B;
+  --navy:   #0D1B35;
+  --bg:     #F4F5F9;
+  --white:  #FFFFFF;
+  --border: #E2E6ED;
+  --tx-h:   #0D1B35;
+  --tx-b:   #2A3550;
+  --tx-dim: #6B7A99;
+  --green:  #00A86B;
+  --blue:   #2563EB;
+  --fast:   #00A86B;
+  --high:   #D97706;
+  --struct: #4A6FA5;
+  --fast-bg:   #ECFDF5;
+  --high-bg:   #FFFBEB;
+  --struct-bg: #EEF2FF;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--tx-b); font-size: 13px; }
+
+/* ── Header ── */
+.header {
+  background: var(--navy);
+  padding: 16px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 3px solid var(--red);
+}
+.header-left h1 { font-size: 16px; font-weight: 800; color: #FFF; letter-spacing: 0.2px; }
+.header-left .sub { font-size: 10px; color: #8A9BC0; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 2px; }
+.independence-note { font-size: 10.5px; line-height: 1.5; color: #8A9BC0; text-align: right; max-width: 230px; }
+
+/* ── KPI Bar ── */
+.kpi-bar {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 32px;
+  display: flex; gap: 0;
+}
+.kpi-item {
+  flex: 1; padding: 0 20px;
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: 2px;
+}
+.kpi-item:first-child { padding-left: 0; }
+.kpi-item:last-child { border-right: none; }
+.kpi-val { font-size: 22px; font-weight: 900; line-height: 1; }
+.kpi-val.red    { color: var(--red); }
+.kpi-val.amber  { color: var(--amber); }
+.kpi-val.navy   { color: var(--navy); }
+.kpi-val.green  { color: var(--green); }
+.kpi-lbl { font-size: 10px; color: var(--tx-dim); text-transform: uppercase; letter-spacing: 0.5px; }
+.kpi-sub { font-size: 9px; color: var(--tx-dim); }
+
+/* ── Controls Panel ── */
+.controls-panel {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 32px;
+  display: flex; align-items: flex-start; gap: 40px; flex-wrap: wrap;
+}
+.control-group { display: flex; flex-direction: column; gap: 6px; }
+.control-label { font-size: 10px; font-weight: 700; color: var(--tx-dim); text-transform: uppercase; letter-spacing: 0.7px; }
+.cluster-pills { display: flex; gap: 6px; }
+.pill {
+  padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600;
+  cursor: pointer; border: 1.5px solid transparent; transition: all 0.15s;
+  user-select: none;
+}
+.pill.fast   { background: var(--fast-bg);   color: var(--fast);   border-color: var(--fast); }
+.pill.high   { background: var(--high-bg);   color: var(--high);   border-color: var(--high); }
+.pill.struct { background: var(--struct-bg); color: var(--struct); border-color: var(--struct); }
+.pill.dimmed { opacity: 0.35; }
+.slider-row { display: flex; align-items: center; gap: 10px; }
+.slider-row input[type=range] { width: 200px; accent-color: var(--red); cursor: pointer; }
+.slider-val { font-size: 13px; font-weight: 700; color: var(--navy); min-width: 52px; }
+.slider-hint { font-size: 10px; color: var(--tx-dim); }
+
+/* ── Tabs ── */
+.tabs-row {
+  background: var(--white);
+  padding: 0 32px;
+  display: flex; gap: 0;
+  border-bottom: 2px solid var(--border);
+}
+.tab-btn {
+  padding: 12px 20px; font-size: 12px; font-weight: 600; color: var(--tx-dim);
+  border: none; background: none; cursor: pointer; border-bottom: 3px solid transparent;
+  margin-bottom: -2px; transition: all 0.15s; white-space: nowrap;
+}
+.tab-btn:hover { color: var(--navy); }
+.tab-btn.active { color: var(--red); border-bottom-color: var(--red); }
+
+/* ── Tab Content ── */
+.tab-panel { display: none; padding: 24px 32px; }
+.tab-panel.active { display: block; }
+
+.panel-header { margin-bottom: 16px; }
+.panel-title { font-size: 15px; font-weight: 800; color: var(--navy); }
+.panel-desc { font-size: 12px; color: var(--tx-dim); margin-top: 4px; }
+
+.chart-wrap { background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+
+.two-col { display: flex; gap: 20px; }
+.two-col .col { flex: 1; }
+
+/* ── Priority Table ── */
+.ptable { width: 100%; border-collapse: collapse; }
+.ptable thead th { 
+  background: var(--navy); color: #FFF; padding: 8px 10px; 
+  font-size: 10px; font-weight: 700; text-align: left; text-transform: uppercase; letter-spacing: 0.4px;
+}
+.ptable tbody td { padding: 8px 10px; font-size: 12px; border-bottom: 1px solid var(--border); }
+.ptable tbody tr:hover td { background: #F8F9FC; }
+.ptable tr.cluster-fast   td { border-left: 3px solid var(--fast); }
+.ptable tr.cluster-high   td { border-left: 3px solid var(--high); }
+.ptable tr.cluster-struct td { border-left: 3px solid var(--struct); }
+.rank { font-weight: 900; font-size: 14px; color: var(--red); }
+.score-bar-wrap { display: flex; align-items: center; gap: 6px; }
+.score-bar { height: 8px; border-radius: 2px; }
+.score-num { font-size: 11px; font-weight: 700; color: var(--tx-b); }
+
+/* ── Panel 5 ── */
+.scenario-grid { display: flex; gap: 20px; }
+.scenario-kpi-col { display: flex; flex-direction: column; gap: 12px; min-width: 260px; }
+.s-kpi {
+  background: var(--white); border: 1px solid var(--border); border-radius: 8px;
+  padding: 16px 20px; border-top: 3px solid var(--red);
+}
+.s-kpi.amber { border-top-color: var(--amber); }
+.s-kpi.green { border-top-color: var(--green); }
+.s-kpi-val { font-size: 28px; font-weight: 900; color: var(--navy); line-height: 1; }
+.s-kpi-lbl { font-size: 11px; color: var(--tx-dim); margin-top: 4px; }
+.s-kpi-note { font-size: 10px; color: var(--tx-dim); margin-top: 2px; }
+.scenario-chart-col { flex: 1; }
+
+/* ── Data bridge callout ── */
+.bridge-box {
+  background: linear-gradient(135deg, rgba(13,27,53,0.04) 0%, rgba(235,0,27,0.03) 100%);
+  border: 1px solid var(--border); border-radius: 8px;
+  padding: 16px 20px; margin-top: 16px;
+  display: flex; gap: 16px; align-items: flex-start;
+}
+.bridge-col { flex: 1; }
+.bridge-divider { width: 1px; background: var(--border); flex-shrink: 0; }
+.bridge-head { font-size: 10px; font-weight: 700; color: var(--tx-dim); text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 6px; }
+.bridge-title { font-size: 13px; font-weight: 800; color: var(--navy); margin-bottom: 8px; }
+.bridge-list { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+.bridge-list li { font-size: 11px; color: var(--tx-b); padding-left: 14px; position: relative; line-height: 1.5; }
+.bridge-list li::before { content: "•"; position: absolute; left: 2px; color: var(--red); font-size: 14px; top: -1px; }
+.bridge-list.right li::before { color: var(--amber); }
+.bridge-arrow-col { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 0 8px; }
+.bridge-arrow-lbl { font-size: 9px; font-weight: 700; color: var(--amber); text-align: center; text-transform: uppercase; letter-spacing: 0.5px; }
+.bridge-arrow-icon { font-size: 24px; color: var(--red); }
+.bridge-quote {
+  margin-top: 10px; padding: 8px 12px;
+  background: rgba(247,158,27,0.1); border-left: 3px solid var(--amber);
+  font-size: 11px; color: var(--tx-b); font-style: italic; line-height: 1.5; border-radius: 0 4px 4px 0;
+}
+.cluster-tag {
+  display: inline-block; padding: 2px 8px; border-radius: 10px;
+  font-size: 10px; font-weight: 600;
+}
+.cluster-tag.fast   { background: var(--fast-bg);   color: var(--fast); }
+.cluster-tag.high   { background: var(--high-bg);   color: var(--high); }
+.cluster-tag.struct { background: var(--struct-bg); color: var(--struct); }
+
+.footer {
+  background: var(--navy); padding: 14px 32px;
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 20px;
+}
+.footer-src { font-size: 9px; color: #8A9BC0; line-height: 1.7; }
+.footer-by { font-size: 12px; font-weight: 700; color: #FFF; text-align: right; }
+.footer-contact { font-size: 10px; color: var(--amber); margin-top: 2px; }
+
+/* DCPC bar */
+.dcpc-bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.dcpc-label { font-size: 11px; color: var(--tx-b); min-width: 230px; }
+.dcpc-bar-outer { flex: 1; height: 16px; background: #F0F2F8; border-radius: 4px; overflow: hidden; }
+.dcpc-bar-inner { height: 100%; border-radius: 4px; }
+.dcpc-pct { font-size: 11px; font-weight: 700; color: var(--tx-b); min-width: 36px; text-align: right; }
+</style>
+</head>
+<body>
+
+<script>
+const DATA = {
+  frps_hist: {"2018": 0.77, "2019": 1.7, "2020": 4.63, "2021": 10.99, "2022": 19.71},
+  mw_hist:   {"2020": 2.63, "2021": 4.39, "2022": 6.95},
+  us_sc:     {"L": 85.0, "k": 0.8, "t0": 2023.5, "rmse_ppt": 0.485, "projections": {"2022": {"baseline": 19.7, "intervention": 42.5}, "2023": {"baseline": 34.1, "intervention": 58.6}, "2024": {"baseline": 50.9, "intervention": 70.7}, "2025": {"baseline": 65.3, "intervention": 77.9}, "2026": {"baseline": 74.9, "intervention": 81.7}, "2027": {"baseline": 80.1, "intervention": 83.5}, "2028": {"baseline": 82.7, "intervention": 84.3}, "2029": {"baseline": 84.0, "intervention": 84.7}, "2030": {"baseline": 84.5, "intervention": 84.9}}, "L_note": "L=85 is an assumption calibrated to saturated international markets (AU/UK ~90%, CA ~85%), not a fitted parameter: with all observations below 20% the data cannot identify the ceiling. k and t0 are fitted.", "intervention_note": "Intervention shifts t0 forward 1.5 years, matching the sector curves. Ceiling and growth rate are held fixed so the scenario cannot manufacture upside."},
+  sec_sc:    {"Grocery/Supermarket": {"L": 92.0, "k": 0.8, "t0_baseline": 2018.88, "t0_intervention": 2017.38, "actual_2022": 85, "cluster": "Fast Mover", "inflection_year_baseline": 2018.9}, "Transit/Public Transport": {"L": 92.0, "k": 0.8, "t0_baseline": 2019.85, "t0_intervention": 2018.35, "actual_2022": 78, "cluster": "Fast Mover", "inflection_year_baseline": 2019.9}, "QSR / Fast Food": {"L": 92.0, "k": 0.8, "t0_baseline": 2020.9, "t0_intervention": 2019.4, "actual_2022": 65, "cluster": "Fast Mover", "inflection_year_baseline": 2020.9}, "Convenience Store / Gas": {"L": 92.0, "k": 0.8, "t0_baseline": 2021.5, "t0_intervention": 2020.0, "actual_2022": 55, "cluster": "Fast Mover", "inflection_year_baseline": 2021.5}, "Drug Store / Pharmacy": {"L": 88.0, "k": 0.8, "t0_baseline": 2021.66, "t0_intervention": 2020.16, "actual_2022": 50, "cluster": "High Potential Laggard", "inflection_year_baseline": 2021.7}, "Casual/Full-Service Restaurant": {"L": 88.0, "k": 0.8, "t0_baseline": 2022.34, "t0_intervention": 2020.84, "actual_2022": 38, "cluster": "High Potential Laggard", "inflection_year_baseline": 2022.3}, "General Merchandise/Dept Store": {"L": 88.0, "k": 0.8, "t0_baseline": 2022.7, "t0_intervention": 2021.2, "actual_2022": 32, "cluster": "High Potential Laggard", "inflection_year_baseline": 2022.7}, "Home Improvement / Hardware": {"L": 70.0, "k": 0.6, "t0_baseline": 2023.3, "t0_intervention": 2021.8, "actual_2022": 22, "cluster": "Structural Resistor", "inflection_year_baseline": 2023.3}, "Healthcare / Medical": {"L": 70.0, "k": 0.6, "t0_baseline": 2024.17, "t0_intervention": 2022.67, "actual_2022": 15, "cluster": "Structural Resistor", "inflection_year_baseline": 2024.2}},
+  sec_l2:    {"Grocery/Supermarket": {"cs": 85, "yr": 2023, "cluster": "Fast Mover", "ticket": 45, "freq": 5, "source": "Mastercard Contactless Momentum Report/PYMNTS 2023"}, "Transit/Public Transport": {"cs": 78, "yr": 2023, "cluster": "Fast Mover", "ticket": 4, "freq": 5, "source": "Visa global transit report 2023; 700+ cities enabled"}, "QSR / Fast Food": {"cs": 65, "yr": 2023, "cluster": "Fast Mover", "ticket": 12, "freq": 5, "source": "NRF 2023 Consumer Payments Survey; Visa/Mastercard investor presentations"}, "Convenience Store / Gas": {"cs": 55, "yr": 2023, "cluster": "Fast Mover", "ticket": 20, "freq": 4, "source": "NACS/Conexxus 2023 technology report"}, "Drug Store / Pharmacy": {"cs": 50, "yr": 2022, "cluster": "High Potential Laggard", "ticket": 25, "freq": 3, "source": "NRF consumer payments survey 2022/2023"}, "Casual/Full-Service Restaurant": {"cs": 38, "yr": 2023, "cluster": "High Potential Laggard", "ticket": 45, "freq": 2, "source": "Toast restaurant POS industry report 2023; NRF survey"}, "General Merchandise/Dept Store": {"cs": 32, "yr": 2022, "cluster": "High Potential Laggard", "ticket": 65, "freq": 2, "source": "NRF 2022/2023 consumer payments survey"}, "Home Improvement / Hardware": {"cs": 22, "yr": 2022, "cluster": "Structural Resistor", "ticket": 120, "freq": 1, "source": "Industry analyst estimates"}, "Healthcare / Medical": {"cs": 15, "yr": 2022, "cluster": "Structural Resistor", "ticket": 80, "freq": 1, "source": "Industry estimates; HIMSS payment tech survey"}},
+  priority:  [{"sector": "General Merchandise/Dept Store", "weighted_score": 76.2, "gap_component": 69.1, "momentum_component": 88.8, "proximity_component": 98.5, "volume_component": 25.0, "receptivity_multiplier": 1.0, "cluster": "High Potential Laggard", "gap_to_benchmark_ppt": 38, "opportunity_bn_txns_50pct_close": 1.49, "intervention_type": "Merchant NFC Terminal Enablement", "intervention_description": "Infrastructure uncertainty barrier significant (DCPC: 38% cite 'unsure if terminal accepts tap'). Tactic: Mastercard merchant incentive programs, POS vendor partnerships, terminal upgrade co-investment.", "t0_baseline": 2022.7}, {"sector": "Casual/Full-Service Restaurant", "weighted_score": 75.4, "gap_component": 58.2, "momentum_component": 96.6, "proximity_component": 100.0, "volume_component": 25.0, "receptivity_multiplier": 1.0, "cluster": "High Potential Laggard", "gap_to_benchmark_ppt": 32, "opportunity_bn_txns_50pct_close": 1.25, "intervention_type": "Merchant NFC Terminal Enablement", "intervention_description": "Infrastructure uncertainty barrier significant (DCPC: 38% cite 'unsure if terminal accepts tap'). Tactic: Mastercard merchant incentive programs, POS vendor partnerships, terminal upgrade co-investment.", "t0_baseline": 2022.34}, {"sector": "Drug Store / Pharmacy", "weighted_score": 59.6, "gap_component": 36.4, "momentum_component": 96.6, "proximity_component": 57.0, "volume_component": 50.0, "receptivity_multiplier": 1.0, "cluster": "High Potential Laggard", "gap_to_benchmark_ppt": 20, "opportunity_bn_txns_50pct_close": 1.17, "intervention_type": "Merchant NFC Terminal Enablement", "intervention_description": "Infrastructure uncertainty barrier significant (DCPC: 38% cite 'unsure if terminal accepts tap'). Tactic: Mastercard merchant incentive programs, POS vendor partnerships, terminal upgrade co-investment.", "t0_baseline": 2021.66}, {"sector": "Convenience Store / Gas", "weighted_score": 35.2, "gap_component": 27.3, "momentum_component": 100.0, "proximity_component": 47.5, "volume_component": 75.0, "receptivity_multiplier": 0.6, "cluster": "Fast Mover", "gap_to_benchmark_ppt": 15, "opportunity_bn_txns_50pct_close": 1.10, "intervention_type": "Consumer Awareness / Digital Activation", "intervention_description": "Habit/preference barrier dominant (DCPC: 43% cite habit). Tactic: card network prompts, issuer push notifications, checkout UI defaults.", "t0_baseline": 2021.5}, {"sector": "QSR / Fast Food", "weighted_score": 26.9, "gap_component": 9.1, "momentum_component": 80.6, "proximity_component": 23.2, "volume_component": 100.0, "receptivity_multiplier": 0.6, "cluster": "Fast Mover", "gap_to_benchmark_ppt": 5, "opportunity_bn_txns_50pct_close": 0.49, "intervention_type": "Consumer Awareness / Digital Activation", "intervention_description": "Habit/preference barrier dominant (DCPC: 43% cite habit). Tactic: card network prompts, issuer push notifications, checkout UI defaults.", "t0_baseline": 2020.9}, {"sector": "Home Improvement / Hardware", "weighted_score": 23.3, "gap_component": 87.3, "momentum_component": 31.0, "proximity_component": 59.6, "volume_component": 0.0, "receptivity_multiplier": 0.45, "cluster": "Structural Resistor", "gap_to_benchmark_ppt": 48, "opportunity_bn_txns_50pct_close": 1.17, "intervention_type": "Dual-Track: Provider-Side Integration + Consumer Education", "intervention_description": "Low transaction frequency means habit formation is slow. Infrastructure AND behavioral barriers both present. Tactic: category-specific pilot programs with major chains; contactless education at point of care/purchase.", "t0_baseline": 2023.3}, {"sector": "Healthcare / Medical", "weighted_score": 18.1, "gap_component": 100.0, "momentum_component": 15.2, "proximity_component": 21.3, "volume_component": 0.0, "receptivity_multiplier": 0.45, "cluster": "Structural Resistor", "gap_to_benchmark_ppt": 55, "opportunity_bn_txns_50pct_close": 1.35, "intervention_type": "Dual-Track: Provider-Side Integration + Consumer Education", "intervention_description": "Low transaction frequency means habit formation is slow. Infrastructure AND behavioral barriers both present. Tactic: category-specific pilot programs with major chains; contactless education at point of care/purchase.", "t0_baseline": 2024.17}, {"sector": "Transit/Public Transport", "weighted_score": 15.2, "gap_component": 0.0, "momentum_component": 34.5, "proximity_component": 5.9, "volume_component": 100.0, "receptivity_multiplier": 0.6, "cluster": "Fast Mover", "gap_to_benchmark_ppt": -8, "opportunity_bn_txns_50pct_close": 0, "intervention_type": "Consumer Awareness / Digital Activation", "intervention_description": "Habit/preference barrier dominant (DCPC: 43% cite habit). Tactic: card network prompts, issuer push notifications, checkout UI defaults.", "t0_baseline": 2019.85}, {"sector": "Grocery/Supermarket", "weighted_score": 9.0, "gap_component": 0.0, "momentum_component": 0.0, "proximity_component": 0.0, "volume_component": 100.0, "receptivity_multiplier": 0.6, "cluster": "Fast Mover", "gap_to_benchmark_ppt": -15, "opportunity_bn_txns_50pct_close": 0, "intervention_type": "Consumer Awareness / Digital Activation", "intervention_description": "Habit/preference barrier dominant (DCPC: 43% cite habit). Tactic: card network prompts, issuer push notifications, checkout UI defaults.", "t0_baseline": 2018.88}],
+  reg:       {"avg_ticket_coeff": 0.089, "frequency_coeff": 15.516, "r2": 0.942},
+  dcpc:      {"contactless_users_pct": {"2020": 19, "2021": 25, "2022": 32}, "top_reasons_not_tap": [{"reason": "Habit / prefer card swipe or dip", "pct": 43, "type": "behavioral"}, {"reason": "Uncertain if merchant terminal accepts tap", "pct": 38, "type": "infrastructure_signal"}, {"reason": "Security/privacy concerns", "pct": 22, "type": "behavioral"}, {"reason": "Unaware of the feature", "pct": 18, "type": "behavioral"}], "age_breakdown": {"under_35": 48, "35_54": 30, "55_plus": 18}, "key_insight": "Gap is split ~50/50 behavioral vs infrastructure. 43% cite habit (behavior), 38% cite terminal uncertainty (infrastructure signal).", "source": "Atlanta Fed DCPC Summary Reports 2021-2023 (Foster et al.)"},
+  rev:       {"incremental_share_ppt_50pct_close": 25.1, "base_volume_bn": 97.85, "incremental_contactless_txns_bn": 24.6, "avg_ticket_usd": 37, "interchange_rate_pct": 1.65, "mc_network_share_pct": 25.0, "total_network_revenue_uplift_bn": 15.02, "mc_revenue_uplift_bn": 3.75, "mc_revenue_top3_sectors_bn": 0.60, "note": "Base is 2022 in-person GP volume (97.85B); remote transactions cannot be contactless, so all-GP volume (153.3B) is the wrong denominator. $37 is the FRPS 2022 in-person GP debit average ticket; the all-GP average is $63.69 and the contactless average is $33.15. Interchange accrues largely to issuers, so these figures are chain-wide interchange value apportioned by network share, not Mastercard revenue.", "source": "FRPS NPIPS 2022 (txn count/value), Mastercard investor materials (~25% US share), Nilson interchange estimates"}
+};
+
+const CLUSTER_COLORS = {
+  "Fast Mover":             "#00A86B",
+  "High Potential Laggard": "#D97706",
+  "Structural Resistor":    "#4A6FA5"
+};
+const CLUSTER_BG = {
+  "Fast Mover":             "#ECFDF5",
+  "High Potential Laggard": "#FFFBEB",
+  "Structural Resistor":    "#EEF2FF"
+};
+
+// Per-sector distinct colors — used only in Tab 3 so lines are individually readable
+const SECTOR_COLORS = {
+  "Grocery/Supermarket":          "#2A9D8F",
+  "Transit/Public Transport":     "#457B9D",
+  "QSR / Fast Food":              "#E9C46A",
+  "Convenience Store / Gas":      "#F4A261",
+  "Drug Store / Pharmacy":        "#E76F51",
+  "Casual/Full-Service Restaurant":"#6A4C93",
+  "General Merchandise/Dept Store":"#EB001B",
+  "Home Improvement / Hardware":  "#264653",
+  "Healthcare / Medical":         "#8D99AE"
+};
+</script>
+
+<!-- ── Header ── -->
+<div class="header">
+  <div class="header-left">
+    <h1>U.S. Contactless Adoption — Merchant Enablement Intelligence</h1>
+    <div class="sub">Federal Reserve NPIPS &middot; Layer 2 Industry Research &middot; Atlanta Fed DCPC &middot; 2026</div>
+  </div>
+  <div class="independence-note">
+    Independent analysis by Linh Le.<br>Not affiliated with or commissioned by Mastercard.
+  </div>
+</div>
+
+<!-- ── KPI Bar (dynamic) ── -->
+<div class="kpi-bar">
+  <div class="kpi-item">
+    <div class="kpi-val red">19.7%</div>
+    <div class="kpi-lbl">U.S. Contactless Share 2022</div>
+    <div class="kpi-sub">Federal Reserve NPIPS (verified)</div>
+  </div>
+  <div class="kpi-item">
+    <div class="kpi-val amber">~70%</div>
+    <div class="kpi-lbl">Mastercard Global Benchmark</div>
+    <div class="kpi-sub">MC investor presentations 2022–23</div>
+  </div>
+  <div class="kpi-item">
+    <div class="kpi-val navy">50 ppt</div>
+    <div class="kpi-lbl">U.S.–Global Gap</div>
+    <div class="kpi-sub">Primary optimization target</div>
+  </div>
+  <div class="kpi-item">
+    <div class="kpi-val green" id="kpi-txns">3.91B</div>
+    <div class="kpi-lbl">Incremental Txns — Top 3 Sectors</div>
+    <div class="kpi-sub" id="kpi-txns-sub">at 50% gap closure</div>
+  </div>
+  <div class="kpi-item">
+    <div class="kpi-val amber" id="kpi-rev">$3.8B</div>
+    <div class="kpi-lbl">MC Network Revenue Uplift</div>
+    <div class="kpi-sub" id="kpi-rev-sub">at 50% closure, all sectors</div>
+  </div>
+  <div class="kpi-item">
+    <div class="kpi-val navy">94%</div>
+    <div class="kpi-lbl">Sector Adoption Variation Explained by Frequency</div>
+    <div class="kpi-sub">Gap-size ranking is near the reverse of it</div>
+  </div>
+</div>
+
+<!-- ── Controls ── -->
+<div class="controls-panel">
+  <div class="control-group">
+    <div class="control-label">Cluster Filter</div>
+    <div class="cluster-pills">
+      <div class="pill fast"   id="pill-fast"   onclick="toggleCluster('Fast Mover')">Fast Mover</div>
+      <div class="pill high"   id="pill-high"   onclick="toggleCluster('High Potential Laggard')">High Potential Laggard</div>
+      <div class="pill struct" id="pill-struct" onclick="toggleCluster('Structural Resistor')">Structural Resistor</div>
+    </div>
+  </div>
+  <div class="control-group">
+    <div class="control-label">Gap Closure Scenario</div>
+    <div class="slider-row">
+      <input type="range" id="slider-closure" min="10" max="100" step="5" value="50"
+             oninput="onClosureChange(this.value)">
+      <div class="slider-val" id="val-closure">50%</div>
+    </div>
+    <div class="slider-hint">Model your target scenario</div>
+  </div>
+  <div class="control-group">
+    <div class="control-label">Enablement Timeline</div>
+    <div class="slider-row">
+      <input type="range" id="slider-accel" min="0" max="3" step="0.5" value="1.5"
+             oninput="onAccelChange(this.value)">
+      <div class="slider-val" id="val-accel">1.5 yr</div>
+    </div>
+    <div class="slider-hint">Move programs forward in time &rarr; updates Sector Outlook tab</div>
+  </div>
+</div>
+
+<!-- ── Tabs ── -->
+<div class="tabs-row">
+  <button class="tab-btn active" onclick="showTab('t1',this)">U.S. Trajectory</button>
+  <button class="tab-btn" onclick="showTab('t2',this)">What Drives Adoption</button>
+  <button class="tab-btn" onclick="showTab('t3',this)">Sector Outlook</button>
+  <button class="tab-btn" onclick="showTab('t4',this)">Priority Scorecard</button>
+  <button class="tab-btn" onclick="showTab('t5',this)">Revenue Scenarios</button>
+  <button class="tab-btn" onclick="showTab('t6',this)">Data Bridge</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     PANEL 1 — U.S. Adoption Trajectory
+═══════════════════════════════════════════════════════════════ -->
+<div id="t1" class="tab-panel active">
+  <div class="panel-header">
+    <div class="panel-title">U.S. Contactless Adoption Trajectory — Historical &amp; Projected</div>
+    <div class="panel-desc">U.S. contactless share of in-person card transactions, 2018–2022 (Federal Reserve, verified), with S-curve growth projections through 2030. The accelerated curve shows what happens when Mastercard moves enablement programs forward — use the Enablement Timeline slider to adjust timing and see the impact.</div>
+  </div>
+  <div class="chart-wrap">
+    <div id="chart-t1" style="height:460px;"></div>
+  </div>
+  <div style="margin-top:14px; display:flex; gap:20px;">
+    <div style="flex:1; background:var(--white); border:1px solid var(--border); border-radius:8px; padding:14px 18px; border-left:3px solid var(--red);">
+      <div style="font-size:11px; font-weight:700; color:var(--navy); margin-bottom:6px;">COVID Inflection</div>
+      <div style="font-size:12px; color:var(--tx-b); line-height:1.6;">Contactless share jumped <strong>+9.3 ppt</strong> (2020→2021), driven by hygiene-motivated tap adoption. This compressed what would have been 3–4 years of organic growth into a single year — resetting the S-curve trajectory ahead of model baseline.</div>
+    </div>
+    <div style="flex:1; background:var(--white); border:1px solid var(--border); border-radius:8px; padding:14px 18px; border-left:3px solid var(--amber);">
+      <div style="font-size:11px; font-weight:700; color:var(--navy); margin-bottom:6px;">Mobile Wallet NFC</div>
+      <div style="font-size:12px; color:var(--tx-b); line-height:1.6;">Mobile wallet NFC share reached <strong>6.95%</strong> of in-person GP transactions in 2022 — embedded within the 19.7% contactless total. Growing at ~2.6 ppt/yr, signaling that tap-via-phone is an accelerating sub-channel as Apple Pay / Google Pay embed deeper.</div>
+    </div>
+    <div style="flex:1; background:var(--white); border:1px solid var(--border); border-radius:8px; padding:14px 18px; border-left:3px solid var(--navy);">
+      <div style="font-size:11px; font-weight:700; color:var(--navy); margin-bottom:6px;">50-Point Gap Context</div>
+      <div style="font-size:12px; color:var(--tx-b); line-height:1.6;">At <strong>19.7%</strong>, the U.S. sits 50 ppt below Mastercard's ~70% global benchmark — roughly where Australia was in 2017 before aggressive enablement programs. Australia reached 85%+ by 2021. The S-curve shape here mirrors that trajectory with a 6-year lag.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     PANEL 2 — OLS Frequency Driver
+═══════════════════════════════════════════════════════════════ -->
+<div id="t2" class="tab-panel">
+  <div class="panel-header">
+    <div class="panel-title">What Drives Contactless Adoption</div>
+    <div class="panel-desc">Each dot is a merchant sector. How often consumers visit — weekly, monthly, twice a year — explains 94% of the variation in contactless adoption across sectors. Average ticket adds nothing once frequency is controlled for (p = 0.46). Ranking sectors by gap size produces almost the reverse of ranking them by frequency (Spearman −0.90), which is why the biggest gaps are not the best targets. N=9 sectors: directional evidence about a mechanism, not an inferential result. Source: industry contactless rates (Layer 2 research) cross-referenced with Atlanta Fed consumer payment behavior data.</div>
+  </div>
+  <div class="two-col">
+    <div class="col">
+      <div class="chart-wrap">
+        <div id="chart-t2" style="height:440px;"></div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="chart-wrap" style="padding:20px 24px;">
+        <div style="font-size:12px; font-weight:700; color:var(--navy); margin-bottom:14px; padding-bottom:8px; border-bottom:1px solid var(--border);">Barrier Breakdown — Atlanta Fed DCPC</div>
+        <div id="dcpc-bars"></div>
+        <div style="margin-top:16px; padding:12px; background:var(--bg); border-radius:6px; font-size:11px; color:var(--tx-b); line-height:1.6;">
+          <strong>Key insight:</strong> 38% of non-tappers say they do not know whether the terminal
+          accepts a tap. Set against Fed NPIPS showing 87.5% of in-person volume already on chip
+          terminals, that describes a specific failure: the hardware is present and consumers cannot
+          tell. Merchant enablement can move it. The larger barrier, 43% citing habit, is slower and
+          sits mainly with issuers and checkout design.
+          <br><br>These are shares of respondents citing a reason in a multi-select question. They
+          identify which barriers are addressable; they do not decompose the gap into causal halves.
+          <br><br><em>Source: Atlanta Fed Diary of Consumer Payment Choice 2021–2023 (Foster et al.)</em>
+        </div>
+        <div style="margin-top:14px; font-size:12px; font-weight:700; color:var(--navy); margin-bottom:10px; padding-bottom:8px; border-bottom:1px solid var(--border);">Tappers by Age Group (2022)</div>
+        <div id="age-bars"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     PANEL 3 — S-Curve Projections
+═══════════════════════════════════════════════════════════════ -->
+<div id="t3" class="tab-panel">
+  <div class="panel-header">
+    <div class="panel-title">Sector S-Curve Projections — Baseline vs. Accelerated Enablement</div>
+    <div class="panel-desc">Dashed = baseline trajectory. Solid = accelerated path if Mastercard moves enablement earlier. The amber line is the 70% global benchmark. Filter by cluster or select an individual sector. Use the Enablement Timeline slider to shift the intervention timing.</div>
+  </div>
+
+  <!-- T3 filter controls -->
+  <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px; flex-wrap:wrap;">
+    <div style="display:flex; border:1px solid var(--border); border-radius:6px; overflow:hidden;">
+      <button id="t3-mode-cluster" onclick="setT3Mode('cluster')"
+        style="padding:5px 14px; font-size:11px; font-weight:600; border:none; cursor:pointer; background:var(--navy); color:#FFF; transition:all 0.15s;">
+        By Cluster
+      </button>
+      <button id="t3-mode-sector" onclick="setT3Mode('sector')"
+        style="padding:5px 14px; font-size:11px; font-weight:600; border:none; cursor:pointer; background:var(--white); color:var(--tx-dim); transition:all 0.15s;">
+        By Sector
+      </button>
+    </div>
+    <!-- Cluster pills (shown in cluster mode) -->
+    <div id="t3-cluster-pills" style="display:flex; gap:6px;">
+      <div class="pill fast"   id="t3-pill-fast"   onclick="toggleT3Cluster('Fast Mover')">Fast Mover</div>
+      <div class="pill high"   id="t3-pill-high"   onclick="toggleT3Cluster('High Potential Laggard')">High Potential Laggard</div>
+      <div class="pill struct" id="t3-pill-struct" onclick="toggleT3Cluster('Structural Resistor')">Structural Resistor</div>
+    </div>
+    <!-- Sector pills (shown in sector mode) -->
+    <div id="t3-sector-pills" style="display:none; flex-wrap:wrap; gap:5px;"></div>
+  </div>
+
+  <div class="chart-wrap">
+    <div id="chart-t3" style="height:460px;"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     PANEL 4 — Priority Scorecard
+═══════════════════════════════════════════════════════════════ -->
+<div id="t4" class="tab-panel">
+  <div class="panel-header">
+    <div class="panel-title">Merchant Sector Priority Scorecard</div>
+    <div class="panel-desc">Sectors ranked by where enablement investment generates the highest return — combining gap to global benchmark, current growth momentum, proximity to peak acceleration window, and transaction volume at stake. The top three hold their ranking across all weighting configurations tested.</div>
+  </div>
+  <div class="two-col">
+    <div class="col">
+      <div class="chart-wrap">
+        <div id="chart-t4" style="height:420px;"></div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="chart-wrap" style="padding: 0; overflow:hidden; border-radius:8px;">
+        <table class="ptable" id="ptable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Sector</th>
+              <th>Cluster</th>
+              <th>Gap (ppt)</th>
+              <th>Opp. (B txns)</th>
+              <th>Score</th>
+            </tr>
+          </thead>
+          <tbody id="ptable-body"></tbody>
+        </table>
+      </div>
+      <div style="margin-top:10px; font-size:10px; color:var(--tx-dim); line-height:1.6; padding:0 4px;">
+        Gap = actual sector rate vs 70% MC global benchmark. Opportunity = incremental transactions at 50% gap closure. 
+        Receptivity multiplier reflects cluster-level adoption dynamics (Fast Movers self-correct; Structural Resistors require costlier dual-track interventions).
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     PANEL 5 — Revenue Scenarios
+═══════════════════════════════════════════════════════════════ -->
+<div id="t5" class="tab-panel">
+  <div class="panel-header">
+    <div class="panel-title">Revenue Scenario Calculator</div>
+    <div class="panel-desc">Adjust the Gap Closure slider to model different scenarios. Revenue estimate is based on incremental contactless transactions multiplied by average ticket and network economics. All inputs sourced from Federal Reserve payment data, Mastercard investor materials, and Nilson Report interchange estimates.</div>
+  </div>
+  <div class="scenario-grid">
+    <div class="scenario-kpi-col">
+      <div class="s-kpi">
+        <div class="s-kpi-val" id="sc-txns">24.6B</div>
+        <div class="s-kpi-lbl">Incremental In-Person GP Transactions</div>
+        <div class="s-kpi-note" id="sc-txns-note">All sectors at 50% closure</div>
+      </div>
+      <div class="s-kpi amber">
+        <div class="s-kpi-val" id="sc-network">$15.0B</div>
+        <div class="s-kpi-lbl">Total Interchange Value Created</div>
+        <div class="s-kpi-note">Visa + MC + AmEx combined</div>
+      </div>
+      <div class="s-kpi green">
+        <div class="s-kpi-val" id="sc-mc">$3.8B</div>
+        <div class="s-kpi-lbl">Mastercard Network Share (~25%)</div>
+        <div class="s-kpi-note" id="sc-mc-note">Interchange revenue uplift</div>
+      </div>
+      <div style="background:var(--white); border:1px solid var(--border); border-radius:8px; padding:14px 18px; border-left:3px solid var(--amber);">
+        <div style="font-size:10px; font-weight:700; color:var(--tx-dim); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px;">Revenue Methodology</div>
+        <div style="font-size:11px; color:var(--tx-b); line-height:1.7;">
+          Incremental in-person txns × $37 avg ticket<br>
+          × 1.65% blended interchange rate<br>
+          × 25% Mastercard network share<br>
+          <span style="color:var(--tx-dim);">= share of interchange value created</span>
+        </div>
+        <div style="font-size:10px; color:var(--tx-dim); line-height:1.6; margin-top:8px; padding-top:8px; border-top:1px solid var(--border);">
+          Base is 2022 in-person GP volume (97.85B), not all GP volume: a remote
+          transaction cannot be tapped. $37 is the FRPS 2022 in-person GP debit
+          average ticket. Interchange accrues largely to issuers, so this is
+          chain-wide value apportioned by network share, not a Mastercard P&amp;L line.
+        </div>
+      </div>
+    </div>
+    <div class="scenario-chart-col">
+      <div class="chart-wrap" style="margin-bottom:16px;">
+        <div id="chart-t5a" style="height:240px;"></div>
+      </div>
+      <div class="chart-wrap">
+        <div id="chart-t5b" style="height:200px;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     PANEL 6 — Data Bridge
+═══════════════════════════════════════════════════════════════ -->
+<div id="t6" class="tab-panel">
+  <div class="panel-header">
+    <div class="panel-title">From Sector Map to Merchant Target List — The Data Bridge</div>
+    <div class="panel-desc">Public data gets you to the right sectors. Mastercard's internal transaction data gets you to the right merchants, the right geographies, and the right timing — at scale. This is what becomes possible one data source away.</div>
+  </div>
+
+  <!-- Header columns -->
+  <div style="display:grid; grid-template-columns:1fr 48px 1fr; gap:0; margin-bottom:12px; align-items:end;">
+    <div style="font-size:11px; font-weight:800; color:var(--navy); text-transform:uppercase; letter-spacing:0.6px; padding-bottom:8px; border-bottom:2px solid var(--red);">This Public Analysis Delivers</div>
+    <div></div>
+    <div style="font-size:11px; font-weight:800; color:var(--navy); text-transform:uppercase; letter-spacing:0.6px; padding-bottom:8px; border-bottom:2px solid var(--amber);">Internal MCC Data Unlocks</div>
+  </div>
+
+  <!-- 6-row comparison table -->
+  <div style="display:flex; flex-direction:column; gap:0; background:var(--white); border:1px solid var(--border); border-radius:8px; overflow:hidden;">
+
+    <div style="display:grid; grid-template-columns:1fr 48px 1fr; background:#F4F5F9; padding:8px 18px; font-size:10px; font-weight:700; color:var(--tx-dim); text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px solid var(--border);">
+      <span>Sector-Level Priority Map</span>
+      <span></span>
+      <span>Merchant-Level Target List</span>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 48px 1fr; padding:12px 18px; border-bottom:1px solid var(--border); align-items:center;">
+      <div style="font-size:12px; color:var(--tx-b); line-height:1.5; padding-right:16px;">9 sectors ranked by gap, momentum, and inflection timing</div>
+      <div style="text-align:center; font-size:18px; color:var(--red);">&#8594;</div>
+      <div style="font-size:12px; color:var(--tx-b); line-height:1.5; padding-left:16px; border-left:2px solid var(--amber);">Individual merchants ranked by gap and geography (MSA / ZIP) — tens of thousands of outreach targets</div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 48px 1fr; padding:12px 18px; border-bottom:1px solid var(--border); align-items:center; background:#FAFBFD;">
+      <div style="font-size:12px; color:var(--tx-b); line-height:1.5; padding-right:16px;">Frequency explains 94% of adoption variation, but across only 9 sector data points</div>
+      <div style="text-align:center; font-size:18px; color:var(--red);">&#8594;</div>
+      <div style="font-size:12px; color:var(--tx-b); line-height:1.5; padding-left:16px; border-left:2px solid var(--amber);">Same regression on thousands of merchant-level observations — confirms or sharpens the predictor</div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 48px 1fr; padding:12px 18px; border-bottom:1px solid var(--border); align-items:center;">
+      <div style="font-size:12px; color:var(--tx-b); line-height:1.5; padding-right:16px;">S-curve inflection timing identified at sector level — which three clusters are approaching peak acceleration now</div>
+      <div style="text-align:center; font-size:18px; color:var(--red);">&#8594;</div>
+      <div style="font-size:12px; color:var(--tx-b); line-height:1.5; padding-left:16px; border-left:2px solid var(--amber);">Same model per MCC × region → months-to-inflection per merchant, ranked for quarterly outreach</div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 48px 1fr; padding:12px 18px; border-bottom:1px solid var(--border); align-items:center; background:#FAFBFD;">
+      <div style="font-size:12px; color:var(--tx-b); line-height:1.5; padding-right:16px;">Addressable barriers identified nationally via Atlanta Fed DCPC, but survey data cannot attribute the gap</div>
+      <div style="text-align:center; font-size:18px; color:var(--red);">&#8594;</div>
+      <div style="font-size:12px; color:var(--tx-b); line-height:1.5; padding-left:16px; border-left:2px solid var(--amber);">Issuer vs. merchant attribution per sector: cards not enabled vs. terminals not installed — determines which program to run</div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 48px 1fr; padding:12px 18px; border-bottom:1px solid var(--border); align-items:center;">
+      <div style="font-size:12px; color:var(--tx-b); line-height:1.5; padding-right:16px;">General Merchandise #1 at sector level — warehouse clubs, dollar stores, department stores grouped together</div>
+      <div style="text-align:center; font-size:18px; color:var(--red);">&#8594;</div>
+      <div style="font-size:12px; color:var(--tx-b); line-height:1.5; padding-left:16px; border-left:2px solid var(--amber);">Sub-category validation: confirms whether the ranking holds at 4-digit MCC or concentrates in one sub-segment</div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 48px 1fr; padding:12px 18px; align-items:center; background:#FAFBFD;">
+      <div style="font-size:12px; color:var(--tx-b); line-height:1.5; padding-right:16px;">Modeled interchange value: $3.8B–$5.3B Mastercard share at 50–70% gap closure, based on public interchange and network share estimates</div>
+      <div style="text-align:center; font-size:18px; color:var(--red);">&#8594;</div>
+      <div style="font-size:12px; color:var(--tx-b); line-height:1.5; padding-left:16px; border-left:2px solid var(--amber);">Enablement ROI calibrated against observed post-campaign transaction lift — replaces modeled estimates with empirically grounded projections</div>
+    </div>
+
+  </div>
+
+  <!-- Quote -->
+  <div style="margin-top:16px; padding:14px 20px; background:rgba(247,158,27,0.08); border-left:3px solid var(--amber); border-radius:0 6px 6px 0; font-size:12px; color:var(--tx-b); font-style:italic; line-height:1.6;">
+    &ldquo;Target these 847 mid-market general merchandise retailers in the Midwest and Southeast for NFC terminal upgrade Q3 — they&rsquo;re 6 months from tipping.&rdquo;
+    <span style="display:block; margin-top:6px; font-size:10px; font-style:normal; color:var(--tx-dim);">The output when the same model runs on Mastercard&rsquo;s internal MCC + geography transaction data.</span>
+  </div>
+</div>
+
+<!-- ── Footer ── -->
+<div class="footer">
+  <div class="footer-src">
+    <strong style="color:#FFF;">Data Sources:</strong>
+    Federal Reserve Payments Study NPIPS 2015–2022 (Layer 1) &nbsp;·&nbsp;
+    Mastercard/Visa investor presentations, NRF 2022/2023 surveys (Layer 2) &nbsp;·&nbsp;
+    Atlanta Fed Diary of Consumer Payment Choice 2021–2023 (Layer 3)<br>
+    Methodology: Logistic S-curve, k and t&#8320; fitted to FRPS 2018–2022 (RMSE 0.48 ppt); saturation ceiling assumed at 85% by analogy to saturated markets, since observations below 20% cannot identify it &nbsp;·&nbsp; K-means clustering (k=3, n_init=50) &nbsp;·&nbsp; OLS regression, N=9 sectors, directional not inferential
+  </div>
+  <div>
+    <div class="footer-by">Linh Le</div>
+    <div class="footer-contact">minalystem@gmail.com &nbsp;·&nbsp; Independent analysis &nbsp;·&nbsp; 2026</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     JAVASCRIPT — Charts + Interactivity
+════════════════════════════════════════════════════ -->
+<script>
+// ── State ─────────────────────────────────────────────
+let activeClusters = new Set(["Fast Mover", "High Potential Laggard", "Structural Resistor"]);
+let closurePct = 50;
+let accelYrs   = 1.5;
+// T3 filter state
+let t3Mode          = 'cluster'; // 'cluster' | 'sector'
+let t3ActiveClusters = new Set(["Fast Mover", "High Potential Laggard", "Structural Resistor"]);
+let t3ActiveSector  = null; // null = all sectors in sector mode
+
+// ── Helpers ────────────────────────────────────────────
+function scurve(t, L, k, t0) {
+  return L / (1 + Math.exp(-k * (t - t0)));
+}
+
+function years(from, to, step=0.25) {
+  const r = [];
+  for (let y = from; y <= to; y += step) r.push(parseFloat(y.toFixed(2)));
+  return r;
+}
+
+function clusterPillId(c) {
+  return c === "Fast Mover" ? "pill-fast" : c === "High Potential Laggard" ? "pill-high" : "pill-struct";
+}
+function clusterClass(c) {
+  return c === "Fast Mover" ? "fast" : c === "High Potential Laggard" ? "high" : "struct";
+}
+
+// ── T3 filter mode ────────────────────────────────────
+function setT3Mode(mode) {
+  t3Mode = mode;
+  document.getElementById('t3-mode-cluster').style.background = mode === 'cluster' ? 'var(--navy)' : 'var(--white)';
+  document.getElementById('t3-mode-cluster').style.color      = mode === 'cluster' ? '#FFF' : 'var(--tx-dim)';
+  document.getElementById('t3-mode-sector').style.background  = mode === 'sector'  ? 'var(--navy)' : 'var(--white)';
+  document.getElementById('t3-mode-sector').style.color       = mode === 'sector'  ? '#FFF' : 'var(--tx-dim)';
+  document.getElementById('t3-cluster-pills').style.display   = mode === 'cluster' ? 'flex' : 'none';
+  document.getElementById('t3-sector-pills').style.display    = mode === 'sector'  ? 'flex' : 'none';
+  if (mode === 'sector' && t3ActiveSector === null) {
+    // default to first sector on first switch
+    t3ActiveSector = Object.keys(DATA.sec_sc)[0];
+    highlightT3SectorPill(t3ActiveSector);
+  }
+  redrawT3();
+}
+
+function toggleT3Cluster(c) {
+  if (t3ActiveClusters.has(c)) {
+    if (t3ActiveClusters.size === 1) return;
+    t3ActiveClusters.delete(c);
+    document.getElementById('t3-pill-' + (c === 'Fast Mover' ? 'fast' : c === 'High Potential Laggard' ? 'high' : 'struct')).classList.add('dimmed');
+  } else {
+    t3ActiveClusters.add(c);
+    document.getElementById('t3-pill-' + (c === 'Fast Mover' ? 'fast' : c === 'High Potential Laggard' ? 'high' : 'struct')).classList.remove('dimmed');
+  }
+  redrawT3();
+}
+
+function selectT3Sector(sector) {
+  t3ActiveSector = sector;
+  highlightT3SectorPill(sector);
+  redrawT3();
+}
+
+function highlightT3SectorPill(sector) {
+  document.querySelectorAll('.t3-sector-pill').forEach(p => {
+    const isActive = p.dataset.sector === sector;
+    p.style.opacity = isActive ? '1' : '0.45';
+    p.style.fontWeight = isActive ? '700' : '500';
+  });
+}
+
+function buildT3SectorPills() {
+  const container = document.getElementById('t3-sector-pills');
+  container.innerHTML = '';
+  Object.entries(DATA.sec_sc).forEach(([sector, v]) => {
+    const color = SECTOR_COLORS[sector] || CLUSTER_COLORS[v.cluster];
+    // Lighten the sector color for the pill background
+    const bg = color + '18'; // ~10% opacity hex
+    const pill  = document.createElement('div');
+    pill.className = 't3-sector-pill';
+    pill.dataset.sector = sector;
+    pill.textContent = sector;
+    pill.style.cssText = `padding:4px 10px; border-radius:20px; font-size:11px; cursor:pointer;
+      border:1.5px solid ${color}; background:${bg}; color:${color};
+      white-space:nowrap; user-select:none; transition:all 0.15s;`;
+    pill.onclick = () => selectT3Sector(sector);
+    container.appendChild(pill);
+  });
+}
+
+// ── Tab switching ─────────────────────────────────────
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  // Redraw on tab show (Plotly needs visible container)
+  if (id === 't1') redrawT1();
+  if (id === 't2') redrawT2();
+  if (id === 't3') redrawT3();
+  if (id === 't4') redrawT4();
+  if (id === 't5') redrawT5();
+  // t6 is static content — no redraw needed
+}
+
+// ── Cluster toggle ─────────────────────────────────────
+function toggleCluster(c) {
+  if (activeClusters.has(c)) {
+    if (activeClusters.size === 1) return; // keep at least one
+    activeClusters.delete(c);
+    document.getElementById(clusterPillId(c)).classList.add('dimmed');
+  } else {
+    activeClusters.add(c);
+    document.getElementById(clusterPillId(c)).classList.remove('dimmed');
+  }
+  redrawT3(); redrawT4(); buildPriorityTable();
+}
+
+// ── Slider handlers ────────────────────────────────────
+function onClosureChange(v) {
+  closurePct = parseInt(v);
+  document.getElementById('val-closure').textContent = v + '%';
+  updateKPIs();
+  if (document.getElementById('t5').classList.contains('active')) redrawT5();
+}
+
+function onAccelChange(v) {
+  accelYrs = parseFloat(v);
+  document.getElementById('val-accel').textContent = v + ' yr';
+  if (document.getElementById('t3').classList.contains('active')) redrawT3();
+  if (document.getElementById('t1').classList.contains('active')) redrawT1();
+}
+
+// ── KPI updates ─────────────────────────────────────────
+function updateKPIs() {
+  // At 50% closure, on the 2022 in-person GP base (97.85B): 24.6B txns, $3.75B MC share
+  const ratio = closurePct / 50;
+  const txns  = (24.60 * ratio).toFixed(1);
+  const mcRev = (3.75 * ratio).toFixed(1);
+  document.getElementById('kpi-rev').textContent = '$' + mcRev + 'B';
+  document.getElementById('kpi-rev-sub').textContent = 'at ' + closurePct + '% closure, all sectors';
+  document.getElementById('kpi-txns-sub').textContent = 'at ' + closurePct + '% gap closure (top 3)';
+  // Top 3 txns scale proportionally too
+  const top3 = (3.91 * ratio).toFixed(2);
+  document.getElementById('kpi-txns').textContent = top3 + 'B';
+  // Panel 5 KPIs
+  if (document.getElementById('t5').classList.contains('active')) redrawT5();
+}
+
+// ═══════════════════════════════════════════════════
+// PANEL 1 — U.S. Trajectory
+// ═══════════════════════════════════════════════════
+function redrawT1() {
+  const histYears = Object.keys(DATA.frps_hist).map(Number).sort();
+  const histVals  = histYears.map(y => DATA.frps_hist[y]);
+  const mwYears   = Object.keys(DATA.mw_hist).map(Number).sort();
+  const mwVals    = mwYears.map(y => DATA.mw_hist[y]);
+
+  const projYears = years(2022, 2030, 0.25);
+  const baseVals  = projYears.map(y => scurve(y, DATA.us_sc.L, DATA.us_sc.k, DATA.us_sc.t0));
+  const intervVals= projYears.map(y => scurve(y, DATA.us_sc.L, DATA.us_sc.k, DATA.us_sc.t0 - accelYrs));
+
+  const layout = {
+    paper_bgcolor: '#FFFFFF', plot_bgcolor: '#FFFFFF',
+    font: { family: "Segoe UI, Arial, sans-serif", color: '#2A3550' },
+    xaxis: { title: '', tickfont: {size:12}, gridcolor:'#F0F2F8', zeroline:false, range:[2017.5, 2030.5] },
+    yaxis: { title: 'Contactless Share (%)', tickfont:{size:12}, gridcolor:'#F0F2F8', zeroline:false, range:[0, 92], ticksuffix:'%' },
+    margin: { l:60, r:30, t:30, b:50 },
+    legend: { orientation:'h', x:0, y:-0.18, font:{size:11} },
+    hovermode: 'x unified',
+    shapes: [
+      // COVID annotation line
+      { type:'line', x0:2020, x1:2020, y0:0, y1:92, line:{color:'rgba(235,0,27,0.25)', width:1.5, dash:'dot'} },
+      // MC global benchmark dashed line
+      { type:'line', x0:2017.5, x1:2030.5, y0:70, y1:70, line:{color:'rgba(247,158,27,0.7)', width:1.5, dash:'dash'} },
+    ],
+    annotations: [
+      { x:2020.1, y:86, text:'COVID<br>inflection', showarrow:false, font:{size:10, color:'#EB001B'}, xanchor:'left' },
+      { x:2030.3, y:71.5, text:'MC Global<br>~70%', showarrow:false, font:{size:10, color:'#D97706'}, xanchor:'right' }
+    ]
+  };
+
+  const traces = [
+    {
+      x: histYears, y: histVals,
+      mode: 'lines+markers', name: 'U.S. Contactless (FRPS verified)',
+      line: { color:'#EB001B', width:3 }, marker: { size:7, color:'#EB001B' },
+      hovertemplate: '%{y:.1f}%<extra>FRPS Actual</extra>'
+    },
+    {
+      x: mwYears, y: mwVals,
+      mode: 'lines+markers', name: 'Mobile Wallet NFC (FRPS sub-component)',
+      line: { color:'#0D1B35', width:2, dash:'dot' }, marker: { size:5, color:'#0D1B35' },
+      hovertemplate: '%{y:.1f}%<extra>Mobile Wallet NFC</extra>'
+    },
+    {
+      x: projYears, y: baseVals,
+      mode: 'lines', name: 'Baseline S-curve projection',
+      line: { color:'#4A6FA5', width:2.5, dash:'dash' },
+      hovertemplate: '%{y:.1f}%<extra>Baseline</extra>'
+    },
+    {
+      x: projYears, y: intervVals,
+      mode: 'lines', name: `Accelerated (+${accelYrs}yr enablement)`,
+      line: { color:'#00A86B', width:2.5 },
+      fill: 'tonexty', fillcolor: 'rgba(0,168,107,0.07)',
+      hovertemplate: '%{y:.1f}%<extra>With Acceleration</extra>'
+    }
+  ];
+
+  Plotly.react('chart-t1', traces, layout, {responsive:true, displayModeBar:false});
+}
+
+// ═══════════════════════════════════════════════════
+// PANEL 2 — OLS Scatter
+// ═══════════════════════════════════════════════════
+function redrawT2() {
+  // Build scatter by cluster
+  const byCluster = {};
+  for (const [sector, v] of Object.entries(DATA.sec_l2)) {
+    const c = DATA.sec_sc[sector] ? DATA.sec_sc[sector].cluster : v.cluster;
+    if (!byCluster[c]) byCluster[c] = { x:[], y:[], text:[] };
+    byCluster[c].x.push(v.freq);
+    byCluster[c].y.push(v.cs);
+    byCluster[c].text.push(sector);
+  }
+
+  // Regression line
+  const freqs = Object.values(DATA.sec_l2).map(v => v.freq);
+  const xmin = Math.min(...freqs) - 0.5, xmax = Math.max(...freqs) + 0.5;
+  // Regression: cs = freq_coeff * freq + ticket_coeff * ticket + intercept
+  // For line, use only frequency dimension with mean ticket (~44)
+  const meanTicket = Object.values(DATA.sec_l2).reduce((s,v)=>s+v.ticket,0)/9;
+  const regX = [xmin, xmax];
+  const regY = regX.map(x => DATA.reg.frequency_coeff * x + DATA.reg.avg_ticket_coeff * meanTicket);
+
+  const traces = Object.entries(byCluster).map(([cluster, pts]) => ({
+    x: pts.x, y: pts.y, text: pts.text,
+    mode: 'markers+text', name: cluster,
+    marker: { color: CLUSTER_COLORS[cluster], size: 12, opacity: 0.85, line:{color:'white', width:1.5} },
+    textposition: 'top center', textfont: {size:10, color:'#2A3550'},
+    hovertemplate: '<b>%{text}</b><br>Frequency: %{x}x/week avg<br>Contactless: %{y}%<extra>' + cluster + '</extra>'
+  }));
+
+  traces.push({
+    x: regX, y: regY,
+    mode: 'lines', name: 'OLS Fit (R²=0.942)',
+    line: { color:'rgba(235,0,27,0.6)', width:2, dash:'dash' },
+    hoverinfo: 'skip'
+  });
+
+  const layout = {
+    paper_bgcolor:'#FFFFFF', plot_bgcolor:'#FFFFFF',
+    font: { family:"Segoe UI, Arial, sans-serif", color:'#2A3550' },
+    xaxis: { title:'Transaction Frequency (relative, 1=annual, 5=weekly)', tickfont:{size:11}, gridcolor:'#F0F2F8', zeroline:false },
+    yaxis: { title:'Contactless Share (%)', tickfont:{size:11}, gridcolor:'#F0F2F8', zeroline:false, ticksuffix:'%' },
+    margin: {l:60, r:20, t:30, b:60},
+    legend: { orientation:'h', x:0, y:-0.22, font:{size:11} },
+    annotations: [{
+      x:4.3, y:25, text: 'R² = 0.942<br>Frequency coeff = +15.52<br>p < 0.001 (n=9)',
+      showarrow:false, font:{size:11, color:'#EB001B'},
+      bgcolor:'rgba(255,255,255,0.9)', bordercolor:'#EB001B', borderwidth:1, borderpad:6
+    }]
+  };
+
+  Plotly.react('chart-t2', traces, layout, {responsive:true, displayModeBar:false});
+
+  // DCPC bars
+  buildDCPCBars();
+}
+
+function buildDCPCBars() {
+  const el = document.getElementById('dcpc-bars');
+  el.innerHTML = '';
+  const colors = { behavioral:'#4A6FA5', infrastructure_signal:'#D97706' };
+  DATA.dcpc.top_reasons_not_tap.forEach(r => {
+    const color = r.type === 'infrastructure_signal' ? '#D97706' : '#4A6FA5';
+    el.innerHTML += `
+      <div class="dcpc-bar-row">
+        <div class="dcpc-label">${r.reason}</div>
+        <div class="dcpc-bar-outer">
+          <div class="dcpc-bar-inner" style="width:${r.pct}%; background:${color};"></div>
+        </div>
+        <div class="dcpc-pct">${r.pct}%</div>
+      </div>`;
+  });
+
+  const el2 = document.getElementById('age-bars');
+  el2.innerHTML = '';
+  const ages = [['Under 35', DATA.dcpc.age_breakdown.under_35, '#EB001B'],
+                ['35–54',    DATA.dcpc.age_breakdown['35_54'],  '#F79E1B'],
+                ['55+',      DATA.dcpc.age_breakdown['55_plus'],'#4A6FA5']];
+  ages.forEach(([lbl, pct, color]) => {
+    el2.innerHTML += `
+      <div class="dcpc-bar-row">
+        <div class="dcpc-label">${lbl}</div>
+        <div class="dcpc-bar-outer">
+          <div class="dcpc-bar-inner" style="width:${pct}%; background:${color};"></div>
+        </div>
+        <div class="dcpc-pct">${pct}%</div>
+      </div>`;
+  });
+}
+
+// ═══════════════════════════════════════════════════
+// PANEL 3 — S-Curve Projections
+// ═══════════════════════════════════════════════════
+function redrawT3() {
+  const ys = years(2018, 2030, 0.2);
+  const traces = [];
+
+  // Determine which sectors to show based on mode
+  let visibleSectors;
+  if (t3Mode === 'cluster') {
+    visibleSectors = Object.entries(DATA.sec_sc).filter(([s, v]) => t3ActiveClusters.has(v.cluster));
+  } else {
+    // Sector mode: show only the selected sector
+    visibleSectors = t3ActiveSector
+      ? Object.entries(DATA.sec_sc).filter(([s]) => s === t3ActiveSector)
+      : Object.entries(DATA.sec_sc);
+  }
+
+  visibleSectors.forEach(([sector, v]) => {
+    const color = SECTOR_COLORS[sector] || CLUSTER_COLORS[v.cluster];
+    const baseVals = ys.map(y => scurve(y, v.L, v.k, v.t0_baseline));
+    const intervT0 = v.t0_baseline - accelYrs;
+    const intervVals = ys.map(y => scurve(y, v.L, v.k, intervT0));
+
+    // Baseline
+    traces.push({
+      x: ys, y: baseVals,
+      mode:'lines', name: sector + ' (baseline)',
+      line: { color: color, width: 2, dash:'dash' },
+      legendgroup: sector,
+      hovertemplate: sector + ' baseline: %{y:.0f}%<extra></extra>',
+      showlegend: true
+    });
+    // Intervention
+    traces.push({
+      x: ys, y: intervVals,
+      mode:'lines', name: sector + ` (+${accelYrs}yr)`,
+      line: { color: color, width: 2.5 },
+      legendgroup: sector,
+      hovertemplate: sector + ' accelerated: %{y:.0f}%<extra></extra>',
+      showlegend: false
+    });
+
+    // Actual 2022 dot
+    traces.push({
+      x:[2022], y:[v.actual_2022],
+      mode:'markers', name: sector + ' actual 2022',
+      marker:{ color:color, size:8, symbol:'circle', line:{color:'white', width:1.5} },
+      legendgroup: sector, showlegend:false,
+      hovertemplate: sector + ' actual 2022: ' + v.actual_2022 + '%<extra></extra>'
+    });
+  });
+
+  const layout = {
+    paper_bgcolor:'#FFFFFF', plot_bgcolor:'#FFFFFF',
+    font: {family:"Segoe UI, Arial, sans-serif", color:'#2A3550'},
+    xaxis: {title:'', tickfont:{size:11}, gridcolor:'#F0F2F8', zeroline:false, range:[2018,2030]},
+    yaxis: {title:'Contactless Share (%)', tickfont:{size:11}, gridcolor:'#F0F2F8', zeroline:false, ticksuffix:'%', range:[0,98]},
+    margin: {l:60, r:20, t:30, b:120},
+    legend: {orientation:'h', x:0, y:-0.28, font:{size:10}},
+    hovermode:'closest',
+    shapes: [
+      {type:'line', x0:2018, x1:2030, y0:70, y1:70, line:{color:'rgba(247,158,27,0.6)', width:1.5, dash:'dash'}},
+      {type:'line', x0:2022, x1:2022, y0:0, y1:98, line:{color:'rgba(13,27,53,0.2)', width:1, dash:'dot'}},
+    ],
+    annotations: [
+      {x:2029.8, y:71.5, text:'MC ~70% global', showarrow:false, font:{size:10, color:'#D97706'}, xanchor:'right'},
+      {x:2022.1, y:95, text:'2022<br>actuals', showarrow:false, font:{size:9, color:'#6B7A99'}, xanchor:'left'}
+    ]
+  };
+
+  Plotly.react('chart-t3', traces, layout, {responsive:true, displayModeBar:false});
+}
+
+// ═══════════════════════════════════════════════════
+// PANEL 4 — Priority Scorecard
+// ═══════════════════════════════════════════════════
+function redrawT4() {
+  const filtered = DATA.priority.filter(r => activeClusters.has(r.cluster));
+  const reversed = [...filtered].reverse(); // Plotly horizontal bar shows bottom-to-top
+
+  const colors = reversed.map(r => CLUSTER_COLORS[r.cluster]);
+  const traces = [{
+    type:'bar', orientation:'h',
+    x: reversed.map(r => r.weighted_score),
+    y: reversed.map(r => r.sector),
+    marker: { color: colors, opacity: 0.85 },
+    text: reversed.map(r => r.weighted_score.toFixed(1)),
+    textposition:'outside',
+    hovertemplate: '<b>%{y}</b><br>Score: %{x:.1f}<br>Gap: ' + reversed.map(r=>r.gap_to_benchmark_ppt+'ppt') + '<extra></extra>',
+    customdata: reversed.map(r => ({gap: r.gap_to_benchmark_ppt, opp: r.opportunity_bn_txns_50pct_close, cluster: r.cluster}))
+  }];
+
+  // Fix hovertemplate per point
+  traces[0].hovertemplate = reversed.map(r =>
+    `<b>${r.sector}</b><br>Score: ${r.weighted_score.toFixed(1)}<br>Gap: ${r.gap_to_benchmark_ppt} ppt<br>Opp: ${r.opportunity_bn_txns_50pct_close}B txns<extra>${r.cluster}</extra>`
+  );
+
+  const layout = {
+    paper_bgcolor:'#FFFFFF', plot_bgcolor:'#FFFFFF',
+    font: {family:"Segoe UI, Arial, sans-serif", color:'#2A3550'},
+    xaxis: {title:'Priority Score', tickfont:{size:11}, gridcolor:'#F0F2F8', zeroline:false, range:[0,90]},
+    yaxis: {tickfont:{size:11}, automargin:true},
+    margin: {l:20, r:60, t:20, b:50},
+    showlegend: false,
+    shapes: [{type:'line', x0:0, x1:0, y0:-0.5, y1:filtered.length-0.5, line:{color:'#E2E6ED', width:1}}]
+  };
+
+  Plotly.react('chart-t4', traces, layout, {responsive:true, displayModeBar:false});
+  buildPriorityTable();
+}
+
+function buildPriorityTable() {
+  const filtered = DATA.priority.filter(r => activeClusters.has(r.cluster));
+  let html = '';
+  filtered.forEach((r, i) => {
+    const cc = clusterClass(r.cluster);
+    const barW = Math.round((r.weighted_score / 80) * 60);
+    html += `<tr class="cluster-${cc}">
+      <td class="rank">${i+1}</td>
+      <td style="font-weight:600;">${r.sector}</td>
+      <td><span class="cluster-tag ${cc}">${r.cluster}</span></td>
+      <td style="font-weight:700;">${r.gap_to_benchmark_ppt > 0 ? r.gap_to_benchmark_ppt + ' ppt' : '<span style="color:#00A86B;">Above bmk</span>'}</td>
+      <td style="font-weight:700; color:#D97706;">${r.opportunity_bn_txns_50pct_close > 0 ? r.opportunity_bn_txns_50pct_close + 'B' : '—'}</td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar" style="width:${barW}px; background:${CLUSTER_COLORS[r.cluster]};"></div>
+          <span class="score-num">${r.weighted_score.toFixed(1)}</span>
+        </div>
+      </td>
+    </tr>`;
+  });
+  document.getElementById('ptable-body').innerHTML = html;
+}
+
+// ═══════════════════════════════════════════════════
+// PANEL 5 — Revenue Scenarios
+// ═══════════════════════════════════════════════════
+function redrawT5() {
+  // All figures on the 2022 in-person GP base (97.85B) at 50% gap closure.
+  const ratio   = closurePct / 50;
+  const txns    = (24.60 * ratio).toFixed(1);
+  const network = (15.02 * ratio).toFixed(1);
+  const mc      = (3.75 * ratio).toFixed(2);
+
+  document.getElementById('sc-txns').textContent    = txns + 'B';
+  document.getElementById('sc-txns-note').textContent = 'All sectors at ' + closurePct + '% closure';
+  document.getElementById('sc-network').textContent = '$' + network + 'B';
+  document.getElementById('sc-mc').textContent      = '$' + mc + 'B';
+  document.getElementById('sc-mc-note').textContent  = 'At ' + closurePct + '% gap closure';
+
+  // Chart 5a — revenue curve across closure scenarios
+  const pcts  = Array.from({length:19}, (_,i) => 10 + i*5);
+  const mcRevs = pcts.map(p => +(3.75 * p/50).toFixed(2));
+  const traces5a = [
+    {
+      x: pcts, y: mcRevs,
+      mode:'lines+markers', name:'MC Revenue Uplift ($B)',
+      line:{color:'#EB001B', width:3}, marker:{size:6, color:'#EB001B'},
+      fill:'tozeroy', fillcolor:'rgba(235,0,27,0.07)',
+      hovertemplate:'%{x}% closure → $%{y}B<extra>MC Revenue</extra>'
+    },
+    {
+      x:[closurePct], y:[+(3.75*closurePct/50).toFixed(2)],
+      mode:'markers', name:'Current scenario',
+      marker:{size:14, color:'#F79E1B', symbol:'diamond', line:{color:'white', width:2}},
+      hovertemplate:'Selected: %{x}% → $%{y}B<extra></extra>'
+    }
+  ];
+  Plotly.react('chart-t5a', traces5a, {
+    paper_bgcolor:'#FFFFFF', plot_bgcolor:'#FFFFFF',
+    font:{family:"Segoe UI, Arial, sans-serif", color:'#2A3550'},
+    xaxis:{title:'Gap Closure %', tickfont:{size:10}, gridcolor:'#F0F2F8', zeroline:false, ticksuffix:'%'},
+    yaxis:{title:'MC Revenue ($B)', tickfont:{size:10}, gridcolor:'#F0F2F8', zeroline:false, tickprefix:'$', ticksuffix:'B'},
+    margin:{l:55, r:20, t:20, b:45},
+    legend:{orientation:'h', x:0, y:-0.3, font:{size:10}},
+    annotations:[{x:closurePct, y:+(3.75*closurePct/50).toFixed(2)+0.3, text:'$'+mc+'B', showarrow:false, font:{size:11, color:'#F79E1B', weight:700}}]
+  }, {responsive:true, displayModeBar:false});
+
+  // Chart 5b — sector opportunity breakdown (top 6)
+  const top6 = DATA.priority.slice(0,6).filter(r => r.opportunity_bn_txns_50pct_close > 0);
+  const opp5b_traces = [{
+    type:'bar', orientation:'h',
+    x: [...top6].reverse().map(r => +(r.opportunity_bn_txns_50pct_close * ratio).toFixed(2)),
+    y: [...top6].reverse().map(r => r.sector),
+    marker:{color:[...top6].reverse().map(r => CLUSTER_COLORS[r.cluster]), opacity:0.85},
+    text:[...top6].reverse().map(r => (r.opportunity_bn_txns_50pct_close*ratio).toFixed(2)+'B'),
+    textposition:'outside',
+    hovertemplate:'%{y}: %{x:.2f}B txns<extra></extra>'
+  }];
+  Plotly.react('chart-t5b', opp5b_traces, {
+    paper_bgcolor:'#FFFFFF', plot_bgcolor:'#FFFFFF',
+    font:{family:"Segoe UI, Arial, sans-serif", color:'#2A3550'},
+    xaxis:{title:'Incremental Transactions (B)', tickfont:{size:10}, gridcolor:'#F0F2F8', zeroline:false},
+    yaxis:{tickfont:{size:10}, automargin:true},
+    margin:{l:20, r:60, t:10, b:40},
+    showlegend:false,
+    title:{text:'Incremental Txn Opportunity by Sector at '+closurePct+'% Closure', font:{size:11, color:'#2A3550'}, x:0}
+  }, {responsive:true, displayModeBar:false});
+}
+
+// ── Init ─────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  redrawT1();
+  buildDCPCBars();
+  buildPriorityTable();
+  updateKPIs();
+  buildT3SectorPills();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,446 @@
+/* Motion. Restrained and purposeful: every effect either shows structure being
+   built (facets, rails, wipes) or gives feedback on something the reader did.
+   Everything here is disabled wholesale under prefers-reduced-motion. */
+
+/* ---------- Scroll progress, marked with a facet ---------- */
+.progress {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  height: 2px;
+  z-index: 60;
+  pointer-events: none;
+  background: transparent;
+}
+.progress-fill {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--accent-mid), var(--accent));
+  transform-origin: left center;
+  transition: width .12s linear;
+}
+.progress-facet {
+  position: absolute;
+  top: -3px;
+  width: 9px;
+  height: 8px;
+  background: var(--accent);
+  clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
+  transition: left .12s linear;
+}
+
+/* ---------- Reveal variants ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity .7s var(--ease-out), transform .7s var(--ease-out);
+}
+.reveal.seen { opacity: 1; transform: none; }
+
+/* Headings wipe in from the left behind a mask */
+.reveal-wipe {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path .85s var(--ease-out);
+}
+.reveal-wipe.seen { clip-path: inset(0 0 0 0); }
+
+/* Charts unmask upward and settle */
+.reveal-chart {
+  opacity: 0;
+  clip-path: inset(12% 0 0 0);
+  transform: scale(.985);
+  transition: opacity .8s var(--ease-out), clip-path .9s var(--ease-out), transform .9s var(--ease-out);
+}
+.reveal-chart.seen { opacity: 1; clip-path: inset(0 0 0 0); transform: none; }
+
+/* ---------- Nav: active section ---------- */
+.topbar nav a { position: relative; }
+.topbar nav a::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -2px;
+  height: 1.5px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform .32s var(--ease-out);
+}
+.topbar nav a:hover::after { transform: scaleX(1); }
+.topbar nav a.active { color: var(--accent-deep); }
+.topbar nav a.active::after { transform: scaleX(1); }
+
+/* ---------- Cards: the tint rail grows on hover ---------- */
+.card { position: relative; }
+.card::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--tint);
+  transform: scaleY(0);
+  transform-origin: top center;
+  transition: transform .45s var(--ease-out);
+  z-index: 2;
+}
+.card:hover::before, .card:focus-within::before { transform: scaleY(1); }
+
+/* ---------- Toolkit: tags lift in sequence on hover ---------- */
+.tk-tag { transition: transform .3s var(--ease-soft), background .3s ease; }
+.tk-card:hover .tk-tag { transform: translateY(-2px); }
+.tk-card:hover .tk-tag:nth-child(2) { transition-delay: .04s; }
+.tk-card:hover .tk-tag:nth-child(3) { transition-delay: .08s; }
+.tk-card:hover .tk-tag:nth-child(4) { transition-delay: .12s; }
+.tk-card:hover .tk-tag:nth-child(5) { transition-delay: .16s; }
+.tk-card:hover .tk-facet { animation: facet-turn .7s var(--ease-out); }
+
+@keyframes facet-turn {
+  0%   { transform: rotate(0deg)   scale(1); }
+  55%  { transform: rotate(180deg) scale(1.22); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+/* ---------- Timeline: the rail draws as you scroll past ---------- */
+.job-rail::before { transform: scaleY(0); transform-origin: top center; transition: transform .9s var(--ease-out); }
+.job.seen .job-rail::before { transform: scaleY(1); }
+.node { transform: scale(0); transition: transform .5s var(--ease-out) .25s; }
+.job.seen .node { transform: scale(1); }
+
+/* ---------- Metric chips ---------- */
+.metric { transition: transform .28s var(--ease-soft), border-color .28s ease; }
+.card:hover .metric { border-color: var(--tint); }
+.metric:hover { transform: translateY(-2px); }
+
+/* ---------- Buttons ---------- */
+.cta, .link { position: relative; overflow: hidden; }
+.cta::after, .link::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: currentColor;
+  opacity: 0;
+  transition: opacity .25s ease;
+  pointer-events: none;
+}
+.cta:active::after, .link:active::after { opacity: .08; }
+
+/* ---------- Chips in the hero enter in sequence ---------- */
+.chip { opacity: 0; transform: translateY(8px); animation: chip-in .55s var(--ease-out) forwards; }
+.chip:nth-child(1) { animation-delay: 1.9s; }
+.chip:nth-child(2) { animation-delay: 2.0s; }
+.chip:nth-child(3) { animation-delay: 2.1s; }
+.chip:nth-child(4) { animation-delay: 2.2s; }
+.chip:nth-child(5) { animation-delay: 2.3s; }
+@keyframes chip-in { to { opacity: 1; transform: none; } }
+
+/* ---------- Anything animated stops under reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal-wipe, .reveal-chart {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+    transition: none !important;
+  }
+  .chip { opacity: 1; transform: none; animation: none; }
+  .card::before, .job-rail::before, .node { transform: none; transition: none; }
+  .tk-card:hover .tk-facet { animation: none; }
+  .progress-fill, .progress-facet { transition: none; }
+  .topbar nav a::after { transition: none; }
+}
+
+
+/* =========================================================
+   Continuous motion. Slow, low amplitude, deliberately out of
+   phase so nothing pulses in unison. All of it stops under
+   prefers-reduced-motion via the block at the end of this file.
+   ========================================================= */
+
+/* Eyebrow facets breathe */
+@keyframes breathe {
+  0%, 100% { opacity: .55; transform: scale(1); }
+  50%      { opacity: 1;   transform: scale(1.18); }
+}
+.eyebrow::before { animation: breathe 5.5s ease-in-out infinite; }
+.section-head .eyebrow::before   { animation-delay: .4s; }
+.tk-card:nth-child(2n) .tk-facet { animation-delay: 1.1s; }
+
+/* Toolkit facets turn slowly and forever, each on its own clock */
+@keyframes drift-turn {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.tk-facet { animation: drift-turn 26s linear infinite; }
+.tk-card:nth-child(2) .tk-facet { animation-duration: 31s; animation-direction: reverse; }
+.tk-card:nth-child(3) .tk-facet { animation-duration: 23s; }
+.tk-card:nth-child(4) .tk-facet { animation-duration: 35s; animation-direction: reverse; }
+.tk-card:nth-child(5) .tk-facet { animation-duration: 28s; }
+.tk-card:nth-child(6) .tk-facet { animation-duration: 33s; animation-direction: reverse; }
+
+/* Timeline nodes pulse in sequence down the rail */
+@keyframes node-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 var(--tint-wash); }
+  50%      { box-shadow: 0 0 0 5px transparent; }
+}
+.job.seen .node { animation: node-pulse 4.5s ease-out infinite; }
+.job:nth-child(2).seen .node { animation-delay: .9s; }
+.job:nth-child(3).seen .node { animation-delay: 1.8s; }
+.job:nth-child(4).seen .node { animation-delay: 2.7s; }
+
+/* A sheen crosses each metric chip now and then */
+@keyframes chip-sheen {
+  0%, 88%, 100% { transform: translateX(-120%); }
+  94%           { transform: translateX(220%); }
+}
+.metric { position: relative; overflow: hidden; }
+.metric::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,.55) 50%, transparent 65%);
+  transform: translateX(-120%);
+  animation: chip-sheen 9s ease-in-out infinite;
+  pointer-events: none;
+}
+.card:nth-child(2n) .metric::after { animation-duration: 11s; animation-delay: 1.4s; }
+.card:nth-child(3n) .metric::after { animation-duration: 13s; animation-delay: 2.6s; }
+
+
+.narrative-rule { position: relative; overflow: hidden; }
+.narrative-rule::after {
+  content: "";
+  position: absolute; left: 11px; top: 0;
+  width: 2px; height: 25%;
+  background: linear-gradient(180deg, transparent, var(--accent), transparent);
+  animation: rule-travel 7s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eyebrow::before, .tk-facet, .job.seen .node,
+  .metric::after { animation: none !important; display: none; }
+}
+
+
+/* =========================================================
+   Pointer and scroll interaction. Everything here is opt-in
+   through a data attribute, driven by the script in Base, and
+   switched off wholesale under prefers-reduced-motion.
+   ========================================================= */
+
+/* --- work cards lean toward the pointer and catch a little light --- */
+.card {
+  --rx: 0deg; --ry: 0deg; --mx: 50%; --my: 50%;
+  transition: transform .4s var(--ease-soft), box-shadow .4s ease, border-color .3s ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(320px circle at var(--mx) var(--my),
+                rgba(255, 255, 255, .5), transparent 62%);
+    opacity: 0;
+    transition: opacity .32s ease;
+    pointer-events: none;
+    z-index: 3;
+  }
+  .card:hover {
+    transform: perspective(900px) rotateX(var(--rx)) rotateY(var(--ry)) translateY(-4px);
+    box-shadow: var(--shadow-lift);
+    border-color: var(--tint);
+  }
+  .card:hover::after { opacity: 1; }
+  .card:hover .thumb img { transform: scale(1.035); }
+}
+.thumb img { transition: transform .6s var(--ease-soft); }
+
+/* --- the hero keeps a soft light under the pointer --- */
+.hero {
+  --hx: 62%; --hy: 34%;
+  position: relative;
+  overflow: hidden;
+}
+.hero > * { position: relative; z-index: 1; }
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(440px circle at var(--hx) var(--hy),
+              var(--accent-wash), transparent 68%);
+  pointer-events: none;
+}
+:root[data-theme="dark"] .hero::before {
+  background:
+    radial-gradient(240px circle at var(--hx) var(--hy), rgba(234, 227, 210, .09), transparent 70%),
+    radial-gradient(560px circle at var(--hx) var(--hy), rgba(165, 204, 127, .19), transparent 72%);
+}
+
+/* --- parallax: the mark and the job diagrams drift at their own rates --- */
+.hero-mark {
+  --fy: 0px;
+  transform: translateY(var(--fy));
+  will-change: transform;
+}
+
+/* --- the timeline node answers a hover on its entry --- */
+.job .node { transition: transform .4s var(--ease-out), box-shadow .4s ease; }
+.job:hover .node { transform: scale(1.45); }
+.job:hover .job-rail::before { background: var(--tint); }
+.job-rail::before { transition: background .4s ease; }
+
+/* --- the domain chips take the light in turn, slowly --- */
+@keyframes chip-lift {
+  0%, 84%, 100% { transform: translateY(0);    box-shadow: none; }
+  90%           { transform: translateY(-2px); box-shadow: 0 3px 10px -4px currentColor; }
+}
+.chip { animation-fill-mode: forwards; }
+.hero .chips .chip { animation: chip-in .55s var(--ease-out) forwards, chip-lift 14s ease-in-out infinite; }
+.hero .chips .chip:nth-child(1) { animation-delay: 1.9s, 2.6s; }
+.hero .chips .chip:nth-child(2) { animation-delay: 2.0s, 5.4s; }
+.hero .chips .chip:nth-child(3) { animation-delay: 2.1s, 8.2s; }
+.hero .chips .chip:nth-child(4) { animation-delay: 2.2s, 11.0s; }
+.hero .chips .chip:nth-child(5) { animation-delay: 2.3s, 13.8s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .card { transform: none !important; }
+  .card::after, .hero::before { display: none; }
+  .thumb img { transition: none; }
+  .hero-mark, .job-art { transform: none !important; }
+  .job .node, .job-rail::before { transition: none; }
+  .hero .chips .chip { animation: none; opacity: 1; transform: none; }
+}
+
+
+/* --- headings arrive a word at a time, and the typed line keeps running --- */
+.words { --wy: 105%; }
+.w { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: .06em; }
+.w > span {
+  display: inline-block;
+  transform: translateY(var(--wy));
+  opacity: 0;
+  transition: transform .62s var(--ease-out), opacity .5s var(--ease-out);
+}
+.words.seen .w > span { transform: none; opacity: 1; }
+
+@keyframes caret-blink { 0%, 46% { opacity: 1; } 54%, 100% { opacity: 0; } }
+.tcaret { animation: caret-blink 1.05s step-end infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .w > span { transform: none !important; opacity: 1 !important; transition: none; }
+  .tcaret { animation: none; opacity: .8; }
+}
+
+
+/* --- the narrative: a reading rail, and a sweep under the turning line --- */
+.beat::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: .12em;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-soft), transparent);
+  transform-origin: left center;
+  animation: beat-sweep 9s ease-in-out infinite;
+}
+@keyframes beat-sweep {
+  0%, 12%   { transform: scaleX(0);   opacity: 0; }
+  32%, 62%  { transform: scaleX(1);   opacity: .95; }
+  86%, 100% { transform: scaleX(1);   opacity: 0; }
+}
+
+.rail-fill { transition: height .18s linear; }
+.rail-facet { transition: top .18s linear; }
+
+@media (prefers-reduced-motion: reduce) {
+  .beat::after { animation: none; transform: scaleX(1); opacity: .8; }
+  .rail-fill, .rail-facet { transition: none; }
+}
+
+
+/* --- experience: motion that keeps running while you are in the section --- */
+.job-rail::before { position: relative; overflow: visible; }
+.job-rail::after { display: none;
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 0;
+  width: 1px;
+  height: 34%;
+  background: linear-gradient(180deg, transparent, var(--tint), transparent);
+  opacity: .85;
+  animation: rail-run 6.5s ease-in-out infinite;
+  pointer-events: none;
+}
+.job:nth-child(2) .job-rail::after { animation-duration: 7.8s; animation-delay: -1.6s; }
+.job:nth-child(3) .job-rail::after { animation-duration: 6.0s; animation-delay: -3.1s; }
+.job:nth-child(4) .job-rail::after { animation-duration: 8.6s; animation-delay: -4.4s; }
+@keyframes rail-run {
+  0%   { transform: translateY(-40%); opacity: 0; }
+  18%  { opacity: .85; }
+  82%  { opacity: .85; }
+  100% { transform: translateY(300%); opacity: 0; }
+}
+
+/* the period figure keeps a soft pulse so the column is never fully still */
+@keyframes when-breathe { 0%, 100% { opacity: 1; } 50% { opacity: .62; } }
+.job-when .figure { animation: when-breathe 5.4s ease-in-out infinite; }
+.job:nth-child(2) .job-when .figure { animation-delay: 1.1s; }
+.job:nth-child(3) .job-when .figure { animation-delay: 2.2s; }
+.job:nth-child(4) .job-when .figure { animation-delay: 3.3s; }
+
+/* --- toolkit: the tags lift in sequence, and the facet keeps turning --- */
+.tk-card:hover .tk-tag:nth-child(1) { transform: translateY(-3px); }
+.tk-card:hover .tk-tag:nth-child(2) { transform: translateY(-3px); transition-delay: .04s; }
+.tk-card:hover .tk-tag:nth-child(3) { transform: translateY(-3px); transition-delay: .08s; }
+.tk-card:hover .tk-tag:nth-child(4) { transform: translateY(-3px); transition-delay: .12s; }
+.tk-card:hover .tk-tag:nth-child(5) { transform: translateY(-3px); transition-delay: .16s; }
+@media (hover: hover) and (pointer: fine) {
+  .tk-card:hover {
+    transform: perspective(900px) rotateX(var(--rx)) rotateY(var(--ry)) translateY(-4px);
+  }
+  .tk-card[aria-pressed="true"]:hover { transform: translateY(-5px); }
+}
+
+/* --- education: the facet marker keeps a slow pulse --- */
+@keyframes cred-pulse {
+  0%, 100% { transform: scale(1);    opacity: 1; }
+  50%      { transform: scale(1.28); opacity: .6; }
+}
+.cred-mark { animation: cred-pulse 5s ease-in-out infinite; }
+.cred:nth-child(2) .cred-mark { animation-delay: 1.4s; }
+.cred:nth-child(3) .cred-mark { animation-delay: 2.8s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .job-rail::after { display: none; }
+  .job-when .figure, .cred-mark { animation: none; }
+  .tk-card:hover { transform: none !important; }
+  .tk-card:hover .tk-tag { transform: none; }
+}
+
+
+/* --- the pointer light, carried down every section in the dark theme --- */
+:root[data-theme="dark"] .band { position: relative; overflow: hidden; }
+:root[data-theme="dark"] .band > .shell { position: relative; z-index: 1; }
+:root[data-theme="dark"] .band::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  /* Two layers: a small warm core and a wide green halo. A single wash at the
+     token alpha only showed against the two lightest grounds and vanished into
+     the darker ones, so the light is built to carry across all five. */
+  background:
+    radial-gradient(240px circle at var(--hx, 50%) var(--hy, 50%),
+                    rgba(234, 227, 210, .09), transparent 70%),
+    radial-gradient(560px circle at var(--hx, 50%) var(--hy, 50%),
+                    rgba(165, 204, 127, .19), transparent 72%);
+  opacity: 0;
+  transition: opacity .45s ease;
+}
+:root[data-theme="dark"] .band.lit::after { opacity: 1; }
+
+/* the hero already carries it, so it only needs the same fade in and out */
+.hero::before { opacity: 0; transition: opacity .45s ease; }
+.hero.lit::before { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  :root[data-theme="dark"] .band::after { display: none; }
+}

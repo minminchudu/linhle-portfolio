@@ -1,0 +1,182 @@
+---
+import CaseStudy from "../../layouts/CaseStudy.astro";
+import Figure from "../../components/Figure.astro";
+
+const metrics = [
+  { value: "$557.35M", label: "Shooter genre sales, 4th of all genres" },
+  { value: "$158.76M", label: "Activision shooter sales, top of four" },
+  { value: "42.74%", label: "Activision portfolio in Shooter" },
+  { value: "53.09%", label: "X360 share of Activision's NA shooter sales" },
+];
+
+const links = [
+  { label: "Deck (PDF)", href: "/media/Linh_Le_Publisher_Selection_Analysis.pdf" },
+];
+---
+
+<CaseStudy
+  title="The strongest financials belonged to the publisher we did not choose"
+  description="Selecting a publishing partner for a shooter title on Xbox 360, where the commercial screen and the financial screen disagreed and the recommendation had to say why. Case study by Linh (Min) Le."
+  project="Video Game Publisher Selection"
+  period="February to March 2026"
+  tint="finance"
+  hook="Ubisoft came out ahead on every growth measure we tested. We recommended Activision anyway, and the interesting part of this analysis is the argument for why."
+  metrics={metrics}
+  links={links}
+>
+
+  <section class="section">
+    <div class="shell">
+      <div class="prose">
+        <h2 class="h-sub">The decision this informed</h2>
+        <p>
+          A studio with a first-person shooter built for Xbox 360 has to choose a publishing partner,
+          and the choice commits marketing budget, distribution reach and a revenue share for the life
+          of the product. Four candidates were on the table: Nintendo, Sony Computer Entertainment,
+          Activision and Ubisoft.
+        </p>
+        <p>
+          The brief asked for a recommendation defended on evidence. I worked as co-analyst across the
+          market sizing and the financial statement analysis, on a team of four.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="prose">
+        <h2 class="h-sub">The finding</h2>
+        <p>
+          The commercial case for Activision is unambiguous. The shooter genre accounts for
+          <strong>$557.35 million</strong> in historical sales, ranking fourth of all genres at
+          <strong>11.74%</strong> of the market. Activision leads the four candidates with
+          <strong>$158.76 million</strong> of that, holds the largest regional share almost everywhere
+          including North America where shooter sales are strongest, and commits
+          <strong>42.74% of its own sales portfolio</strong> to the genre. The other three publishers
+          are diversified, so shooters are a line of business for them and a centre of gravity for
+          Activision.
+        </p>
+        <Figure
+          src="/figures/publisher-genre-sales.png"
+          alt="Bar chart of total sales by video game genre with Shooter highlighted at 557.35 million dollars, alongside a table giving each genre's percentage of total sales."
+          caption="Total sales across twelve genres. Shooter ranks fourth at $557.35M and 11.74% of the market, which is what established the genre was worth entering before any publisher question was asked."
+          wide
+        />
+        <p>
+          The platform screen points the same way. Xbox 360 is the leading console for shooter sales in
+          North America at <strong>$125.54 million</strong>, Activision generates more of that than any
+          other publisher, and <strong>53.09%</strong> of Activision's North American shooter sales come
+          from that one platform. Part of the reason is structural: Activision and Ubisoft are the only
+          third-party publishers of the four competing on Xbox 360 at all, since Nintendo and Sony
+          publish primarily onto their own hardware.
+        </p>
+        <p>
+          Then the financial screen disagreed. Across the comparison window Activision showed positive
+          growth in revenue, operating income, profit and assets, and its return on equity improved
+          through profit margin and asset turnover while financial leverage came down, which is returns
+          earned from operations instead of borrowed from the balance sheet. Activision outperformed all
+          three rivals on asset turnover by a wide margin.
+        </p>
+        <p>
+          Ubisoft still came out ahead across the growth measures. On the financial screen alone, the
+          recommendation would have been Ubisoft.
+        </p>
+        <p>
+          We recommended Activision, and the reason is the whole point of the analysis. Financial
+          strength qualifies a partner and does not by itself sell a shooter. Activision's advantage is
+          genre-specific and platform-specific, built on a catalogue already concentrated where this
+          title would launch, and that specialisation is not something a stronger balance sheet
+          substitutes for.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="prose">
+        <h2 class="h-sub">What I did, and the obvious alternative I rejected</h2>
+        <p>
+          The obvious alternative was to rank the four on shooter sales and stop, which would have
+          produced the same name by a route that collapses under a single follow-up question. Sales
+          leadership establishes that a publisher has sold games in a genre. It says nothing about
+          whether the company can fund a launch, sustain distribution, or survive the window between
+          signature and release.
+        </p>
+        <div class="pull">
+          Return on equity has the same weakness in miniature. Two publishers can post identical
+          returns while one earns them through margin and asset efficiency and the other manufactures
+          them with debt. Decomposing the ratio into its three components is the only way to tell those
+          apart from outside the company, and it is what showed Activision improving on the operating
+          side while reducing leverage.
+        </div>
+        <p>
+          So the analysis ran the commercial case and the financial case as genuinely separate tests,
+          which is what made the disagreement visible. A single blended score would have averaged
+          Ubisoft's financial strength against Activision's genre concentration and produced a ranking
+          that hid the actual decision. Keeping them apart forced the trade-off into the open and
+          required the recommendation to argue for it rather than assert it.
+        </p>
+        <p>
+          Reading the comparison window across all four publishers rather than Activision alone is what
+          allowed shared industry pressure to be identified as an industry condition instead of a
+          company-specific warning sign. Every publisher in the set showed strong DuPont growth, which
+          is the context that makes Activision's asset turnover advantage meaningful rather than merely
+          positive.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <header class="section-head">
+        <p class="eyebrow">Evidence</p>
+        <h2 class="h-sub">The deck as presented</h2>
+      </header>
+      <div class="embed">
+        <iframe src="/media/Linh_Le_Publisher_Selection_Analysis.pdf"
+                title="Video game publisher selection deck" loading="lazy"></iframe>
+      </div>
+      <p class="embed-note">
+        <a href="/media/Linh_Le_Publisher_Selection_Analysis.pdf">Open the deck in its own tab</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="prose">
+        <h2 class="h-sub">Assumptions and limitations</h2>
+        <p>
+          The comparison set is four publishers. That is enough to rank them against one another and too
+          few to say anything about the industry, so every relative statement here is bounded by that
+          set.
+        </p>
+        <p>
+          The financial analysis covers a two-year comparison window drawn from public filings. Two
+          years establishes direction and cannot establish durability. A commitment of this size would
+          ordinarily want a longer series alongside forward guidance that public statements do not
+          disclose.
+        </p>
+        <p>
+          Sales data is historical and tied to a console generation. The Xbox 360 findings describe
+          where the audience was in the data rather than where it would be at launch, so the platform
+          result is evidence about publisher specialisation instead of a forecast.
+        </p>
+        <p>
+          Nothing here models deal terms, and they are what ultimately decide whether a good partner
+          produces a good outcome. Revenue share, marketing commitment and creative control sit inside
+          a negotiation that no external analysis can see.
+        </p>
+        <p>
+          The revenue picture is also incomplete by construction. The dataset covers unit sales and
+          carries nothing on in-game purchases, which for a modern shooter is a substantial and growing
+          share of what a title actually earns.
+        </p>
+      </div>
+    </div>
+  </section>
+
+</CaseStudy>

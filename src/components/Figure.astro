@@ -1,0 +1,45 @@
+---
+// A chart from the analysis, placed beside the claim it supports.
+interface Props {
+  src: string;
+  alt: string;
+  caption: string;
+  wide?: boolean;
+}
+const { src, alt, caption, wide = false } = Astro.props;
+---
+
+<figure class={wide ? "fig wide reveal-chart" : "fig reveal-chart"}>
+  <div class="fig-frame">
+    <img src={src} alt={alt} loading="lazy" decoding="async" />
+  </div>
+  <figcaption>{caption}</figcaption>
+</figure>
+
+<style>
+  .fig {
+    margin: 2rem 0 0;
+    max-width: var(--measure);
+    display: flex;
+    flex-direction: column;
+    gap: .7rem;
+  }
+  .fig.wide { max-width: 100%; }
+
+  .fig-frame {
+    border: 1px solid var(--rule);
+    background: #fff;
+    padding: .75rem;
+    overflow-x: auto;
+  }
+  .fig-frame img { width: 100%; height: auto; display: block; }
+
+  figcaption {
+    font-family: var(--font-mono);
+    font-size: var(--step--2);
+    line-height: 1.6;
+    color: var(--ink-faint);
+    padding-left: .75rem;
+    border-left: 2px solid var(--tint, var(--accent));
+  }
+</style>

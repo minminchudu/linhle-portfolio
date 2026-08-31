@@ -1,0 +1,209 @@
+---
+import CaseStudy from "../../layouts/CaseStudy.astro";
+import Figure from "../../components/Figure.astro";
+
+const metrics = [
+  { value: "94%", label: "Variation explained by visit frequency" },
+  { value: "7th of 9", label: "Healthcare's priority rank" },
+  { value: "3.91B", label: "Incremental annual transactions" },
+  { value: "94.9%", label: "Weightings preserving the top three" },
+];
+
+const links = [
+  { label: "Repository", href: "https://github.com/minminchudu/contactless-enablement-priority-model" },
+  { label: "Live dashboard", href: "/media/Linh_Le_Contactless_Priority_Dashboard.html" },
+  { label: "Executive brief", href: "/media/Linh_Le_Contactless_Priority_Brief.html" },
+];
+---
+
+<CaseStudy
+  title="The biggest adoption gaps were the worst places to invest"
+  description="US contactless payment adoption sits 50 points below the global benchmark. Ranking nine merchant sectors by gap size produces almost the reverse of the right answer. Case study by Linh (Min) Le."
+  project="Contactless Enablement Priority Model"
+  period="May 2026"
+  tint="method"
+  hook="Healthcare sits further below the global contactless benchmark than any other sector in the United States, and it ranks seventh of nine for where enablement money should go."
+  metrics={metrics}
+  links={links}
+>
+
+  <section class="section">
+    <div class="shell">
+      <div class="prose">
+        <h2 class="h-sub">The decision this informed</h2>
+        <p>
+          In 2022 just under a fifth of in-person card transactions in the United States were tapped,
+          against a global figure closer to seventy percent. A payments network looking at that
+          fifty-point gap has to decide where to spend finite merchant-enablement budget, and the
+          intuitive answer is to attack the widest gaps first, because that is where the most volume
+          appears to be sitting.
+        </p>
+        <p>
+          I built this to test whether that intuition survives contact with the data. The work is
+          independent, unaffiliated with any network, and drawn entirely from public sources: the
+          Federal Reserve Payments Study for the volume series, the Atlanta Fed's consumer payment
+          diaries for the behavioural side, and published network and retail-association reporting for
+          sector context.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="prose">
+        <h2 class="h-sub">The finding</h2>
+        <p>
+          Visit frequency explains <strong>94% of the variation in contactless adoption across
+          sectors</strong>. Average ticket size, the other obvious candidate, adds nothing once
+          frequency is controlled for, at p = 0.46. Habits form through repetition, so a category
+          someone touches weekly closes its own gap while a category they touch twice a year does
+          not, whatever the terminal supports.
+        </p>
+        <p>
+          The consequence is operational and uncomfortable. Ranking sectors by gap size produces close
+          to the reverse of ranking them by visit frequency, at a Spearman correlation of
+          <strong>&minus;0.90</strong>, and gap size against final priority score is effectively
+          uncorrelated at r = &minus;0.11. Healthcare carries a
+          <strong>55 point</strong> gap, the largest in the market, and lands
+          <strong>seventh of nine</strong> on priority. Home improvement carries 48 points and lands
+          sixth. General merchandise, at roughly two-thirds of healthcare's gap, ranks first, followed
+          by casual restaurants and pharmacies. Those three together represent about
+          <strong>3.91 billion</strong> incremental annual transactions at half-gap closure.
+        </p>
+        <Figure
+          src="/figures/contactless-gap-vs-priority.png"
+          alt="Scatter plot of enablement priority score against gap to the 70 percent global benchmark for seven merchant sectors, coloured by cluster. Healthcare sits at the largest gap and near the lowest priority. General Merchandise sits at two thirds the gap with four times the priority. The trend line is nearly flat at r equals minus 0.11."
+          caption="Gap size against priority score. The trend line is almost flat at r = −0.11, which is the whole argument: knowing how far a sector sits below the benchmark tells you very little about where the money should go."
+          wide
+        />
+        <p>
+          A second result cuts against the assumption that this is a hardware problem. By 2022,
+          <strong>87.5% of in-person card volume already ran through terminals capable of accepting a
+          tap</strong>, and only <strong>22.5% of it was tapped</strong>. On the consumer side, 38% of
+          non-users said they did not know whether the terminal in front of them would take a
+          contactless payment. The equipment is largely in the field. What is missing is configuration
+          and prompting, which costs a fraction of a capital deployment programme.
+        </p>
+        <Figure
+          src="/figures/contactless-capability-vs-activation.png"
+          alt="Chart comparing terminal capability against actual contactless activation, showing 87.5 percent of in-person card volume running through tap-capable terminals against only 22.5 percent of that volume actually tapped."
+          caption="Capability against activation. The hardware gap closed years ago. The behaviour gap did not."
+        />
+        <p>
+          Timing turns out to matter more than size. Three sectors sit within a year of their modelled
+          inflection point, which is where an intervention compounds instead of merely adding, and the
+          curves converge regardless within a few years. The investment buys arrival time rather than a
+          higher ceiling. That is a genuinely different argument from the one a gap-ranking makes, and
+          it comes with an expiry date attached.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="prose">
+        <h2 class="h-sub">What I did, and the obvious alternative I rejected</h2>
+        <p>
+          The obvious alternative was to rank on the gap and stop, which is what the headline number
+          invites and what most sector commentary does. I rejected it because a gap is a description of
+          the present with no information about velocity, and enablement spending is a bet on movement.
+          A sector can be far behind and moving, far behind and stuck, or close to the benchmark and
+          arriving on its own, and all three deserve different money.
+        </p>
+        <p>
+          Separating those cases meant fitting a logistic adoption curve per sector to the Federal
+          Reserve series, which locates each one on its own S-curve and yields months-to-inflection
+          rather than distance-from-benchmark. Sectors then cluster into three groups by k-means on
+          standardised adoption, ticket and frequency: fast movers already past inflection and
+          self-correcting, high-potential laggards approaching inflection now, and structural resistors
+          whose visit frequency prevents habit formation at any level of investment. The priority score
+          weights gap at 30 percent, growth momentum at 25, inflection proximity at 30 and volume at 15,
+          then multiplies by a cluster receptivity factor that discounts structural resistors to 0.45.
+        </p>
+        <Figure
+          src="/figures/contactless-frequency-vs-adoption.png"
+          alt="Scatter plot of contactless adoption against visit frequency across merchant sectors, showing a strong positive relationship."
+          caption="Visit frequency against adoption. This relationship explains 94% of the variation between sectors, and it is what replaced gap size as the ranking variable."
+        />
+        <div class="pull">
+          A weighted score is only as credible as its weights, which is the standard objection to any
+          ranking of this kind. The same top three hold across all six weighting configurations tested
+          and across <strong>94.9% of ten thousand randomised weightings</strong>. The conclusion is a
+          property of the data rather than of my judgment about what matters.
+        </div>
+        <p>
+          The behavioural layer came last and answers the question the volume data cannot: what is
+          actually stopping a person mid-transaction. Pairing the Atlanta Fed diaries against the
+          terminal-capability figures is what separated a hardware story from an awareness story, and it
+          is the difference between recommending capital expenditure and recommending signage,
+          prompting and terminal configuration.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <header class="section-head">
+        <p class="eyebrow">Evidence</p>
+        <h2 class="h-sub">The executive brief</h2>
+        <p class="section-note">
+          One page carrying the sector ranking, the four analytical findings, and the bridge from a
+          public sector-level model to the merchant-level targeting an internal dataset would unlock.
+          The interactive dashboard is linked at the foot of this page.
+        </p>
+      </header>
+      <div class="embed">
+        <iframe src="/media/Linh_Le_Contactless_Priority_Brief.html"
+                title="Contactless enablement priority executive brief" loading="lazy"></iframe>
+      </div>
+      <p class="embed-note">
+        <a href="/media/Linh_Le_Contactless_Priority_Brief.html">Open the brief in its own tab</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="prose">
+        <h2 class="h-sub">Assumptions and limitations</h2>
+        <p>
+          The regression runs on nine sectors. With an n that small the result is directional rather
+          than inferential, and the brief says so on its face. It is enough to establish that frequency
+          dominates ticket size and not enough to support a confidence interval anyone should trade on.
+        </p>
+        <p>
+          The S-curves are fitted to observations that all sit below twenty percent adoption, and the
+          saturation ceiling is not identifiable from that. Ceilings anywhere between 50% and 100% fit
+          the history within 0.19 percentage points of each other while implying 2026 outcomes ranging
+          from 48% to 86%. I set it at 85% by analogy to saturated markets, and a reconciliation pass
+          across the deliverables found that a lower ceiling actually fits marginally better. The
+          ranking is built on relative position rather than on the absolute level, which is what keeps
+          it standing while the level does not.
+        </p>
+        <p>
+          Opportunity sizing is an order-of-magnitude figure. It applies sector volume shares to 2022
+          in-person general-purpose volume, and those shares are constructed rather than sourced: they
+          sum to exactly one across nine categories that are not exhaustive, which is a strong hint they
+          were fitted rather than measured. The 3.91 billion should be read as scale rather than as a
+          forecast.
+        </p>
+        <p>
+          A reconciliation pass re-derived every quantitative claim in the deliverables from source and
+          found ten of forty-three failing to reproduce, mostly component definitions stated loosely and
+          one opportunity figure computed on the wrong volume base. The corrected values are the ones on
+          this page. Publishing that count rather than quietly fixing the numbers is the point of running
+          the check at all.
+        </p>
+        <p>
+          The analysis stops at the sector level because public data stops there. Turning this into an
+          outreach list requires merchant-category and geographic data that only a network holds, which
+          is the explicit boundary drawn on the brief rather than a gap left unstated.
+        </p>
+      </div>
+    </div>
+  </section>
+
+</CaseStudy>

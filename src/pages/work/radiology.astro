@@ -1,0 +1,136 @@
+---
+import CaseStudy from "../../layouts/CaseStudy.astro";
+
+const metrics = [
+  { value: "100+", label: "Staff positions audited" },
+  { value: "15", label: "Outdated allocations found" },
+  { value: "$40,000+", label: "Annual savings secured" },
+  { value: "$9,000+", label: "Reimbursements recovered" },
+];
+---
+
+<CaseStudy
+  title="Fifteen positions funded against a department that had already changed"
+  description="A hospital radiology budget that balanced every month for a year, and the reorganisations it had stopped describing. Case study by Linh (Min) Le."
+  project="Department of Radiology, OSU Wexner Medical Center"
+  period="June 2024 to May 2025"
+  tint="finance"
+  hook="The error was invisible precisely because nothing was broken. Payroll ran correctly, the ledger balanced, and the numbers behaved exactly as they were supposed to every month for a year."
+  metrics={metrics}
+>
+
+  <section class="section">
+    <div class="shell">
+      <div class="prose">
+        <h2 class="h-sub">The decision this informed</h2>
+        <p>
+          A radiology department in an academic medical center is the operation behind every MRI, CT
+          and ultrasound the hospital performs, and its budget reaches well past payroll. The money in
+          those records supports the people running the department, the service contracts that keep
+          imaging equipment working, and the supplies used in patient care.
+        </p>
+        <p>
+          My work sat between the human resources system and the general ledger, which are two systems
+          that describe the same department and are updated by different people on different schedules.
+          The recurring deliverable was a monthly variance report to departmental leadership. The
+          underlying job was making sure the numbers in it still described the department that
+          actually existed.
+        </p>
+        <p class="section-note">
+          The longer account of what that year taught me opens <a href="/">the front page</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="prose">
+        <h2 class="h-sub">The finding</h2>
+        <p>
+          Auditing position allocations across <strong>more than a hundred</strong> clinical and
+          administrative staff surfaced <strong>fifteen</strong> still funded at levels that three
+          reorganisations had already changed. Roughly <strong>$40,000 a year</strong> was moving
+          through the budget against an organisational structure that had stopped existing, and it had
+          been doing so quietly enough that no monthly close had ever flagged it.
+        </p>
+        <p>
+          Nothing about the ledger was wrong. Every allocation reconciled, every payroll run completed,
+          and every month closed clean. A funding line pointing at a role that has been restructured
+          still balances perfectly well, because balancing is a property of the arithmetic rather than
+          of whether the arithmetic still describes anything real.
+        </p>
+        <p>
+          Two adjacent audits came out of the same habit. Matching employee travel and clinical supply
+          claims across three separate financial ledgers surfaced <strong>$9,000</strong> in
+          reimbursements that had been approved and never paid, sitting in the gap between systems that
+          each believed the other had handled it. Checking monthly invoices against purchase orders
+          across <strong>more than fifty</strong> vendor contracts, covering over
+          <strong>$300,000</strong> in annual departmental spend, surfaced unit price drift and
+          quantity discrepancies that individually cleared any approval threshold and collectively did
+          not.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="prose">
+        <h2 class="h-sub">What I did, and the obvious alternative I rejected</h2>
+        <p>
+          The obvious way to check a budget is to reconcile it against itself, confirming that the
+          totals tie and the variances have explanations. That process runs monthly in every finance
+          department and it would never have found any of this, because an outdated allocation is
+          internally consistent. It ties. It has an explanation. The explanation is simply describing a
+          department that has since been reorganised.
+        </p>
+        <div class="pull">
+          So the reconciliation ran against the operational reality instead of against the ledger.
+          Position allocations were checked against who was actually doing which job, which turns the
+          question from whether the numbers agree with each other into whether they agree with the
+          department.
+        </div>
+        <p>
+          That reframing is what makes the three findings versions of one finding. A stale position
+          allocation, an unpaid reimbursement and a drifting unit price are all cases of two records
+          that each look correct in isolation and stop agreeing once you put them side by side. The
+          reimbursements were invisible to both ledgers individually and obvious across all three at
+          once. The price drift was invisible per invoice and visible against the purchase order.
+        </p>
+        <p>
+          The tooling was deliberately plain. An Excel reconciliation built on lookups and pivot tables
+          across the three ledgers, designed so that the monthly comparison happened automatically
+          rather than depending on whoever was doing the close that month remembering to look. The
+          value was in defining what to compare, and the automation made sure the comparison kept
+          happening after I had defined it.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="prose">
+        <h2 class="h-sub">Assumptions and limitations</h2>
+        <p>
+          This page carries no exhibits and it cannot. The underlying records are hospital financial and
+          personnel data, and nothing from them is reproducible outside the institution. Every figure
+          here is stated at the level of aggregation that appears on my resume, which is the level I can
+          stand behind publicly.
+        </p>
+        <p>
+          The $40,000 is an annualised figure based on the corrected allocations at the point of
+          correction. It represents funding redirected to the department's actual structure rather than
+          cash recovered, and the two are worth distinguishing.
+        </p>
+        <p>
+          The audit covered one department in one medical center over one year. Whether the same
+          pattern sits in other departments is a reasonable inference and remains untested, and the
+          drift itself was a consequence of reorganisation rather than of anything anyone did wrong.
+        </p>
+      </div>
+    </div>
+  </section>
+
+</CaseStudy>

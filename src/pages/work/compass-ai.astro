@@ -1,0 +1,222 @@
+---
+import CaseStudy from "../../layouts/CaseStudy.astro";
+import Figure from "../../components/Figure.astro";
+
+const metrics = [
+  { value: "63%", label: "Decline in quarterly conversion" },
+  { value: "€4.7M", label: "Year-1 net benefit" },
+  { value: "46.9%", label: "Year-1 ROI" },
+  { value: "7.4x", label: "LTV to CAC, Year 1" },
+];
+
+const links = [
+  { label: "Deck (PDF)", href: "/media/Linh_Le_Compass_AI_Spotify_Conversion.pdf" },
+];
+---
+
+<CaseStudy
+  title="The best next action is sometimes to say nothing at all"
+  description="Spotify's free-to-paid conversion fell 63% while its margins improved. Compass AI, a behavioural decision layer that scores silence as a candidate action. Case study by Linh (Min) Le."
+  project="Compass AI, Spotify"
+  period="July 2026"
+  tint="finance"
+  hook="Spotify repaired its income statement by starving the engine that fills it, and the repair looked like a turnaround right up until you separated the two things it was doing at once."
+  metrics={metrics}
+  links={links}
+>
+
+  <section class="section">
+    <div class="shell">
+      <div class="prose">
+        <h2 class="h-sub">The decision this informed</h2>
+        <p>
+          Sixty-two percent of Spotify's monthly listeners, some 468 million people, sit on the
+          free tier. The company has said publicly that it wants a billion users by 2030 with the
+          majority of them still free, which rules out the easiest way to push people toward
+          Premium, namely making the free experience worse. The question on the table at the Viet
+          Career Conference Think-A-Thon was how to convert more of that base without touching it.
+        </p>
+        <p>
+          Our team's deliverable was an investment recommendation with a number attached: how much
+          to commit, against what return, and under which conditions to stop. I led the quantitative
+          work, which meant the diagnosis, the financial model, and the measurement design that would
+          have to hold up if anyone actually spent the money.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="prose">
+        <h2 class="h-sub">The finding</h2>
+        <p>
+          Between 2019 and 2026 the rate at which free listeners became paying subscribers fell from
+          <strong>4.42% per quarter to 1.64%</strong>, a <strong>63% decline</strong> that a simple
+          time regression explains with an R&sup2; of 0.78 at t = &minus;8.18. That is a structural
+          drift rather than a noisy quarter, and it ran underneath one of the most celebrated margin
+          turnarounds in the company's history: operating margin moved from
+          <strong>&minus;5.1% to +15.8%</strong> across the same window, a 20.9 point swing.
+        </p>
+        <Figure
+          src="/figures/compass-conversion-decline.png"
+          alt="Time series chart of Spotify's quarterly free-to-paid conversion rate, declining steadily across the period covered by the analysis."
+          caption="Quarterly conversion flow across the panel. The decline is steady enough that time alone explains 78% of the movement."
+        />
+        <p>
+          The two facts are connected, and the connection runs through sales and marketing. Marketing
+          spend fell from <strong>12.0% to 7.5% of revenue</strong> while the new-signup rate fell
+          from 15.1% to 7.5% per quarter, the two moving together at a correlation of 0.69. Roughly
+          <strong>63% of the margin improvement</strong> came from a one-time cost reset, which is a
+          lever that works exactly once.
+        </p>
+        <p>
+          The instinct in a room looking at falling conversion is to blame churn. Splitting the
+          decline apart showed cancellations improving over the period, from 9.4% down to 7.3% of the
+          paid base. Strip that cushion away and the acquisition weakness is worse than the headline
+          suggests, at <strong>&minus;7.65 points against a &minus;5.16 point net decline</strong>.
+          Every part of the deterioration traces to people no longer starting to pay.
+        </p>
+        <p>
+          That reframes the entire investment case. A retention problem is solved with offers and
+          win-back campaigns. An acquisition problem inside a base of 468 million people is a
+          targeting problem, and targeting problems are won by deciding who to leave alone.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="prose">
+        <h2 class="h-sub">What I did, and the obvious alternative I rejected</h2>
+        <p>
+          The first rejected alternative was a metric, and catching it changed every number
+          downstream. The intuitive way to measure free-to-paid conversion is subscribers divided by
+          monthly active users, and an early pass of this analysis used exactly that. It is wrong in
+          a specific and dangerous way, because it falls whenever the free base grows regardless of
+          how the funnel is performing, which makes healthy top-of-funnel growth look like decline.
+          Spotify's own reporting already carried a computed conversion rate, on a row the first pass
+          had skipped. The analysis was rebuilt on the source definition, and every sheet read now
+          resolves by row label instead of row position so the same mistake cannot recur silently.
+        </p>
+        <div class="pull">
+          The published figures come from net conversion flow, meaning net new paying subscribers in
+          a quarter over the free base that existed at the end of the previous one. That is a lever
+          management can pull. Subscribers over monthly actives is an outcome that moves on its own.
+        </div>
+        <p>
+          The second rejected alternative was the set of levers everyone reaches for first. Cutting
+          price erodes the 34.8% Premium gross margin that the 2030 plan depends on, against roughly
+          13% on the ad-supported side. Adding features is expensive, copyable, and subject to
+          diminishing returns as users adapt. Degrading the free tier reduces sign-ups and works
+          directly against the company's own stated free-majority target. Each of those moves the
+          product or the price for everyone, which is the wrong shape of instrument for a problem
+          where users differ from one another.
+        </p>
+        <p>
+          What survived was a decision layer rather than an offer. Compass AI sorts the eligible base
+          by whether an intervention would actually change the outcome, which produces four groups
+          and only one worth spending on. Users who would upgrade anyway cost money to convince.
+          Users who will never upgrade cost money to annoy. Users already dismissing promotions get
+          made worse by another one. The engine acts only on people whose decision it can move, and
+          it treats staying silent as a fifth candidate action that every other option has to beat on
+          expected value after costs.
+        </p>
+        <p>
+          Building the evidence meant a 32-quarter financial database assembled directly from
+          Spotify's SEC filings, covering Q2 2018 through Q1 2026, with 64 dated events mapped to the
+          quarter each one landed in. An event-study model then tested whether price changes, feature
+          launches or acquisitions explained the conversion decline. None of them did to any
+          statistically meaningful degree, which is what moved the diagnosis from product timeline to
+          marketing spend.
+        </p>
+        <p>
+          The financial model runs off a single assumptions tab, and every figure quoted anywhere in
+          the deck reconciles to it. Base case is a 40% persuadable share of the eligible pool, 90%
+          in-app delivery reach, and a 2.0 point conditional lift, producing about 758,000 incremental
+          conversions worth <strong>€14.76M</strong> in gross profit against <strong>€10.04M</strong>
+          of first-year cost. That leaves <strong>€4.7M</strong> of net benefit at
+          <strong>46.9%</strong> return, a <strong>6.7 month</strong> payback on the €6.0M build, and
+          a three-year net present value of <strong>€16.34M</strong> discounted at 10%, which is a
+          deliberate hurdle rate set well above Spotify's actual cost of capital so the number errs
+          low.
+        </p>
+        <Figure
+          src="/figures/compass-business-impact-range.png"
+          alt="Chart showing the range of modelled Year-1 business impact for Compass AI across scenarios."
+          caption="Year-1 impact across the modelled range. The base case sits inside a band rather than at a point, because three of the inputs are assumptions awaiting a pilot."
+        />
+        <p>
+          The part I would defend hardest is the stopping rule. Each load-bearing assumption carries a
+          published break-even and a cushion: the lift can fall to 1.33 points, the persuadable share
+          to 26.6%, and reach to 59.8% before the case stops clearing, each roughly a 1.5x margin.
+          Six pre-committed triggers state in advance what would falsify the recommendation and what
+          happens when one fires, including pausing spend if measured lift sits below break-even for
+          two consecutive quarters. Writing those down before the pilot runs is what separates an
+          investment case from a pitch.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <header class="section-head">
+        <p class="eyebrow">Evidence</p>
+        <h2 class="h-sub">The submitted deck</h2>
+        <p class="section-note">
+          Twenty-three pages, including the appendix carrying the conversion build, the unit
+          economics, the break-even sensitivities and the experiment design.
+        </p>
+      </header>
+      <div class="embed">
+        <iframe src="/media/Linh_Le_Compass_AI_Spotify_Conversion.pdf"
+                title="Compass AI submitted deck" loading="lazy"></iframe>
+      </div>
+      <p class="embed-note">
+        <a href="/media/Linh_Le_Compass_AI_Spotify_Conversion.pdf">Open the deck in its own tab</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="prose">
+        <h2 class="h-sub">Assumptions and limitations</h2>
+        <p>
+          Compass AI was designed and modelled. It was never built and never deployed, so every
+          financial figure on this page is a projection under stated assumptions. The measured
+          outcome is the second-place finish.
+        </p>
+        <p>
+          Three numbers carry the case and all three are assumptions awaiting a pilot. The 40%
+          persuadable share, the 90% delivery reach and the 2.0 point conditional lift were chosen as
+          conservative mid-cases and calibrated against published benchmarks, with self-serve freemium
+          free-to-paid conversion running 3 to 5 percent overall and mature personalisation programmes
+          showing double-digit lifts against low-maturity peers. They remain the model's most
+          sensitive inputs.
+        </p>
+        <p>
+          The segmentation rests on a simplifying step that the deck labels as such. Treating the
+          high-engagement, high-friction quadrant as 25% of the free base assumes an even distribution
+          across a two-by-two screen, and it is a modelling convenience rather than an observed
+          Spotify statistic. A pilot should replace it with the real joint distribution.
+        </p>
+        <p>
+          The cancellation rate is anchored to Spotify's own disclosed figure of roughly 4% monthly
+          from 2020, which sits inside the range the data cannot rule out. That anchoring pins down
+          the shape of the new-signup decline with confidence while leaving the cancellation level
+          itself an informed estimate.
+        </p>
+        <p>
+          The link between marketing spend and the signup decline is a correlation of 0.69 across the
+          panel. It is the simplest available explanation for a decline the event model cannot account
+          for, and it is not proof of causation. Establishing that would need a country-level
+          breakdown, which public filings do not support.
+        </p>
+      </div>
+    </div>
+  </section>
+
+</CaseStudy>

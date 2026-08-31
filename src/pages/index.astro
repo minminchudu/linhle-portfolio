@@ -1,0 +1,891 @@
+---
+import Base from "../layouts/Base.astro";
+import HeaderMark from "../components/HeaderMark.astro";
+import WorkCard from "../components/WorkCard.astro";
+import JobArt from "../components/JobArt.astro";
+
+const typedLines = [
+  "Traced a $4.24M monthly margin deficit to product scoring",
+  "Found 126,000 anomalous rows inside 862,000 transit records",
+  "Showed break-even needed a 164.5% conversion rate",
+  "Recovered $40,000 a year from ghost positions in a hospital budget",
+];
+
+const domains = [
+  { label: "Healthcare finance", tint: "finance" },
+  { label: "Payments", tint: "method" },
+  { label: "E-commerce", tint: "code" },
+  { label: "Retail", tint: "viz" },
+  { label: "Product research", tint: "research" },
+];
+
+const toolkit = [
+  { tint: "code", label: "Languages",
+    body: "Python (pandas, NumPy, scikit-learn, SciPy), SQL across MySQL, PostgreSQL and DuckDB, R, and advanced Excel with macros and VBA.",
+    tags: ["Python", "SQL", "DuckDB", "R", "Excel"] },
+  { tint: "method", label: "Analysis",
+    body: "OLS and fixed-effects regression, experiment design and pre-registration, power analysis, Bonferroni correction, difference-in-differences, k-means clustering, forecasting with holdout validation.",
+    tags: ["Regression", "A/B testing", "Causal inference", "Clustering"] },
+  { tint: "ai", label: "AI workflow",
+    body: "Framing the question and choosing the method before delegating, defining what counts as a result in advance, and verifying output against the data.",
+    tags: ["Claude Code", "ChatGPT", "Antigravity"] },
+  { tint: "viz", label: "Visualization",
+    body: "Power BI with DAX, Tableau, Google Looker with LookML, Plotly, and hand-built HTML and JavaScript dashboards.",
+    tags: ["Power BI", "Tableau", "Looker", "Plotly"] },
+  { tint: "finance", label: "Finance",
+    body: "Financial modeling, scenario and break-even analysis, DuPont decomposition, budget variance reporting, and reconciliation across systems that disagree.",
+    tags: ["Modeling", "DuPont", "Variance", "Reconciliation"] },
+  { tint: "research", label: "Domains",
+    body: "Healthcare finance operations, payments, e-commerce, retail analytics, and product research.",
+    tags: ["Healthcare", "Payments", "Retail"] },
+];
+
+const experience = [
+  {
+    role: "Graduate Assistant",
+    art: "labs",
+    artLabel: "A lab spreadsheet with a formula typing into the formula bar, beside a rubric column ticking off.",
+    org: "Carl H. Lindner College of Business, University of Cincinnati",
+    period: "August 2026 to present",
+    place: "Cincinnati, OH",
+    tint: "ai",
+    lines: [
+      "Teach weekly technology labs for undergraduate business students covering Excel, Access, Python, and remote computing tools.",
+      "Evaluate lab assignments and assessments against established rubrics, and hold weekly office hours for individual support.",
+    ],
+  },
+  {
+    role: "Product and Financial Analyst",
+    art: "scissor",
+    artLabel: "Conversion climbing while margin per order falls, with the $121.41 gap between them shaded.",
+    org: "IterLight Lab",
+    period: "March to June 2026",
+    place: "Remote, internship",
+    tint: "code",
+    href: "/work/iterlight/",
+    lines: [
+      "Held full ownership of an e-commerce recommendation and logistics system modelled on Wayfair, working alongside AI agents against a real deliverable every week.",
+      "Analyzed unit economics across 500,000 transaction records in Python and DuckDB, tracing a $4.24M monthly gross margin deficit to misaligned product scoring and pricing rules.",
+      "Directed AI coding agents to rebuild the shipping cost model on 93 pre-shipment features after the inherited version matched actuals at r = 0.9999, impossible before delivery.",
+      "Built the executive Power BI dashboards and the controlled pilot framework that protected $977,000 in monthly recurring revenue.",
+    ],
+  },
+  {
+    role: "Data and Applied Analytics Trainee",
+    art: "tail",
+    artLabel: "A right-skewed distribution of trip durations, the mean dragged into the tail and the median holding in the bulk.",
+    org: "The Global Career Accelerator",
+    period: "June to August 2025",
+    place: "Remote",
+    tint: "method",
+    lines: [
+      "Queried 600,000+ enterprise hardware asset records for Intel in SQL, segmenting device lifecycle cohorts across global regions.",
+      "Evaluated 862,000+ transit ride records, identified data quality anomalies across 126,000 rows, and moved the trip duration benchmark to the median.",
+    ],
+  },
+  {
+    role: "Finance Assistant, Department of Radiology",
+    art: "roster",
+    artLabel: "A grid of budgeted positions where three ghost allocations are struck out and removed.",
+    org: "The Ohio State University Wexner Medical Center",
+    period: "June 2024 to May 2025",
+    place: "Columbus, OH",
+    tint: "finance",
+    href: "/work/radiology/",
+    lines: [
+      "Audited HRIS position allocations for 100+ clinical and administrative radiology staff, eliminating ghost positions and securing $40,000+ in annual savings.",
+      "Built an automated Excel reconciliation tool across three financial ledgers that recovered $9,000+ in outstanding reimbursements.",
+      "Monitored 50+ vendor contracts covering $300,000+ in annual spend, detecting unit price drift and delivering monthly variance reports to leadership.",
+    ],
+  },
+];
+---
+
+<Base
+  title="Linh (Min) Le"
+  description="Data, business and BI analysis across healthcare finance, payments, e-commerce and retail. Python, SQL, Power BI, Tableau."
+>
+  <section class="hero g-ivory">
+    <div class="shell">
+      <div class="hero-mark" data-float="14"><HeaderMark /></div>
+      <div class="hero-text">
+        <p class="eyebrow">Data Analyst, Business Analyst, BI Analyst</p>
+        <h1>Linh (Min) Le</h1>
+        <p class="typer" data-typer={JSON.stringify(typedLines)}>
+          <span class="typed">{typedLines[0]}</span><span class="tcaret" aria-hidden="true"></span>
+        </p>
+        <p class="lead">
+          Analysis across healthcare finance, payments, e-commerce and retail, with an
+          accounting foundation underneath it and information systems training on top.
+        </p>
+        <div class="chips">
+          {domains.map((d) => <span class={`chip tint-${d.tint}`}>{d.label}</span>)}
+        </div>
+        <div class="hero-cta">
+          <a class="cta with-icon" href="https://github.com/minminchudu" target="_blank" rel="noopener">
+            <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true" focusable="false">
+              <path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
+                0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01
+                1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95
+                0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09
+                2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87
+                3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0
+                16 8c0-4.42-3.58-8-8-8Z"/>
+            </svg>
+            <span>GitHub</span>
+          </a>
+          <a class="cta ghost" href="/media/Linh_Le_Resume.pdf" target="_blank" rel="noopener">Resume</a>
+          <a class="cta ghost with-icon" href="https://www.linkedin.com/in/linh-tt-le/" target="_blank" rel="noopener">
+            <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true" focusable="false">
+              <path fill="currentColor" d="M3.6 5.4H.9V15h2.7V5.4ZM2.25 1A1.55 1.55 0 1 0 2.25 4.1
+                1.55 1.55 0 0 0 2.25 1ZM15.1 9.53c0-2.6-1.39-3.81-3.24-3.81-1.5 0-2.17.82-2.54
+                1.4V5.4H6.62c.04.76 0 9.6 0 9.6h2.7V9.64c0-.24.02-.48.09-.65.19-.48.63-.98
+                1.37-.98.96 0 1.35.73 1.35 1.81V15h2.97V9.53Z"/>
+            </svg>
+            <span>LinkedIn</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band plated g-leaf narrative" style="--plate: var(--g-beige);" data-rail-section>
+    <div class="shell narrative-inner">
+      <aside class="narrative-rail" aria-hidden="true">
+        <span class="rail-track"><span class="rail-fill" data-rail></span></span>
+        <span class="rail-facet"></span>
+      </aside>
+
+      <div class="opening prose">
+        <p class="eyebrow">The radiology year</p>
+        <p class="first reveal">
+          For a year, I worked with the funding records of a hospital radiology department,
+          the one behind every MRI, CT, and ultrasound in an academic medical center.
+        </p>
+        <p class="reveal">
+          Buried in those records were fifteen positions still funded at levels that three
+          reorganizations had already changed. Roughly $40,000 a year kept moving through
+          the budget as if nothing had happened.
+        </p>
+        <p class="reveal">
+          Payroll ran correctly. The ledger balanced. Month after month, the numbers behaved
+          exactly as they were supposed to.
+        </p>
+        <p class="beat reveal">That was what made the error easy to miss.</p>
+        <p class="reveal">
+          A hospital budget reaches far beyond the ledger. The money in those records supports
+          the people running the department, the contracts that keep imaging equipment working,
+          and the supplies used in patient care. An outdated allocation can sit quietly for
+          months while money remains tied to a version of the department that has already changed.
+        </p>
+        <p class="reveal">
+          That experience left me with a habit I have carried into every project since: when a
+          number looks settled, I still want to know what is underneath it.
+        </p>
+        <p class="reveal">I think that is where a lot of good analytical work begins.</p>
+      </div>
+
+      <aside class="narrative-aside reveal">
+        <span class="aside-figure band-value">$40,000</span>
+        <span class="aside-label">a year, still moving through a budget that had already changed</span>
+        <span class="aside-rule"></span>
+        <span class="aside-figure band-value">15</span>
+        <span class="aside-label">positions funded at levels three reorganizations had replaced</span>
+      </aside>
+    </div>
+  </section>
+
+  <section class="band plated g-cream has-cards" id="work" style="--plate: var(--g-leaf);">
+    <div class="shell">
+      <header class="section-head">
+        <p class="eyebrow">Selected work</p>
+        <h2 class="words" data-words>Six projects, most recent first</h2>
+        <p class="section-note">
+          Each one states its finding before its method. All of them analyse public companies
+          from public data, independently, with no affiliation to the companies involved. Every
+          figure traces to a source file, and any projection is labelled as one.
+        </p>
+      </header>
+
+      <div class="cards">
+        <WorkCard
+          featured
+          project="Compass AI, Spotify"
+          period="August 2026"
+          tint="finance"
+          image="/figures/compass-conversion-decline.png"
+          imageAlt="Time series of Spotify's quarterly free-to-paid conversion rate declining across the analysis window."
+          finding="The best next action is sometimes to say nothing at all"
+          context="Viet Career Conference Think-A-Thon, Seattle. Second place. Lead quantitative analyst."
+          body="Most conversion tooling asks which offer to show. Compass AI scores staying silent as a candidate action that every other option has to beat, which turns promotion fatigue from a side effect into a modelled cost. Built a 32-quarter financial database from Spotify SEC filings, separated subscriber churn from conversion flow, and sized the case on a persuadability segmentation rather than on the raw size of the free base."
+          metrics={[
+            { value: "63%", label: "Conversion decline" },
+            { value: "€4.7M", label: "Year-1 net benefit" },
+            { value: "46.9%", label: "Year-1 ROI" },
+            { value: "6.7 mo", label: "Payback" },
+          ]}
+          note="Designed and modelled, never deployed. Figures are projections under stated assumptions, gated on a randomised pilot clearing 1.33pp of measured lift. The second-place finish is the measured outcome."
+          links={[
+            { label: "Read the case study", href: "/work/compass-ai/" },
+            { label: "Deck (PDF)", href: "/media/Linh_Le_Compass_AI_Spotify_Conversion.pdf" },
+          ]}
+        />
+
+        <WorkCard
+          project="IterLight Lab"
+          period="March to June 2026"
+          tint="code"
+          image="/figures/iterlight-cvr-margin-anomaly.png"
+          imageAlt="Bubble chart of margin per impression against conversion rate across twelve furniture categories, trending downward at r equals minus 0.71."
+          finding="Break-even required a 164.5% conversion rate"
+          context="E-commerce recommendation engine. Product and financial analyst."
+          body="Conversion was climbing while gross margin fell. Shipping cost averaged $309.77 against an order value of $188.36, so every completed sale opened a $121.41 hole and higher conversion made the position worse."
+          metrics={[
+            { value: "164.5%", label: "Break-even CVR" },
+            { value: "51x", label: "Above actual" },
+            { value: "$4.24M", label: "Monthly loss" },
+          ]}
+          links={[
+            { label: "Read the case study", href: "/work/iterlight/" },
+            { label: "Repository", href: "https://github.com/minminchudu/ecommerce-recommendation-margin-analysis" },
+          ]}
+        />
+
+        <WorkCard
+          project="Contactless Enablement Priority Model"
+          period="May 2026"
+          tint="method"
+          image="/figures/contactless-gap-vs-priority.png"
+          imageAlt="Scatter plot of enablement priority score against gap to the global benchmark across seven merchant sectors, with a nearly flat trend line."
+          finding="The biggest adoption gaps were the worst places to invest"
+          context="Merchant enablement priority analysis on Federal Reserve payments data. Sole analyst."
+          body="Healthcare sits 55 points below the global contactless benchmark, the largest gap in the US market, and ranks seventh of nine for investment priority. Visit frequency explains 94% of the variation between sectors."
+          metrics={[
+            { value: "94%", label: "Variation explained" },
+            { value: "3.91B", label: "Incremental txns" },
+            { value: "94.9%", label: "Weightings held" },
+          ]}
+          links={[
+            { label: "Read the case study", href: "/work/contactless/" },
+            { label: "Live dashboard", href: "/media/Linh_Le_Contactless_Priority_Dashboard.html" },
+          ]}
+        />
+
+        <WorkCard
+          project="Instagram Feed Fatigue Audit"
+          period="April 2026"
+          tint="research"
+          image="/figures/instagram-failure-modes.png"
+          imageAlt="Horizontal bar chart ranking six Instagram failure modes by complaint intensity, from social graph collapse at 95 down to commerce sameness at 58."
+          finding="Loops drive people off the platform, ahead of ads"
+          context="Product and retention research. Research and synthesis lead."
+          body="Complaints about a feed stuck on one topic carry the language of app abandonment. Complaints about advertising read as resignation. Six failure modes ranked across 17 venue types, each corroborated against earnings calls, court testimony and SEC disclosure."
+          metrics={[
+            { value: "95/100", label: "Top intensity" },
+            { value: "17", label: "Venue types" },
+            { value: "3B", label: "Users at stake" },
+          ]}
+          links={[
+            { label: "Read the case study", href: "/work/instagram/" },
+            { label: "Live dashboard", href: "/media/Linh_Le_Feed_Fatigue_Dashboard.html" },
+          ]}
+        />
+
+        <WorkCard
+          project="Walmart Promotional Strategy"
+          period="April 2026"
+          tint="viz"
+          image="/figures/walmart-revenue-scenarios.png"
+          imageAlt="Bar chart of weekly revenue by recommendation scenario, showing the baseline and the two increments that sum to the projected lift."
+          finding="Only two of five markdown types paid for themselves"
+          context="Promotional and inventory strategy across Walmart store formats. Diagnostic analytics lead."
+          body="MarkDown3 returns $10.12 per dollar and MarkDown5 returns $5.25. The other three return nothing distinguishable from zero, and Type C stores show no measurable response at all."
+          metrics={[
+            { value: "68.5%", label: "R², N = 2,295" },
+            { value: "2 of 5", label: "Markdowns working" },
+            { value: "$48,799", label: "Weekly, per store" },
+          ]}
+          links={[
+            { label: "Read the case study", href: "/work/walmart/" },
+            { label: "Deck (PDF)", href: "/media/Linh_Le_Walmart_Promotional_Strategy.pdf" },
+          ]}
+        />
+
+        <WorkCard
+          project="Video Game Publisher Selection"
+          period="March 2026"
+          tint="finance"
+          image="/figures/publisher-genre-sales.png"
+          imageAlt="Bar chart of total video game sales by genre with the shooter genre highlighted at 557 million dollars."
+          finding="The strongest financials belonged to the publisher we did not choose"
+          context="Publisher partnership and financial strategy analysis. Co-analyst."
+          body="Ubisoft came out ahead on every growth measure tested. The recommendation still went to Activision, because its advantage is genre-specific and platform-specific: 42.74% of its own portfolio sits in Shooter, on the console where the title would launch."
+          metrics={[
+            { value: "$557.35M", label: "Genre sales" },
+            { value: "42.74%", label: "Portfolio in genre" },
+          ]}
+          links={[
+            { label: "Read the case study", href: "/work/publisher/" },
+            { label: "Deck (PDF)", href: "/media/Linh_Le_Publisher_Selection_Analysis.pdf" },
+          ]}
+        />
+      </div>
+    </div>
+  </section>
+
+  
+
+  <section class="band plated g-beige" id="experience" style="--plate: var(--g-leaf);" data-track-section>
+    <div class="shell">
+      <header class="section-head">
+        <p class="eyebrow">Experience</p>
+        <h2 class="words" data-words>Most recent first</h2>
+      </header>
+
+      <div class="timeline">
+        <span class="tl-track" aria-hidden="true"><span class="tl-fill" data-track></span></span>
+        {experience.map((job, i) => (
+          <article class={`job reveal tint-${job.tint} ${i % 2 ? "flip" : ""}`}>
+            <div class="job-rail" aria-hidden="true"><span class="node"></span></div>
+            <div class="job-card">
+              <div class="job-art" data-float="16"><JobArt kind={job.art} label={job.artLabel} /></div>
+              <div class="job-body">
+                <div class="job-when">
+                  <span class="figure">{job.period}</span>
+                  <span class="job-place">{job.place}</span>
+                </div>
+                <div class="job-what">
+                  <h3 class="job-role">{job.role}</h3>
+                  <p class="job-org">{job.org}</p>
+                  <ul class="job-lines">
+                    {job.lines.map((line) => <li>{line}</li>)}
+                  </ul>
+                  {job.href && <a class="job-link" href={job.href}>Read the case study</a>}
+                </div>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="band plated g-leaf" style="--plate: var(--g-ivory);">
+    <div class="shell">
+      <header class="section-head">
+        <p class="eyebrow">Education and volunteer</p>
+        <h2 class="words" data-words>Where the foundation comes from</h2>
+      </header>
+
+      <ol class="creds">
+        <li class="cred reveal tint-ai">
+          <span class="cred-mark" aria-hidden="true"></span>
+          <p class="cred-when figure">Expected November 2027</p>
+          <h3 class="cred-title">M.S. Information Systems</h3>
+          <p class="cred-org">Carl H. Lindner College of Business, University of Cincinnati</p>
+          <p class="cred-note">Graduate Certificate in Data Analytics</p>
+        </li>
+
+        <li class="cred reveal tint-code">
+          <span class="cred-mark" aria-hidden="true"></span>
+          <p class="cred-when figure">August 2026 &middot; GPA 3.69</p>
+          <h3 class="cred-title">B.S.B.A. in Accounting</h3>
+          <p class="cred-org">Max M. Fisher College of Business, The Ohio State University</p>
+          <p class="cred-note">Magna Cum Laude &middot; Dean&rsquo;s List &middot; Fisher College of Business Scholar</p>
+        </li>
+
+        <li class="cred reveal tint-research">
+          <span class="cred-mark" aria-hidden="true"></span>
+          <p class="cred-when figure">June to August 2025 &middot; Remote</p>
+          <h3 class="cred-title">Finance Intern, volunteer</h3>
+          <p class="cred-org">Unity Bands Inc.</p>
+          <p class="cred-note">
+            Financial tracking for healthcare worker support programs, budgeting for
+            fundraising initiatives, and preparation of tax and compliance documents.
+          </p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+<section class="band plated g-ivory" id="toolkit" style="--plate: var(--g-leaf);">
+    <div class="shell">
+      <header class="section-head">
+        <p class="eyebrow">Toolkit</p>
+        <h2 class="words" data-words>What the work is built with</h2>
+      </header>
+      <p class="tk-lead section-note">Pick one to bring it forward and set the rest back.</p>
+      <div class="tk-grid" data-focus-group>
+        {toolkit.map((row) => (
+          <button type="button" class={`tk-card reveal tint-${row.tint}`} data-focusable aria-pressed="false" data-tilt>
+            <span class="tk-head">
+              <span class="tk-facet" aria-hidden="true"></span>
+              <span class="tk-label">{row.label}</span>
+            </span>
+            <span class="tk-body">{row.body}</span>
+            <span class="tk-tags">
+              {row.tags.map((tag) => <span class="tk-tag">{tag}</span>)}
+            </span>
+            <span class="tk-hint" aria-hidden="true">Click to focus</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="band plated g-leaf-deep" id="contact" style="--plate: var(--g-beige);">
+    <div class="shell">
+      <div class="closing">
+        <p class="eyebrow">Get in touch</p>
+        <h2 class="words" data-words>Available for analyst roles from Summer 2027.</h2>
+        <p class="closing-note">
+          My work so far spans healthcare finance, payments, e-commerce, retail and product
+          research. What those have in common matters more than the sector does: a number
+          somebody is about to act on, and a question about whether it holds.
+        </p>
+        <div class="closing-links">
+          <a class="cta" href="mailto:minalystem@gmail.com">minalystem@gmail.com</a>
+          <a class="cta ghost" href="https://www.linkedin.com/in/linh-tt-le/">LinkedIn</a>
+          <a class="cta ghost" href="https://github.com/minminchudu">GitHub</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* Five grounds, lightest to deepest. Which one a section gets is a question
+     of fitness: sections holding white cards sit on a deeper tone so the cards
+     read as raised, and text-only sections take a flatter one. */
+  .band {
+    border-block: 1px solid var(--rule);
+    padding-block: var(--gap-section);
+  }
+  .band { position: relative; }
+  .band > .shell { position: relative; z-index: 1; }
+
+  /* The plate: a panel of the counter tone sitting under the section content,
+     so cream and green are both on screen wherever the reader stops. Its top
+     corner is chamfered, which is the same cut as the mark. */
+  .plated::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(100% - 1.5rem, calc(var(--shell) + 3.5rem));
+    top: clamp(1.1rem, 2vw, 2rem);
+    bottom: clamp(1.1rem, 2vw, 2rem);
+    background: var(--plate);
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    clip-path: polygon(0 34px, 34px 0, 100% 0, 100% calc(100% - 34px), calc(100% - 34px) 100%, 0 100%);
+    z-index: 0;
+  }
+
+  .g-ivory     { background: var(--g-ivory); }
+  .g-beige     { background: var(--g-beige); }
+  .g-cream     { background: var(--g-cream); }
+  .g-leaf      { background: var(--g-leaf); }
+  .g-leaf-deep { background: var(--g-leaf-deep); }
+
+  /* On the green grounds the rule and the figure frames warm up, so a green
+     section does not read as the cream one with a filter over it. */
+  .g-leaf, .g-leaf-deep { --rule: #c3d3ad; --rule-strong: #a8bd8d; --paper-sunk: #eaf2df; }
+  .g-ivory { --rule: #e4ddca; }
+
+  .hero {
+    padding-block: clamp(1.25rem, 2.4vw, 2.1rem) clamp(1.5rem, 3vw, 2.4rem);
+    min-height: calc(100svh - 3.6rem);
+    display: flex;
+    align-items: center;
+  }
+  .hero > .shell { width: 100%; }
+
+  /* the mark sits on its own green plate, so the opening screen is never
+     one flat tone either */
+  .hero-mark { position: relative; }
+  .hero-mark::before {
+    content: "";
+    position: absolute;
+    inset: -1.1rem clamp(-2.5rem, -2vw, -1rem);
+    background: var(--g-leaf);
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    clip-path: polygon(0 30px, 30px 0, 100% 0, 100% calc(100% - 30px), calc(100% - 30px) 100%, 0 100%);
+    z-index: -1;
+  }
+
+  .cta {
+    font-family: var(--font-mono);
+    font-size: var(--step--2);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    background: var(--accent-deep);
+    color: var(--g-ivory);
+    border: 1px solid var(--accent-deep);
+    border-radius: 7px;
+    padding: .6rem .95rem;
+    display: inline-block;
+    transition: background .25s ease, border-color .25s ease, color .25s ease, transform .25s var(--ease-soft);
+  }
+  .cta:hover { background: var(--ink); border-color: var(--ink); transform: translateY(-1px); }
+  .cta:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .cta.ghost {
+    background: transparent;
+    color: var(--ink);
+    border-color: var(--rule-strong);
+  }
+  .cta.ghost:hover { background: var(--accent-wash); border-color: var(--accent); color: var(--accent-deep); }
+
+  .closing { display: flex; flex-direction: column; gap: .75rem; max-width: var(--measure); }
+  .closing-note { color: var(--ink-soft); }
+  .closing-links { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .5rem; }
+
+  .cta.with-icon { display: inline-flex; align-items: center; gap: .45rem; }
+  .cta.with-icon svg { flex: none; }
+
+  .typer {
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    color: var(--accent-deep);
+    letter-spacing: .01em;
+    min-height: 1.7em;
+    margin-top: .1rem;
+  }
+  .tcaret {
+    display: inline-block;
+    width: .55ch;
+    height: 1.05em;
+    margin-left: .12em;
+    vertical-align: -.16em;
+    background: var(--accent);
+  }
+  .hero-mark { max-width: min(46rem, 100%); margin-inline: 0; opacity: .95; }
+  .hero-text { display: flex; flex-direction: column; gap: .6rem; margin-top: clamp(.9rem, 2vw, 1.5rem); }
+  .hero-text h1 { font-weight: 400; }
+  .lead { max-width: 54ch; color: var(--ink-soft); font-size: var(--step-1); line-height: 1.5; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .2rem; }
+  .chip {
+    font-family: var(--font-mono); font-size: var(--step--2);
+    letter-spacing: .05em;
+    padding: .35rem .7rem; border-radius: 999px;
+    color: var(--tint); background: var(--tint-soft);
+    border: 1px solid var(--tint-wash);
+  }
+
+  .hero-cta { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .5rem; }
+
+  .narrative { position: relative; }
+  .narrative-inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 22px minmax(0, 1fr) minmax(0, 14rem);
+    gap: clamp(1rem, 3vw, 2.75rem);
+    align-items: start;
+  }
+
+  /* A rail that fills as you read down the section, rather than decoration. */
+  .narrative-rail { position: relative; align-self: stretch; min-height: 100%; }
+  .rail-track {
+    position: absolute;
+    left: 10px; top: .5rem; bottom: .5rem;
+    width: 2px;
+    background: var(--rule-strong);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .rail-fill {
+    position: absolute;
+    inset-inline: 0; top: 0;
+    height: 0%;
+    background: linear-gradient(180deg, var(--accent-mid), var(--accent));
+  }
+  .rail-facet {
+    position: absolute;
+    left: 4px;
+    top: calc(.5rem + var(--rail-y, 0%));
+    width: 14px; height: 12px;
+    margin-top: -6px;
+    background: var(--accent);
+    clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
+  }
+
+  .opening {
+    font-size: var(--step-1);
+    line-height: 1.62;
+    max-width: 60ch;
+    display: flex;
+    flex-direction: column;
+    gap: 1.05em;
+  }
+  .opening .eyebrow { margin-bottom: .2rem; }
+  .opening .first::first-letter {
+    float: left;
+    font-family: var(--font-display);
+    font-size: 3.4em;
+    line-height: .78;
+    padding: .04em .10em 0 0;
+    color: var(--accent-deep);
+    font-weight: 600;
+    font-variation-settings: "SOFT" 40, "WONK" 1;
+  }
+  .opening .beat {
+    font-family: var(--font-display);
+    font-variation-settings: "SOFT" 60, "WONK" 1;
+    color: var(--accent-deep);
+    font-style: italic;
+    font-size: var(--step-2);
+    line-height: 1.24;
+    letter-spacing: -.012em;
+    padding-block: .35rem;
+    position: relative;
+    width: fit-content;
+    max-width: 100%;
+  }
+
+  /* the two figures the passage turns on, set in the margin */
+  .narrative-aside {
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
+    padding-left: clamp(.75rem, 1.5vw, 1.1rem);
+    border-left: 1px solid var(--rule-strong);
+    margin-top: .4rem;
+  }
+  .aside-figure {
+    font-family: var(--font-display);
+    font-variation-settings: "SOFT" 40;
+    font-size: var(--step-2);
+    font-weight: 600;
+    line-height: 1;
+    color: var(--accent-deep);
+    font-variant-numeric: tabular-nums;
+  }
+  .aside-label {
+    font-size: var(--step--1);
+    line-height: 1.45;
+    color: var(--ink-soft);
+  }
+  .aside-rule { height: 1px; background: var(--rule-strong); margin-block: .9rem; }
+
+  .section-head { display: flex; flex-direction: column; gap: .6rem; margin-bottom: clamp(1.75rem, 3vw, 2.75rem); max-width: var(--measure); }
+  .section-note { color: var(--ink-soft); font-size: var(--step--1); }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 26rem), 1fr)); gap: clamp(1rem, 2vw, 1.6rem); }
+
+  .tk-lead { margin-top: -.9rem; margin-bottom: 1.1rem; }
+  .tk-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); gap: clamp(.85rem, 1.6vw, 1.25rem); }
+  .tk-card {
+    -webkit-appearance: none;
+    appearance: none;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    background: var(--paper-raised);
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--tint);
+    border-radius: var(--radius);
+    padding: clamp(1rem, 1.8vw, 1.35rem);
+    display: flex;
+    flex-direction: column;
+    gap: .55rem;
+    --rx: 0deg; --ry: 0deg; --mx: 50%; --my: 50%;
+    transition: transform .4s var(--ease-soft), box-shadow .35s ease,
+                border-color .35s ease, opacity .35s ease, filter .35s ease;
+  }
+  .tk-card:hover { box-shadow: var(--shadow); border-color: var(--tint); }
+  .tk-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .tk-head { display: flex; align-items: center; gap: .5rem; }
+  .tk-facet {
+    width: 12px; height: 11px; flex: none; background: var(--tint);
+    clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
+  }
+  .tk-label {
+    font-family: var(--font-display);
+    font-variation-settings: "SOFT" 40;
+    font-size: var(--step-0);
+    font-weight: 600;
+  }
+  .tk-body { color: var(--ink-soft); font-size: var(--step--1); line-height: 1.55; }
+  .tk-tags { display: flex; flex-wrap: wrap; gap: .3rem; margin-top: .15rem; }
+  .tk-hint {
+    font-family: var(--font-mono); font-size: var(--step--2);
+    letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint);
+    opacity: 0; transition: opacity .3s ease; margin-top: auto; padding-top: .5rem;
+  }
+  .tk-card:hover .tk-hint, .tk-card:focus-visible .tk-hint { opacity: 1; }
+  .tk-card[aria-pressed="true"] .tk-hint { opacity: 1; color: var(--tint); }
+  .tk-card[aria-pressed="true"] {
+    border-color: var(--tint);
+    box-shadow: var(--shadow-lift);
+    transform: translateY(-4px);
+  }
+  .tk-grid.has-focus .tk-card[aria-pressed="false"] {
+    opacity: .42;
+    filter: saturate(.5);
+  }
+  .tk-tag {
+    font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: .04em;
+    padding: .22rem .5rem; border-radius: 5px;
+    background: var(--tint-wash); color: var(--tint);
+    transition: transform .25s var(--ease-soft), background .25s ease;
+  }
+  .tk-card:hover .tk-tag { background: var(--tint-soft); }
+
+
+  .timeline { display: flex; flex-direction: column; position: relative; }
+
+  /* One rail for the whole run of roles, filling with how far you have scrolled
+     through the section. The per-entry rails stay for the nodes. */
+  .tl-track {
+    position: absolute;
+    left: 8px;
+    top: 1.6rem;
+    bottom: 1.6rem;
+    width: 2px;
+    background: var(--rule-strong);
+    border-radius: 2px;
+    overflow: hidden;
+    z-index: 0;
+  }
+  .tl-fill {
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    height: 0%;
+    background: linear-gradient(180deg, var(--accent-mid), var(--accent));
+    transition: height .16s linear;
+  }
+  .job { position: relative; z-index: 1; }
+  .job {
+    display: grid;
+    grid-template-columns: 18px minmax(0, 1fr);
+    gap: clamp(.75rem, 2.5vw, 1.5rem);
+    padding-block: clamp(1.5rem, 3vw, 2.6rem);
+  }
+  .job-rail { position: relative; }
+  .job-rail::before {
+    content: ""; position: absolute; left: 8px; top: 0; bottom: -2rem;
+    width: 1px; background: transparent;
+  }
+  .job:last-child .job-rail::before { bottom: auto; height: 1.6rem; }
+  .node {
+    position: absolute; left: 3px; top: .45rem;
+    width: 11px; height: 11px; background: var(--paper); border: 2px solid var(--tint);
+    border-radius: 50%; z-index: 1;
+  }
+
+  /* The illustration sits beside the role and swaps sides down the timeline. */
+  .job-card {
+    display: grid;
+    grid-template-columns: minmax(0, 17.5rem) minmax(0, 1fr);
+    gap: clamp(1rem, 2.6vw, 2.1rem);
+    align-items: start;
+  }
+  .job.flip .job-card { grid-template-columns: minmax(0, 1fr) minmax(0, 17.5rem); }
+  .job.flip .job-art  { order: 2; }
+  .job.flip .job-body { order: 1; }
+
+  .job-art {
+    --fy: 0px;
+    transform: translateY(10px);
+    opacity: 0;
+    transition: opacity .7s var(--ease-out) .1s, transform .7s var(--ease-out) .1s;
+    will-change: transform;
+  }
+  .job.seen .job-art { opacity: 1; transform: translateY(var(--fy)); }
+  .job-art :global(.art) { transition: border-color .35s ease, transform .45s var(--ease-soft); }
+  .job:hover .job-art :global(.art) { border-color: var(--tint); transform: translateY(-3px); }
+
+  .job-body { display: flex; flex-direction: column; gap: .55rem; }
+  .job-when { display: flex; flex-direction: column; gap: .2rem; font-size: var(--step--2); font-family: var(--font-mono); }
+  .job-when .figure { color: var(--tint); letter-spacing: .04em; }
+  .job-place { color: var(--ink-faint); }
+  .job-what { display: flex; flex-direction: column; gap: .4rem; max-width: var(--measure); }
+  .job-role { font-size: var(--step-1); }
+  .job-org { color: var(--ink-soft); font-size: var(--step--1); }
+  .job-lines { margin: .35rem 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: .5rem; }
+  .job-lines li { position: relative; padding-left: 1.05rem; color: var(--ink-soft); font-size: var(--step--1); }
+  .job-lines li::before {
+    content: ""; position: absolute; left: 0; top: .6em;
+    width: 6px; height: 6px; background: var(--tint); opacity: .65;
+    clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
+  }
+  .job-link {
+    font-family: var(--font-mono); font-size: var(--step--2);
+    letter-spacing: .07em; text-transform: uppercase; text-decoration: none;
+    color: var(--tint); border-bottom: 1px solid var(--tint);
+    width: fit-content; margin-top: .45rem; padding-bottom: .12rem;
+  }
+  .job-link:hover { color: var(--ink); border-color: var(--ink); }
+
+  .creds {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+    gap: clamp(1rem, 2.4vw, 2rem);
+  }
+  .cred {
+    position: relative;
+    padding-top: 1.15rem;
+    border-top: 2px solid var(--tint);
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+    transition: transform .4s var(--ease-soft);
+  }
+  .cred:hover { transform: translateY(-3px); }
+  .cred-mark {
+    position: absolute;
+    top: -6px; left: 0;
+    width: 11px; height: 10px;
+    background: var(--tint);
+    clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
+  }
+  .cred-when {
+    font-family: var(--font-mono);
+    font-size: var(--step--2);
+    letter-spacing: .05em;
+    color: var(--tint);
+  }
+  .cred-title {
+    font-family: var(--font-display);
+    font-variation-settings: "SOFT" 40;
+    font-size: var(--step-1);
+    line-height: 1.2;
+    margin-top: .1rem;
+  }
+  .cred-org { color: var(--ink-soft); font-size: var(--step--1); }
+  .cred-note { color: var(--ink-faint); font-size: var(--step--1); line-height: 1.5; margin-top: .35rem; }
+
+  .tint-code    { --tint: var(--t-code);     --tint-wash: var(--t-code-wash);     --tint-soft: var(--t-code-soft); }
+  .tint-method  { --tint: var(--t-method);   --tint-wash: var(--t-method-wash);   --tint-soft: var(--t-method-soft); }
+  .tint-ai      { --tint: var(--t-ai);       --tint-wash: var(--t-ai-wash);       --tint-soft: var(--t-ai-soft); }
+  .tint-viz     { --tint: var(--t-viz);      --tint-wash: var(--t-viz-wash);      --tint-soft: var(--t-viz-soft); }
+  .tint-finance { --tint: var(--t-finance);  --tint-wash: var(--t-finance-wash);  --tint-soft: var(--t-finance-soft); }
+  .tint-research{ --tint: var(--t-research); --tint-wash: var(--t-research-wash); --tint-soft: var(--t-research-soft); }
+
+  @media (max-width: 52rem) {
+    .job-card,
+    .job.flip .job-card { grid-template-columns: minmax(0, 1fr); gap: 1rem; }
+    .job.flip .job-art  { order: 0; }
+    .job.flip .job-body { order: 0; }
+    .job-art { max-width: 22rem; }
+    .job-when { flex-direction: row; flex-wrap: wrap; gap: .35rem .75rem; }
+  }
+  @media (max-width: 62rem) {
+    .narrative-inner { grid-template-columns: 22px minmax(0, 1fr); }
+    .narrative-aside { grid-column: 2; margin-top: 1.6rem; }
+  }
+  @media (max-width: 34rem) {
+    .narrative-inner { grid-template-columns: 1fr; }
+    .narrative-rail { display: none; }
+    .narrative-aside { grid-column: 1; }
+  }
+</style>

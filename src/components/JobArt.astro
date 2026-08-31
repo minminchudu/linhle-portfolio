@@ -1,0 +1,319 @@
+---
+/* One diagram per role, drawn from the specific thing that role actually did
+   rather than from a generic chart shape. Every figure shown here appears in
+   the role's own copy beside it. All colour comes from the tint tokens, so
+   these follow the palette without edits. */
+interface Props {
+  kind: "labs" | "scissor" | "tail" | "roster";
+  label: string;
+}
+const { kind, label } = Astro.props;
+---
+
+<div class="art" role="img" aria-label={label}>
+  {kind === "labs" && (
+    <svg viewBox="0 0 260 180" preserveAspectRatio="xMidYMid meet">
+      <rect class="pane" x="14" y="16" width="166" height="126" rx="4" />
+      <rect class="bar" x="14" y="16" width="166" height="16" rx="4" />
+      <text class="fx" x="21" y="27">fx</text>
+      <text class="formula" x="34" y="27">=VLOOKUP(B2,Roster,3,0)</text>
+      <rect class="caret" x="34" y="20" width="1.4" height="9" />
+      <rect class="typemask" x="34" y="18" width="146" height="13" />
+
+      <g class="colhead">
+        <line x1="14" y1="44" x2="180" y2="44" />
+        {[0, 1, 2, 3].map((c) => (
+          <line x1={56 + c * 32} y1="32" x2={56 + c * 32} y2="142" />
+        ))}
+      </g>
+      <g class="rows">
+        {[0, 1, 2, 3, 4].map((r) => (
+          <g class="sheetrow" style={`--i:${r}`}>
+            <rect class="rowlabel" x="20" y={51 + r * 18} width="30" height="9" rx="1.5" />
+            {[0, 1, 2].map((c) => (
+              <rect class="cellfill" x={62 + c * 32} y={51 + r * 18} width="24" height="9" rx="1.5" />
+            ))}
+          </g>
+        ))}
+      </g>
+      <rect class="focus" x="60" y="49" width="28" height="13" rx="2" />
+
+      <text class="tag" x="196" y="42">rubric</text>
+      {[0, 1, 2, 3, 4].map((r) => (
+        <g class="crit" style={`--i:${r}`}>
+          <rect class="critbar" x="196" y={51 + r * 18} width="30" height="9" rx="1.5" />
+          <path class="check" d={`M232 ${57 + r * 18} l3 3.5 l6 -7`} />
+        </g>
+      ))}
+      <text class="tag" x="14" y="164">Excel · Access · Python</text>
+    </svg>
+  )}
+
+  {kind === "scissor" && (
+    <svg viewBox="0 0 260 180" preserveAspectRatio="xMidYMid meet">
+      <g class="axes">
+        <line x1="30" y1="140" x2="238" y2="140" />
+        <line x1="30" y1="22" x2="30" y2="140" />
+      </g>
+
+      <path class="gapband" d="M52 96 L226 62 L226 118 L52 122 Z" />
+      <text class="gaplab" x="139" y="97">$121.41 per sale</text>
+
+      <polyline class="up" points="52,122 87,116 122,106 157,94 192,80 226,62" />
+      <text class="serieslab up-lab" x="232" y="58">conversion</text>
+
+      <polyline class="down" points="52,96 87,101 122,109 157,118 192,127 226,118" />
+      <text class="serieslab down-lab" x="232" y="128">margin</text>
+
+      <circle class="cross" cx="70" cy="108" r="4.5" />
+      <text class="tag" x="30" y="164">conversion climbing, margin falling</text>
+    </svg>
+  )}
+
+  {kind === "tail" && (
+    <svg viewBox="0 0 260 180" preserveAspectRatio="xMidYMid meet">
+      <line class="axis" x1="24" y1="132" x2="240" y2="132" />
+      <g class="hist">
+        {[10, 26, 54, 78, 66, 46, 32, 22, 16, 12, 9, 7, 6, 5, 4, 4, 3, 3].map((h, i) => (
+          <rect
+            class={i >= 10 ? "col tailcol" : "col"}
+            x={26 + i * 12}
+            y={132 - h}
+            width="9"
+            height={h}
+            rx="1"
+            style={`--i:${i}`}
+          />
+        ))}
+      </g>
+
+      <line class="median" x1="80" y1="28" x2="80" y2="138" />
+      <text class="marklab median-lab" x="80" y="24">median</text>
+
+      <line class="mean" x1="150" y1="40" x2="150" y2="138" />
+      <text class="marklab mean-lab" x="150" y="36">mean</text>
+
+      <path class="tailbrace" d="M150 146 L240 146" />
+      <text class="tag" x="152" y="160">126k rows flagged</text>
+      <text class="tag" x="24" y="176">862k transit rides</text>
+    </svg>
+  )}
+
+  {kind === "roster" && (
+    <svg viewBox="0 0 260 180" preserveAspectRatio="xMidYMid meet">
+      <text class="tag" x="20" y="26">HRIS position allocations</text>
+      <g class="slots">
+        {Array.from({ length: 24 }, (_, i) => {
+          const ghost = i === 5 || i === 12 || i === 19;
+          const c = i % 6;
+          const r = Math.floor(i / 6);
+          return (
+            <g class={ghost ? "slot ghost" : "slot"} style={`--i:${i}`}>
+              <rect x={20 + c * 38} y={38 + r * 26} width="30" height="17" rx="2.5" />
+              <circle cx={26 + c * 38} cy={46.5 + r * 26} r="3" />
+              <line class="strike" x1={20 + c * 38} y1={46.5 + r * 26} x2={50 + c * 38} y2={46.5 + r * 26} />
+            </g>
+          );
+        })}
+      </g>
+      <g class="ledgerline">
+        <line x1="20" y1="150" x2="240" y2="150" />
+        <rect class="saved" x="20" y="144" width="0" height="12" rx="2" />
+      </g>
+      <text class="tag" x="20" y="172">ghost positions removed</text>
+    </svg>
+  )}
+</div>
+
+<style>
+  .art {
+    /* Ivory, not a tint wash. Washing the panel in the role's own tint put the
+       drawing and its ground in the same colour, so nothing separated. The
+       tint now only carries meaning inside the drawing. */
+    background: var(--g-ivory);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  svg { display: block; width: 100%; height: auto; }
+
+  .tag, .marklab, .serieslab, .gaplab, .fx {
+    font-family: var(--font-mono);
+    font-size: 7.5px;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    fill: var(--ink-faint);
+  }
+  .serieslab { text-anchor: end; font-size: 7px; }
+  .gaplab { text-anchor: middle; fill: var(--tint); font-size: 8px; letter-spacing: .03em; text-transform: none; }
+  .marklab { text-anchor: middle; font-size: 7px; }
+
+  /* ============ labs: a lab sheet, and the rubric beside it =============== */
+  .pane { fill: var(--paper-raised); stroke: var(--rule-strong); stroke-width: 1; }
+  .bar  { fill: var(--tint); opacity: .22; }
+  .formula {
+    font-family: var(--font-mono); font-size: 7px; fill: var(--tint);
+    letter-spacing: 0; text-transform: none;
+  }
+  .typemask { fill: var(--paper-raised); }
+  :global(.job.seen) .typemask { animation: type-out 3.2s steps(24) 1.1s forwards; }
+  @keyframes type-out { to { transform: translateX(150px); } }
+  .caret { fill: var(--tint); opacity: 0; }
+  :global(.job.seen) .caret {
+    animation: caret-run 3.2s steps(24) 1.1s forwards, blink .7s step-end 1.1s 6;
+  }
+  @keyframes caret-run { to { transform: translateX(150px); } }
+  @keyframes blink { 0%, 100% { opacity: .9; } 50% { opacity: 0; } }
+
+  .colhead line { stroke: var(--rule); stroke-width: 1; }
+  .rowlabel { fill: var(--ink-faint); opacity: 0; }
+  .cellfill { fill: var(--tint); opacity: 0; }
+  :global(.job.seen) .rowlabel,
+  :global(.job.seen) .cellfill {
+    animation: soft-in .5s var(--ease-out) forwards;
+    animation-delay: calc(.3s + var(--i) * .09s);
+  }
+  @keyframes soft-in { to { opacity: .3; } }
+  .focus { fill: none; stroke: var(--tint); stroke-width: 1.4; opacity: 0; }
+  :global(.job.seen) .focus { animation: focus-step 7s ease-in-out 1.2s infinite; }
+  @keyframes focus-step {
+    0%, 10%   { opacity: .85; transform: translate(0, 0); }
+    22%, 32%  { opacity: .85; transform: translate(32px, 0); }
+    44%, 54%  { opacity: .85; transform: translate(64px, 0); }
+    66%, 76%  { opacity: .85; transform: translate(64px, 18px); }
+    88%, 100% { opacity: 0;   transform: translate(64px, 36px); }
+  }
+
+  .critbar { fill: var(--ink-faint); opacity: 0; }
+  :global(.job.seen) .critbar {
+    animation: soft-in .5s var(--ease-out) forwards;
+    animation-delay: calc(.5s + var(--i) * .12s);
+  }
+  .check {
+    fill: none; stroke: var(--tint); stroke-width: 1.6;
+    stroke-linecap: round; stroke-linejoin: round; opacity: 0;
+  }
+  :global(.job.seen) .check {
+    animation: tick-in .45s var(--ease-out) forwards;
+    animation-delay: calc(1.4s + var(--i) * .32s);
+  }
+  @keyframes tick-in { to { opacity: .95; } }
+
+  /* ============ scissor: conversion climbing while margin falls =========== */
+  .axes line { stroke: var(--rule-strong); stroke-width: 1; }
+  .gapband { fill: var(--tint); opacity: 0; }
+  :global(.job.seen) .gapband { animation: band-in 1s var(--ease-out) 1.5s forwards; }
+  @keyframes band-in { to { opacity: .17; } }
+  .gaplab { opacity: 0; }
+  :global(.job.seen) .gaplab { animation: tick-in .6s var(--ease-out) 2.1s forwards; }
+
+  .up, .down {
+    fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+  }
+  .up   { stroke: var(--tint); stroke-dasharray: 230; stroke-dashoffset: 230; }
+  .down { stroke: var(--ink-soft); stroke-dasharray: 4 3; opacity: 0; }
+  :global(.job.seen) .up   { animation: draw230 1.3s var(--ease-out) .35s forwards; }
+  :global(.job.seen) .down { animation: tick-in 1.1s var(--ease-out) .75s forwards; }
+  @keyframes draw230 { to { stroke-dashoffset: 0; } }
+  .up-lab, .down-lab { opacity: 0; }
+  :global(.job.seen) .up-lab   { animation: tick-in .5s var(--ease-out) 1.6s forwards; }
+  :global(.job.seen) .down-lab { animation: tick-in .5s var(--ease-out) 1.8s forwards; }
+  .cross { fill: none; stroke: var(--tint); stroke-width: 1.6; opacity: 0; }
+  :global(.job.seen) .cross {
+    animation: tick-in .4s var(--ease-out) 1.5s forwards,
+               cross-pulse 3.6s ease-in-out 2s infinite;
+  }
+  @keyframes cross-pulse {
+    0%, 100% { r: 4.5; opacity: .9; }
+    50%      { r: 7;   opacity: .35; }
+  }
+
+  /* ============ tail: the mean dragged out, the median holding ============ */
+  .axis { stroke: var(--rule-strong); stroke-width: 1; }
+  .col {
+    fill: var(--ink-faint); opacity: .45;
+    transform-box: fill-box; transform-origin: center bottom; transform: scaleY(0);
+  }
+  .col.tailcol { fill: var(--tint); opacity: .7; }
+  :global(.job.seen) .col {
+    animation: grow-y .55s var(--ease-out) forwards;
+    animation-delay: calc(.25s + var(--i) * .05s);
+  }
+  @keyframes grow-y { to { transform: scaleY(1); } }
+  :global(.job.seen) .col.tailcol {
+    animation: grow-y .55s var(--ease-out) forwards, tail-glow 4.5s ease-in-out infinite;
+    animation-delay: calc(.25s + var(--i) * .05s), 2s;
+  }
+  @keyframes tail-glow { 0%, 100% { opacity: .7; } 50% { opacity: 1; } }
+
+  .median, .mean { stroke-width: 1.6; opacity: 0; }
+  .median { stroke: var(--ink-soft); }
+  .mean   { stroke: var(--tint); stroke-dasharray: 3 3; }
+  :global(.job.seen) .median { animation: tick-in .5s var(--ease-out) 1.3s forwards; }
+  :global(.job.seen) .mean   { animation: mean-drag 1.1s var(--ease-out) 1.5s forwards; }
+  @keyframes mean-drag {
+    from { opacity: 0;   transform: translateX(-62px); }
+    to   { opacity: .95; transform: translateX(0); }
+  }
+  .median-lab, .mean-lab, .tailbrace { opacity: 0; }
+  :global(.job.seen) .median-lab { animation: tick-in .5s var(--ease-out) 1.5s forwards; }
+  :global(.job.seen) .mean-lab   { animation: tick-in .5s var(--ease-out) 2.4s forwards; }
+  .tailbrace { stroke: var(--tint); stroke-width: 1.4; fill: none; }
+  :global(.job.seen) .tailbrace { animation: tick-in .5s var(--ease-out) 2.6s forwards; }
+
+  /* ============ roster: ghost positions leaving the allocation ============ */
+  .slot rect { fill: var(--tint); opacity: 0; }
+  .slot circle { fill: var(--paper-raised); opacity: 0; }
+  .strike {
+    stroke: var(--tint); stroke-width: 1.4;
+    stroke-dasharray: 30; stroke-dashoffset: 30; opacity: 0;
+  }
+  :global(.job.seen) .slot rect {
+    animation: slot-in .45s var(--ease-out) forwards;
+    animation-delay: calc(.2s + var(--i) * .045s);
+  }
+  @keyframes slot-in { to { opacity: .32; } }
+  :global(.job.seen) .slot circle {
+    animation: slot-dot .45s var(--ease-out) forwards;
+    animation-delay: calc(.28s + var(--i) * .045s);
+  }
+  @keyframes slot-dot { to { opacity: .8; } }
+
+  .slot.ghost rect { fill: none; stroke: var(--tint); stroke-width: 1; stroke-dasharray: 2.5 2.5; }
+  :global(.job.seen) .slot.ghost rect {
+    animation: ghost-in .45s var(--ease-out) forwards, ghost-fade 6s ease-in-out 2.4s infinite;
+    animation-delay: calc(.2s + var(--i) * .045s), 2.4s;
+  }
+  @keyframes ghost-in { to { opacity: .8; } }
+  @keyframes ghost-fade {
+    0%, 22%  { opacity: .8; }
+    46%, 88% { opacity: .1; }
+    100%     { opacity: .8; }
+  }
+  :global(.job.seen) .slot.ghost circle { animation: none; opacity: 0; }
+  :global(.job.seen) .slot.ghost .strike { animation: strike-through 6s ease-in-out 2.4s infinite; }
+  @keyframes strike-through {
+    0%, 18%  { opacity: 0;  stroke-dashoffset: 30; }
+    34%, 84% { opacity: .8; stroke-dashoffset: 0; }
+    100%     { opacity: 0;  stroke-dashoffset: 30; }
+  }
+
+  .ledgerline line { stroke: var(--rule-strong); stroke-width: 1; }
+  .saved { fill: var(--tint); opacity: .4; }
+  :global(.job.seen) .saved { animation: fill-bar 1.6s var(--ease-out) 2.6s forwards; }
+  @keyframes fill-bar { to { width: 178px; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .typemask, .caret, .focus, .strike, .cross { display: none; }
+    .rowlabel, .critbar, .col { opacity: .45 !important; }
+    .cellfill, .slot rect { opacity: .32 !important; }
+    .slot circle { opacity: .8 !important; }
+    .col { transform: none !important; }
+    .check, .median, .mean, .median-lab, .mean-lab,
+    .tailbrace, .gaplab, .up-lab, .down-lab, .down { opacity: .9 !important; }
+    .gapband { opacity: .13 !important; }
+    .up { stroke-dashoffset: 0 !important; }
+    .saved { width: 178px; }
+    * { animation: none !important; }
+  }
+</style>

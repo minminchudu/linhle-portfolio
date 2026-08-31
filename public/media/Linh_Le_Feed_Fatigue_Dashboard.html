@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Instagram Feed Fatigue Signal Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --navy: #0D1B2A; --navy-mid: #1A2E45;
+  --coral: #F58529; --purple: #833AB4;
+  --bg: #F0F2F5; --card: #FFFFFF; --border: #E2E8F0;
+  --text: #0D1B2A; --text-2: #4A5568; --text-3: #6B7280;
+  --radius: 10px;
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.6; }
+
+/* ── HEADER ── */
+.header { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, #2D1B4E 100%); position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 16px rgba(0,0,0,0.25); }
+.header-accent { height: 3px; background: linear-gradient(90deg, var(--coral), var(--purple)); }
+.header-inner { max-width: 1200px; margin: 0 auto; padding: 18px 32px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.header-left h1 { font-size: 20px; font-weight: 800; color: #fff; letter-spacing: -0.3px; }
+.header-left p { font-size: 12px; color: rgba(255,255,255,0.55); margin-top: 2px; }
+.header-badge { font-size: 11px; font-weight: 600; padding: 4px 12px; border-radius: 20px; background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.8); border: 1px solid rgba(255,255,255,0.15); white-space: nowrap; }
+
+/* ── NAV ── */
+.nav-bar { background: var(--navy); border-bottom: 1px solid rgba(255,255,255,0.08); }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 32px; display: flex; overflow-x: auto; }
+.nav-tab { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.5); padding: 12px 18px; cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; transition: all 0.18s; text-decoration: none; display: block; }
+.nav-tab:hover { color: rgba(255,255,255,0.85); }
+.nav-tab.active { color: #fff; border-bottom-color: var(--coral); }
+
+/* ── LAYOUT ── */
+.page { max-width: 1200px; margin: 0 auto; padding: 32px; }
+section { margin-bottom: 40px; }
+.section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-3); margin-bottom: 16px; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
+.card-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.card-sub { font-size: 12px; color: var(--text-3); margin-bottom: 20px; }
+
+/* ── FILTER ── */
+.filter-bar { display: flex; align-items: center; gap: 10px; padding-top: 28px; margin-bottom: 28px; flex-wrap: wrap; }
+.filter-label { font-size: 12px; font-weight: 600; color: var(--text-2); margin-right: 4px; }
+.filter-btn { font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600; padding: 7px 16px; border-radius: 20px; border: 1.5px solid var(--border); background: var(--card); color: var(--text-2); cursor: pointer; transition: all 0.16s; }
+.filter-btn:hover { border-color: var(--coral); color: var(--coral); }
+.filter-btn.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+
+/* ── TIMELINE ── */
+.tl-row { display: grid; grid-template-columns: 170px 1fr; align-items: center; margin-bottom: 16px; }
+.tl-mode-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; padding-right: 16px; white-space: nowrap; }
+.tl-track { position: relative; height: 30px; }
+.tl-line { position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--border); }
+.tl-marker { position: absolute; top: 50%; transform: translate(-50%,-50%); width: 11px; height: 11px; border-radius: 50%; cursor: pointer; transition: transform 0.15s; z-index: 2; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.15); }
+.tl-marker:hover { transform: translate(-50%,-50%) scale(1.6); }
+.tl-year-tag { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 9px; font-weight: 700; white-space: nowrap; color: var(--text-2); background: #fff; padding: 1px 4px; border-radius: 3px; pointer-events: none; }
+.tl-axis { display: grid; grid-template-columns: 170px 1fr; margin-top: 6px; }
+.tl-axis-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--text-3); font-weight: 500; }
+.timeline-wrap { min-width: 650px; }
+
+/* ── INTENSITY CHART ── */
+.chart-hint { font-size: 11px; color: var(--text-3); text-align: center; margin-top: 8px; font-style: italic; }
+
+
+/* ── DETAIL PANEL ── */
+.detail-panel { display: none; margin-top: 20px; }
+.detail-panel.visible { display: block; }
+.detail-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.detail-header { padding: 22px 28px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.detail-header-left h2 { font-size: 21px; font-weight: 800; margin-bottom: 5px; }
+.detail-core { font-size: 13px; color: var(--text-2); max-width: 580px; line-height: 1.6; }
+.intensity-badge { font-size: 11px; font-weight: 700; padding: 5px 14px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.05em; }
+.detail-body { display: grid; grid-template-columns: 1fr 1fr; }
+@media (max-width: 780px) { .detail-body { grid-template-columns: 1fr; } }
+.detail-col { padding: 22px 28px; }
+.detail-col:first-child { border-right: 1px solid var(--border); }
+.detail-col-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-3); margin-bottom: 14px; }
+
+blockquote { border-left: 4px solid; padding: 11px 15px; border-radius: 0 6px 6px 0; margin-bottom: 12px; font-style: italic; font-size: 13px; line-height: 1.6; color: var(--text); }
+blockquote:last-child { margin-bottom: 0; }
+blockquote cite { display: block; margin-top: 5px; font-style: normal; font-size: 11px; color: var(--text-3); font-weight: 500; }
+
+.fix-box { background: #F8FAFC; border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; margin-bottom: 14px; }
+.fix-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-3); margin-bottom: 7px; }
+.fix-text { font-size: 13px; color: var(--text); line-height: 1.6; font-weight: 500; }
+
+.seg-section { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
+.seg-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-3); margin-bottom: 10px; }
+.seg-row { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 8px; }
+.seg-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text-3); margin-top: 5px; flex-shrink: 0; }
+.seg-dot.active { background: var(--coral); }
+
+/* ── FINDINGS ── */
+.findings-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+@media (max-width: 700px) { .findings-grid { grid-template-columns: 1fr; } }
+.finding-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; border-top: 3px solid; }
+.finding-num { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-3); margin-bottom: 8px; }
+.finding-headline { font-size: 15px; font-weight: 700; margin-bottom: 8px; line-height: 1.35; }
+.finding-body { font-size: 12px; color: var(--text-2); line-height: 1.6; }
+.finding-inv { margin-top: 10px; font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* ── COMPETITOR CARDS (v3: quotes-first, research-based) ── */
+.comp-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+@media (max-width: 850px) { .comp-grid { grid-template-columns: 1fr; } }
+.comp-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; display: flex; flex-direction: column; gap: 0; }
+.comp-platform { font-size: 16px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+.comp-why { font-size: 11px; color: var(--text-3); margin-bottom: 14px; font-style: italic; }
+.comp-quotes { flex: 1; }
+.comp-gap-wrap { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
+.comp-gap-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-3); margin-bottom: 6px; }
+.comp-gap-text { font-size: 12px; color: var(--text-2); line-height: 1.55; font-weight: 500; }
+.comp-source-note { font-size: 11px; color: var(--text-3); margin-top: 16px; font-style: italic; }
+
+/* ── BUSINESS IMPACT ── */
+.impact-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; margin-bottom: 20px; }
+@media (max-width: 800px) { .impact-grid { grid-template-columns: 1fr; } }
+.stat-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; }
+.stat-num { font-size: 26px; font-weight: 800; line-height: 1.1; background: linear-gradient(135deg, var(--coral), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.stat-label { font-size: 11px; color: var(--text-2); margin-top: 4px; line-height: 1.4; font-weight: 500; }
+.stat-caveat { font-size: 10px; color: var(--text-3); margin-top: 5px; font-style: italic; }
+.chart-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 22px; }
+.chart-card-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+.chart-card-sub { font-size: 11px; color: var(--text-3); margin-bottom: 16px; }
+.impact-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.impact-table th { text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-3); padding: 10px 16px; border-bottom: 2px solid var(--border); background: #F8FAFC; }
+.impact-table td { padding: 12px 16px; border-bottom: 1px solid var(--border); vertical-align: top; color: var(--text-2); line-height: 1.5; }
+.impact-table td:first-child { font-weight: 600; color: var(--text); width: 210px; }
+.impact-table tr:last-child td { border-bottom: none; }
+
+/* ── SOURCES ── */
+.source-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+@media (max-width: 700px) { .source-grid { grid-template-columns: 1fr; } }
+.source-item { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; display: flex; gap: 12px; align-items: flex-start; }
+.source-tier { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; white-space: nowrap; flex-shrink: 0; margin-top: 2px; }
+.tier-primary  { background: #EBF8FF; color: #1A73C7; }
+.tier-academic { background: #F0FDF4; color: #16A34A; }
+.tier-user     { background: #FFF7ED; color: #C2410C; }
+.tier-media    { background: #FAF5FF; color: #7C3AED; }
+.source-info strong { font-size: 12px; font-weight: 600; color: var(--text); display: block; margin-bottom: 2px; }
+.source-info span { font-size: 11px; color: var(--text-3); line-height: 1.4; }
+.method-note { background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 8px; padding: 14px 18px; font-size: 12px; color: #78350F; line-height: 1.6; margin-top: 16px; }
+.method-note strong { font-weight: 700; }
+
+/* ── FOOTER ── */
+.footer { background: var(--navy); padding: 20px 32px; text-align: center; }
+.footer p { font-size: 11px; color: rgba(255,255,255,0.35); }
+.back-to-top { position: fixed; bottom: 28px; right: 28px; width: 40px; height: 40px; background: var(--navy); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: 0 4px 14px rgba(0,0,0,0.2); text-decoration: none; z-index: 200; transition: background 0.15s; }
+.back-to-top:hover { background: var(--coral); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-accent"></div>
+  <div class="header-inner">
+    <div class="header-left">
+      <h1>Feed Fatigue Signal Dashboard</h1>
+      <p>Instagram · 6 failure modes · 17 venue types · 2022–2025 · Data Science Lab Final Project</p>
+    </div>
+    <div class="header-badge">PM-Ready Signal Tracker</div>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav-bar">
+  <div class="nav-inner">
+    <a class="nav-tab active" href="#timeline">Timeline</a>
+    <a class="nav-tab" href="#overview">Failure Modes</a>
+    <a class="nav-tab" href="#findings">Surprise Findings</a>
+    <a class="nav-tab" href="#competitors">Competitor Gap</a>
+    <a class="nav-tab" href="#impact">Business Impact</a>
+    <a class="nav-tab" href="#sources">Sources</a>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- FILTER -->
+  <div class="filter-bar">
+    <span class="filter-label">Filter by segment:</span>
+    <button class="filter-btn active" onclick="setFilter('all',this)">All Users</button>
+    <button class="filter-btn" onclick="setFilter('genz',this)">Gen Z</button>
+    <button class="filter-btn" onclick="setFilter('millennial',this)">Millennials</button>
+    <button class="filter-btn" onclick="setFilter('creator',this)">Creators</button>
+  </div>
+
+  <!-- ══ 1. TIMELINE ══ -->
+  <section id="timeline">
+    <div class="section-label">Complaint Persistence — 2022 to 2025</div>
+    <div class="card">
+      <div class="card-title">3 Years of Signal — Every Failure Mode Is Sustained, Not Momentary</div>
+      <div class="card-sub">Key events by failure mode. Instagram's own product launches are timestamped responses that validate our analysis.</div>
+      <div style="overflow-x:auto">
+        <div class="timeline-wrap" id="tl-wrap"></div>
+        <div class="tl-axis">
+          <div></div>
+          <div class="tl-axis-labels">
+            <span>Jan 2022</span><span>Jul 2022</span><span>Jan 2023</span><span>Jan 2024</span><span>Jul 2024</span><span>Jan 2025</span><span>Dec 2025</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 2. FAILURE MODES — BAR CHART + QUOTE PREVIEWS ══ -->
+  <section id="overview">
+    <div class="section-label">6 Failure Modes — Ranked by Intensity · Click any bar or row to expand</div>
+    <div class="card">
+      <div class="card-title">Failure Mode Intensity Ranking</div>
+      <div class="card-sub" id="chart-sub">Sorted by overall intensity across all user segments. Switch the filter above to see segment-specific ranking.</div>
+      <div style="position:relative; height:268px">
+        <canvas id="intensity-chart"></canvas>
+      </div>
+      <div class="chart-hint">↑ Click any bar to open the full analysis panel below</div>
+    </div>
+    <div class="detail-panel" id="detail-panel"></div>
+  </section>
+
+  <!-- ══ 3. SURPRISE FINDINGS ══ -->
+  <section id="findings">
+    <div class="section-label">4 Surprise Findings — Contradicting the Official Narrative</div>
+    <div class="findings-grid" id="findings-grid"></div>
+  </section>
+
+  <!-- ══ 4. COMPETITOR GAP — QUOTE-FIRST CARDS (v3, research-based) ══ -->
+  <section id="competitors">
+    <div class="section-label">Competitor Gap — What Users Say Rivals Do Better</div>
+    <div class="comp-grid">
+
+      <!-- TikTok -->
+      <div class="comp-card">
+        <div class="comp-platform">TikTok</div>
+        <div class="comp-why">The user-cited gold standard for content variety and algorithm responsiveness</div>
+        <div class="comp-quotes">
+          <blockquote style="border-left-color:#010101;background:#F8FAFC">
+            "The TikTok For You Page actually learns what you like. Every swipe feels different. Instagram gives me the same five topics on repeat."
+            <cite>ResetEra · 2024</cite>
+          </blockquote>
+          <blockquote style="border-left-color:#010101;background:#F8FAFC">
+            "TikTok keeps its video in the video section. It doesn't invade my DMs or my main feed."
+            <cite>X / Twitter · 2025</cite>
+          </blockquote>
+        </div>
+        <div class="comp-gap-wrap">
+          <div class="comp-gap-label">What Instagram is missing</div>
+          <div class="comp-gap-text">Variety per session and surface containment. Users don't object to Instagram having a short-form video tab — they object to it bleeding across the whole app. TikTok doesn't do that.</div>
+        </div>
+        <div class="comp-source-note">Sources: ResetEra, X / Twitter, Vice, Morning Consult Q1 2025</div>
+      </div>
+
+      <!-- Snapchat -->
+      <div class="comp-card">
+        <div class="comp-platform">Snapchat</div>
+        <div class="comp-why">Cited specifically for preserving the friend-graph experience Instagram abandoned</div>
+        <div class="comp-quotes">
+          <blockquote style="border-left-color:#FFCC00;background:#F8FAFC">
+            "Snap still feels like it's actually for my friends. Instagram used to feel that way."
+            <cite>Quora · 2024</cite>
+          </blockquote>
+          <blockquote style="border-left-color:#FFCC00;background:#F8FAFC">
+            "BeReal and Snapchat offer the unedited, mundane content that Instagram lost."
+            <cite>Cosmopolitan India · 2024</cite>
+          </blockquote>
+        </div>
+        <div class="comp-gap-wrap">
+          <div class="comp-gap-label">What Instagram is missing</div>
+          <div class="comp-gap-text">Friend-graph preservation. Snapchat never deprioritised who you know for what you watch. Morning Consult Q1 2025 places Snapchat ahead of YouTube Shorts among Gen Z daily users — driven by this distinction.</div>
+        </div>
+        <div class="comp-source-note">Sources: Quora, Cosmopolitan India, Morning Consult Q1 2025</div>
+      </div>
+
+      <!-- YouTube Shorts -->
+      <div class="comp-card">
+        <div class="comp-platform">YouTube Shorts</div>
+        <div class="comp-why">Less aggressive surface invasion — short-form and long-form coexist without cannibalising each other</div>
+        <div class="comp-quotes">
+          <blockquote style="border-left-color:#FF0000;background:#F8FAFC">
+            "Shorts are aggressive but at least I can still find my subscriptions immediately. Instagram buried my follows."
+            <cite>X / Twitter · 2025</cite>
+          </blockquote>
+          <blockquote style="border-left-color:#FF0000;background:#F8FAFC">
+            "YouTube Shorts feels less aggressive than Reels partly because the main YouTube app still surfaces subscriptions and search prominently."
+            <cite>User sentiment synthesis · PiunikaWeb / ResetEra 2025</cite>
+          </blockquote>
+        </div>
+        <div class="comp-gap-wrap">
+          <div class="comp-gap-label">What Instagram is missing</div>
+          <div class="comp-gap-text">A clear separation between short-form and the rest of the product. On YouTube, short-form is one surface. On Instagram, Reels is everywhere — friend-feed, DM swipe, Explore — with no clear zone.</div>
+        </div>
+        <div class="comp-source-note">Sources: X / Twitter, PiunikaWeb, ResetEra · 2025</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ 5. BUSINESS IMPACT ══ -->
+  <section id="impact">
+    <div class="section-label">Business Impact — Why Feed Fatigue Costs Meta Money</div>
+    <div class="impact-grid">
+      <div class="stat-card">
+        <div class="stat-num">~$83.6B</div>
+        <div class="stat-label">Instagram 2025 ad revenue — eMarketer projection, >50% of Meta's US total</div>
+        <div class="stat-caveat">Projected figure from eMarketer (2024). Actual 2025 results reportable from Q4 earnings — directionally confirmed.</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">15.9%</div>
+        <div class="stat-label">Projected revenue growth rate for 2025 — decelerating from 24.4% in 2024</div>
+        <div class="stat-caveat">eMarketer 2025 projection. Deceleration trend is the argument; precise rate secondary.</div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-card-title">Gen Z Daily Time — Instagram vs TikTok</div>
+        <div class="chart-card-sub">Qustodio Jan 2025 · 400,000+ family devices · 2024 data. Each lost minute = lost ad impressions.</div>
+        <div style="height:130px; position:relative"><canvas id="time-chart"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-card-title">Instagram Feed Composition Shift</div>
+        <div class="chart-card-sub">Based on Zuckerberg Q2 2022 earnings ("30% target") and Q1 2024 earnings ("50%+ confirmed").</div>
+        <div style="height:130px; position:relative"><canvas id="feed-chart"></canvas></div>
+      </div>
+    </div>
+    <div class="card">
+      <table class="impact-table" id="impact-table"></table>
+    </div>
+  </section>
+
+  <!-- ══ 6. SOURCES ══ -->
+  <section id="sources">
+    <div class="section-label">Source Transparency — 22 Sources Across 17 Venue Types</div>
+    <div class="source-grid" id="source-grid"></div>
+    <div class="method-note">
+      <strong>Methodology:</strong> Grounded qualitative categorization — categories discovered from the data, not imposed in advance. Automated sentiment scoring (VADER, BERT) considered and set aside: our goal was category discovery, not frequency counting. Intensity rankings reflect source frequency and emotional charge across documented complaints, not hard numerical scores. Reddit inaccessible May 2026; ResetEra, Substack, Quora, and X substituted with confirmed pattern replication across all venues.
+    </div>
+  </section>
+
+</div>
+
+<div class="footer">
+  <p>Feed Fatigue Signal Dashboard · Data Science Lab · May 2026 · Research window 2022–2025 · Presented to Meta / Instagram product team</p>
+</div>
+<a class="back-to-top" href="#timeline">↑</a>
+
+<!-- ══════════════════ DATA + LOGIC ══════════════════ -->
+<script>
+/* ── PALETTE ── */
+const C = {
+  highest:  { badge:'#C0392B', bg:'#FEF2F2', border:'#FECACA', text:'#991B1B' },
+  veryhigh: { badge:'#D35400', bg:'#FFF7ED', border:'#FED7AA', text:'#9A3412' },
+  high:     { badge:'#2980B9', bg:'#EFF6FF', border:'#BFDBFE', text:'#1E40AF' },
+  medium:   { badge:'#27AE60', bg:'#F0FDF4', border:'#BBF7D0', text:'#166534' },
+  episodic: { badge:'#8E44AD', bg:'#FAF5FF', border:'#E9D5FF', text:'#6B21A8' },
+};
+const IL = { highest:'Highest', veryhigh:'Very High', high:'High', medium:'Medium', episodic:'Episodic' };
+
+/* ── PANEL DATA ── */
+const PANELS = [
+  {
+    id:'social', num:1, name:'Social Graph Collapse', intensity:'highest',
+    scores:{ all:95, genz:90, millennial:88, creator:60 },
+    complaint:'Friends replaced by AI suggestions — users can\'t see posts from accounts they chose to follow.',
+    demographics:['genz','millennial'],
+    demoLabels:{ genz:'Migrate scrolling to TikTok; keep Instagram for DMs only', millennial:'Strongest "Make Instagram Instagram Again" voice — sustained since 2016', creator:'Posts reach fewer followers as algorithm prioritises unconnected reach' },
+    quotes:[
+      { text:'I follow about 300 people and I barely see any of their posts. It feels like the app is just for stories and the search wall.', source:'ResetEra', year:'2023' },
+      { text:'My feed has gone from 100% my friends to 30% friends and the rest being "Because you follow X."', source:'ResetEra', year:'2024' },
+      { text:'I just open it for DMs now. The feed is pointless.', source:'X / Twitter', year:'2025' },
+    ],
+    previewQuote:'My feed has gone from 100% my friends to 30% friends and the rest being "Because you follow X."',
+    fix:'"Friends First" toggle — first 10 posts per session are exclusively from followed accounts before any AI content appears. A persistent mode within the existing feed, not a separate tab.',
+    businessRisk:'Instagram becomes a DM utility. DMs cannot be monetised at feed CPMs — directly erodes ARPU.',
+  },
+  {
+    id:'reels', num:2, name:'Reels Surface Invasion', intensity:'veryhigh',
+    scores:{ all:88, genz:95, millennial:65, creator:55 },
+    complaint:'Reels bleeding into friend-feed, DM swipe gesture, and non-video surfaces across the app.',
+    demographics:['genz'],
+    demoLabels:{ genz:'Strongest objection — came for photos, being forced into vertical video across every surface', millennial:'Accepts Reels as entertainment; strongly rejects it displacing friend-feed photos', creator:'Reach unpredictability as Reels algorithm operates differently from photo feed' },
+    quotes:[
+      { text:'WTF is up with Suggested Reels? Why can\'t I see any of my friends\' posts anymore?', source:'Vice', year:'2022' },
+      { text:'Hate this instagram update keep swiping on these dumb a*s reels just to see my dms.', source:'X / Twitter', year:'Dec 2025' },
+      { text:'I want to see posts. Not stories or reels but posts. The original purpose of Instagram is much more impactful than trying to copy TikTok.', source:'NC State Poole Research', year:'2024' },
+    ],
+    previewQuote:'Hate this instagram update keep swiping on these dumb a*s reels just to see my dms.',
+    fix:'Enforce surface contracts — Reels in the Reels tab and feed video slot only. Restore right-swipe-to-DMs immediately (zero algorithmic cost, absorbs the loudest current complaint).',
+    businessRisk:'"Worse TikTok" perception erodes the differentiated positioning that justifies Instagram\'s $223 ARPU premium over TikTok.',
+  },
+  {
+    id:'loop', num:3, name:'Stuck Interest Loop', intensity:'high',
+    scores:{ all:85, genz:85, millennial:65, creator:72 },
+    complaint:'A single tap triggers an inescapable repetitive rabbit hole that ignores "Not Interested" feedback.',
+    demographics:['genz','millennial','creator'],
+    demoLabels:{ genz:'Primary disengagement trigger — cited as the reason they stopped opening the app daily', millennial:'Experienced as algorithmic sameness; most likely to drift to competitor apps over time', creator:'Algorithm locks into one content type, making reach unpredictable for multi-topic accounts' },
+    quotes:[
+      { text:'I liked a food hashtag and now it\'s nonstop food videos on my feed and maybe a post from someone I actually follow.', source:'ResetEra', year:'2024' },
+      { text:'Instagram only shows me what it thinks I should see... starts a vicious cycle of boringness and predictability.', source:'Medium', year:'2024' },
+      { text:'I\'ve done all I can to stop getting Jake Paul boxing content on my main feed and it still happens.', source:'ResetEra', year:'2025' },
+    ],
+    previewQuote:'I liked a food hashtag and now it\'s nonstop food videos on my feed and maybe a post from someone I actually follow.',
+    fix:'Automatic interest decay (14-day half-life) + 1-in-15 "Surprise Me" injection from adjacent interest cluster. "Not Interested" applies a 30-day suppression, not a single-post hide.',
+    businessRisk:'Primary disengagement driver. Losing 5% of Gen Z\'s 79 min/day = ~33 billion fewer ad impression-minutes annually.',
+  },
+  {
+    id:'ads', num:4, name:'Ad + Suggested Overload', intensity:'high',
+    scores:{ all:78, genz:60, millennial:72, creator:75 },
+    complaint:'50%+ of feed is AI-recommended or ads — confirmed by Zuckerberg on the Q1 2024 earnings call.',
+    demographics:['genz','millennial','creator'],
+    demoLabels:{ genz:'Resigned tone — high frequency complaint but lower emotional charge than loops or Reels', millennial:'Distinguishes ad overload from suggested content overload — both frustrate separately', creator:'Organic reach suppressed as AI-recommended and paid content fill available feed slots' },
+    quotes:[
+      { text:'Yeah they basically throw an ad at you every 2–3 posts and when you scroll you just end up going into recommended content.', source:'ResetEra', year:'2024' },
+      { text:'80% ads and recommended posts. Stories is the only place I see people I wanna see.', source:'ResetEra', year:'2025' },
+    ],
+    previewQuote:'80% ads and recommended posts. Stories is the only place I see people I wanna see.',
+    fix:'Session-level cap: AI-recommended + ads ≤ 40% of any scroll session. Show a "you\'ve seen all recent posts from followed accounts" marker before AI content begins.',
+    businessRisk:'CPM pressure as engagement signals weaken from oversaturation — algorithm charges advertisers less efficiently on a declining-quality feed.',
+  },
+  {
+    id:'disturbing', num:5, name:'Disturbing Content Surfacing', intensity:'episodic',
+    scores:{ all:62, genz:70, millennial:55, creator:50 },
+    complaint:'Off-topic or graphic content from non-followed accounts enters feed unexpectedly via a self-amplifying loop.',
+    demographics:['genz','millennial'],
+    demoLabels:{ genz:'Higher exposure via heavier Reels usage — primary victims of the Feb 2025 incident', millennial:'Episodic high-intensity complaints; triggers immediate uninstall behaviour at spike moments', creator:'Brand-safety concern — proximity to disturbing content damages creator reputation' },
+    quotes:[
+      { text:'Every time I open reels I get disgusting content from people I don\'t follow. I report it, press Not Interested, and it comes back within minutes.', source:'ResetEra', year:'2024' },
+      { text:'The algorithm kept showing me content from a violent news event for two weeks after I pressed Not Interested. It treated my horror as engagement.', source:'X / Twitter', year:'2024' },
+      { text:'Feeds "progressively got worse as they scrolled" — Meta publicly apologised.', source:'HuffPost', year:'Feb 2025' },
+    ],
+    previewQuote:'The algorithm kept showing me violent content for two weeks after I pressed Not Interested. It treated my horror as engagement.',
+    fix:'Confidence threshold gate — unconnected content enters feed only if safety classifier confidence ≥ minimum threshold AND post has ≥500 saves/shares from verified humans. Breaks the self-amplifying loop.',
+    businessRisk:'Brand safety risk for advertisers. Episodic crises (Feb 2025) generate press coverage that accelerates user churn and triggers advertiser pullback at scale.',
+  },
+  {
+    id:'commerce', num:6, name:'Commerce Sameness', intensity:'medium',
+    scores:{ all:58, genz:30, millennial:88, creator:48 },
+    complaint:'Influencer and brand content homogenises feed — especially acute for women aged 25–45.',
+    demographics:['millennial'],
+    demoLabels:{ genz:'Less prominent — more likely to migrate to TikTok than to voice brand-saturation complaints', millennial:'Strongest voice — chronic dissatisfaction with influencer/brand content dominating recommendations', creator:'Brand-adjacent creators benefit short-term but suffer from broader "sameness" trust erosion' },
+    quotes:[
+      { text:'My Instagram is mostly people selling me moisturiser and telling me my midlife face is probably too dry.', source:'Anniki Sommerville / Substack', year:'2024' },
+      { text:'The platform I used to love won\'t let me scroll two thumbs without showing me a dropshipped dress to buy.', source:'Vice', year:'2023' },
+    ],
+    previewQuote:'My Instagram is mostly people selling me moisturiser and telling me my midlife face is probably too dry.',
+    fix:'Category concentration penalty — if 3 of last 10 recommendations are from the same vertical, suppress that category for 5 posts and inject a non-commercial signal.',
+    businessRisk:'Reduced ad engagement quality in saturated verticals → lower engagement signals → CPM compression on Meta\'s most valuable ad surface.',
+  },
+];
+
+/* ── STATE ── */
+let activeFilter = 'all';
+let openPanelId  = null;
+let intensityChart = null;
+let sortedPanels = [];
+
+/* ── TIMELINE ── */
+function buildTimeline() {
+  const events = [
+    { date:'2022-07', modes:[0,1], label:'"Make Instagram Instagram Again" petition — 230K sigs' },
+    { date:'2022-07', modes:[0],   label:'Mosseri tweet admits friend content moved to DMs' },
+    { date:'2022-09', modes:[3],   label:'Zuckerberg Q2 earnings: 30% AI-recommended target confirmed' },
+    { date:'2024-03', modes:[2,3], label:'Zuckerberg Q1 earnings: 50%+ AI-recommended confirmed' },
+    { date:'2024-11', modes:[2],   label:'Reset Suggested Content launches — implicit loop admission' },
+    { date:'2025-02', modes:[4],   label:'Graphic violence floods Reels; Meta public apology' },
+    { date:'2025-04', modes:[2],   label:'"Your Algorithm" dashboard ships' },
+    { date:'2025-12', modes:[1],   label:'DM swipe replaced by Reels; X complaint wave peaks' },
+  ];
+  const modeNames  = ['Social Graph','Reels Invasion','Stuck Loop','Ad Overload','Disturbing Content','Commerce'];
+  const modeColors = ['#C0392B','#D35400','#2980B9','#2980B9','#8E44AD','#27AE60'];
+  const start = new Date('2022-01-01').getTime();
+  const end   = new Date('2025-12-31').getTime();
+  const pct   = d => ((new Date(d+'-01').getTime()-start)/(end-start)*100).toFixed(2);
+
+  let html = '';
+  for (let mi = 0; mi < 6; mi++) {
+    const me = events.filter(e => e.modes.includes(mi));
+    html += `<div class="tl-row">
+      <div class="tl-mode-label" style="color:${modeColors[mi]}">${modeNames[mi]}</div>
+      <div class="tl-track"><div class="tl-line"></div>`;
+    me.forEach(ev => {
+      html += `<div class="tl-marker" style="left:${pct(ev.date)}%;background:${modeColors[mi]}" title="${ev.label}">
+        <div class="tl-year-tag">${ev.date.slice(0,4)}</div></div>`;
+    });
+    html += `</div></div>`;
+  }
+  document.getElementById('tl-wrap').innerHTML = html;
+}
+
+/* ── INTENSITY CHART ── */
+function buildIntensityChart() {
+  sortedPanels = [...PANELS].sort((a,b) => b.scores[activeFilter] - a.scores[activeFilter]);
+
+  const labels = sortedPanels.map(p => p.name);
+  const data   = sortedPanels.map(p => p.scores[activeFilter]);
+  const colors = sortedPanels.map(p => {
+    const hex = C[p.intensity].badge;
+    if (activeFilter === 'all') return hex;
+    return p.demographics.includes(activeFilter) ? hex : hex + '40';
+  });
+
+  const ctx = document.getElementById('intensity-chart').getContext('2d');
+  if (intensityChart) intensityChart.destroy();
+
+  intensityChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{ data, backgroundColor: colors, borderColor: colors.map(c => c.slice(0,7)), borderWidth: 1, borderRadius: 5, borderSkipped: false }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      onClick(evt, elements) {
+        if (elements.length) toggleDetail(sortedPanels[elements[0].index].id);
+      },
+      onHover(evt, elements) {
+        evt.native.target.style.cursor = elements.length ? 'pointer' : 'default';
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => ` Intensity score: ${ctx.parsed.x} / 100`,
+            afterLabel: ctx => ` ${IL[sortedPanels[ctx.dataIndex].intensity]} · click to expand`,
+          },
+          bodyFont: { family:'Inter', size:12 }, titleFont: { family:'Inter', size:13, weight:'700' },
+          padding: 12, cornerRadius: 8,
+        }
+      },
+      scales: {
+        x: { min:0, max:100, grid:{ color:'#F0F2F5' }, ticks:{ font:{ family:'Inter', size:11 }, color:'#6B7280', callback: v => v===0?'':v }, border:{ display:false } },
+        y: { afterFit: function(axis){ axis.width = 210; }, grid:{ display:false }, ticks:{ font:{ family:'Inter', size:12, weight:'600' }, color:'#0D1B2A', padding: 6, callback: function(val){ const n = this.getLabelForValue(val); const S = {'Disturbing Content Surfacing':'Disturbing Content','Ad + Suggested Overload':'Ad + Suggested'}; return S[n] || n; } }, border:{ display:false } },
+      },
+      layout: { padding:{ right:10, left:0 } }
+    }
+  });
+
+  const subtitles = {
+    all:       'Sorted by overall intensity across all segments.',
+    genz:      'Sorted by Gen Z acuity — faded bars are less acute for this segment.',
+    millennial:'Sorted by Millennial acuity — faded bars are less acute for this segment.',
+    creator:   'Sorted by Creator acuity — faded bars are less acute for this segment.',
+  };
+  document.getElementById('chart-sub').textContent = subtitles[activeFilter] + ' Click any bar to open full analysis.';
+
+}
+
+
+/* ── DETAIL PANEL ── */
+function toggleDetail(id) {
+  const panel = document.getElementById('detail-panel');
+  if (openPanelId === id && panel.classList.contains('visible')) {
+    panel.classList.remove('visible');
+    openPanelId = null;
+      return;
+  }
+  openPanelId = id;
+  const p = PANELS.find(x => x.id === id);
+  renderDetail(p);
+  panel.classList.add('visible');
+  setTimeout(() => panel.scrollIntoView({ behavior:'smooth', block:'start' }), 60);
+}
+
+function renderDetail(p) {
+  const panel = document.getElementById('detail-panel');
+  panel.dataset.panelId = p.id;
+  const col = C[p.intensity];
+  const dk = activeFilter === 'all' ? null : activeFilter;
+
+  const segs = [
+    { key:'genz', label:'Gen Z' },
+    { key:'millennial', label:'Millennials' },
+    { key:'creator', label:'Creators' },
+  ].map(s => {
+    const active = p.demographics.includes(s.key);
+    const hl = dk === s.key && active;
+    return `<div class="seg-row">
+      <div class="seg-dot ${hl ? 'active' : ''}"></div>
+      <div>
+        <strong style="font-size:12px;color:${active ? 'var(--text)' : 'var(--text-3)'}">${s.label}${active ? '' : ' — less acute'}</strong>
+        <div style="font-size:12px;color:var(--text-2);margin-top:1px">${p.demoLabels[s.key]}</div>
+      </div></div>`;
+  }).join('');
+
+  const quotes = p.quotes.map(q =>
+    `<blockquote style="border-left-color:${col.badge};background:${col.bg}">"${q.text}"<cite>${q.source} · ${q.year}</cite></blockquote>`
+  ).join('');
+
+  panel.innerHTML = `<div class="detail-card">
+    <div class="detail-header">
+      <div class="detail-header-left">
+        <h2>Mode ${p.num} — ${p.name}</h2>
+        <div class="detail-core">${p.complaint}</div>
+      </div>
+      <span class="intensity-badge" style="background:${col.bg};color:${col.text};border:1px solid ${col.border}">
+        ${IL[p.intensity]} Intensity · ${p.scores[activeFilter]}/100
+      </span>
+    </div>
+    <div class="detail-body">
+      <div class="detail-col">
+        <div class="detail-col-title">User Voice</div>${quotes}
+      </div>
+      <div class="detail-col">
+        <div class="detail-col-title">Product Fix</div>
+        <div class="fix-box"><div class="fix-label">Recommended intervention</div><div class="fix-text">${p.fix}</div></div>
+        <div class="fix-box" style="background:#FFF9F0;border-color:#FDE68A">
+          <div class="fix-label" style="color:#92400E">Business risk if unaddressed</div>
+          <div class="fix-text" style="color:#78350F">${p.businessRisk}</div>
+        </div>
+        <div class="seg-section"><div class="seg-title">Segment Breakdown</div>${segs}</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ── FILTER ── */
+function setFilter(f, btn) {
+  activeFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  buildIntensityChart();
+  if (openPanelId) {
+    const p = PANELS.find(x => x.id === openPanelId);
+    if (p) renderDetail(p);
+  }
+}
+
+/* ── FINDINGS ── */
+function renderFindings() {
+  const F = [
+    { color:'#C0392B', num:'Finding 01', headline:'Loops kill engagement — ahead of ads', body:'Users tolerate ads — low emotion, high frequency, resigned language. The algorithmic loop is what actually drives app abandonment. This inverts most Instagram product communications assumptions.', inv:'Inverts: conventional wisdom blames ad density' },
+    { color:'#2980B9', num:'Finding 02', headline:'Gen Z wants fewer videos on Instagram', body:'Counter to the industry narrative that Gen Z drives video everywhere. They drive video on TikTok and YouTube — they want posts and photos on Instagram. "I want to see posts. Not stories or reels." — NC State Poole Research, 2024.', inv:'Inverts: assumption that video = Gen Z preference everywhere' },
+    { color:'#8E44AD', num:'Finding 03', headline:'Reels favorability rising AND complaints rising simultaneously', body:'Morning Consult: millennial Reels favorability rose from 31 to 47 (2022–2024) while complaint volume also rose. Users accept Reels as entertainment — they reject it as a friend-feed replacement.', inv:'Inverts: "users are warming up to Reels" narrative' },
+    { color:'#27AE60', num:'Finding 04', headline:'Zuckerberg\'s earnings calls confirm the user math', body:'"30% AI-recommended by end of 2023" (Q2 2022) → "50%+ now AI-recommended" (Q1 2024). Maps directly onto the steepening complaint curve. Users aren\'t misperceiving the shift — it\'s in the quarterly transcripts.', inv:'Inverts: "user perception is just noise" dismissal' },
+  ];
+  document.getElementById('findings-grid').innerHTML = F.map(f =>
+    `<div class="finding-card" style="border-top-color:${f.color}">
+      <div class="finding-num" style="color:${f.color}">${f.num}</div>
+      <div class="finding-headline">${f.headline}</div>
+      <div class="finding-body">${f.body}</div>
+      <div class="finding-inv">${f.inv}</div>
+    </div>`).join('');
+}
+
+/* ── BUSINESS IMPACT CHARTS ── */
+function buildTimeChart() {
+  new Chart(document.getElementById('time-chart').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: ['TikTok', 'Instagram'],
+      datasets: [{ data:[120,79], backgroundColor:['#1a1a1a','#E1306C'], borderRadius:5, borderSkipped:false }]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins: {
+        legend:{ display:false },
+        tooltip:{ callbacks:{ label: c => ` ${c.parsed.y} min/day (Gen Z, 2024)` }, bodyFont:{family:'Inter',size:12}, cornerRadius:6, padding:10 }
+      },
+      scales: {
+        x:{ grid:{display:false}, ticks:{font:{family:'Inter',size:12,weight:'600'},color:'var(--text)'}, border:{display:false} },
+        y:{ max:140, grid:{color:'#F0F2F5'}, ticks:{font:{family:'Inter',size:11},color:'#6B7280',callback:v=>v+'m'}, border:{display:false} },
+      },
+      layout:{padding:{top:8}}
+    }
+  });
+}
+
+function buildFeedChart() {
+  new Chart(document.getElementById('feed-chart').getContext('2d'), {
+    type:'bar',
+    data: {
+      labels:['2022 (baseline)','2023 (est.)','2024 (confirmed)'],
+      datasets:[
+        { label:'Followed accounts', data:[70,55,50], backgroundColor:'#BFDBFE', borderRadius:4, borderSkipped:false },
+        { label:'AI-recommended + Ads', data:[30,45,50], backgroundColor:'#C0392B', borderRadius:4, borderSkipped:false },
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins: {
+        legend:{ position:'bottom', labels:{ font:{family:'Inter',size:11}, boxWidth:12, padding:10, color:'var(--text-2)' } },
+        tooltip:{ callbacks:{ label: c => ` ${c.dataset.label}: ${c.parsed.y}%` }, bodyFont:{family:'Inter',size:12}, cornerRadius:6, padding:10 }
+      },
+      scales: {
+        x:{ stacked:true, grid:{display:false}, ticks:{font:{family:'Inter',size:10},color:'#6B7280'}, border:{display:false} },
+        y:{ stacked:true, max:100, grid:{color:'#F0F2F5'}, ticks:{font:{family:'Inter',size:11},color:'#6B7280',callback:v=>v+'%'}, border:{display:false} },
+      },
+      layout:{padding:{top:4}}
+    }
+  });
+}
+
+/* ── IMPACT TABLE ── */
+function renderImpact() {
+  const rows = [
+    ['Social Graph Collapse',       'Instagram becomes a DM utility. DMs cannot be monetised at feed CPMs — directly erodes ARPU.'],
+    ['Reels Surface Invasion',      '"Worse TikTok" perception erodes the differentiated positioning that justifies Instagram\'s $223 ARPU premium over TikTok.'],
+    ['Stuck Interest Loop',         'Primary disengagement driver. Losing 5% of Gen Z\'s 79 min/day = ~33 billion fewer ad impression-minutes annually.'],
+    ['Ad + Suggested Overload',     'CPM pressure when engagement signals weaken from oversaturation — algorithm charges advertisers less efficiently.'],
+    ['Commerce Sameness',           'Reduced ad engagement quality in saturated verticals → CPM compression on Meta\'s most valuable ad surface.'],
+    ['Disturbing Content Surfacing','Brand safety risk. Episodic crises (Feb 2025) accelerate user churn and trigger advertiser pullback at scale.'],
+  ];
+  document.getElementById('impact-table').innerHTML =
+    `<tr><th>Failure Mode</th><th>Business Risk if Unaddressed</th></tr>` +
+    rows.map(([m,r]) => `<tr><td>${m}</td><td>${r}</td></tr>`).join('');
+}
+
+/* ── SOURCES ── */
+function renderSources() {
+  const S = [
+    { name:'FTC v. Meta Trial Testimony', tier:'primary', info:'Mosseri (May 8) + Zuckerberg (Apr 14–16, 2025). Under-oath admissions on TikTok competition and feed strategy.' },
+    { name:'Meta Quarterly Earnings Calls', tier:'primary', info:'Q2 2022 + Q1 2024. Zuckerberg confirms AI-recommended share: 30% target → 50%+ achieved.' },
+    { name:'Mosseri Year-End Memo', tier:'primary', info:'December 31, 2025. "That feed is dead." Official thesis on DMs as the primary sharing surface.' },
+    { name:'Mosseri Semafor Interview', tier:'primary', info:'Dec 19, 2025. TikTok competitive threat; DMs as primary sharing surface.' },
+    { name:'LA Social Media Addiction Trial', tier:'primary', info:'Feb 18, 2026. Zuckerberg: teens = 1% of revenue — strategic, not direct revenue value.' },
+    { name:'Qustodio Digital Dilemma 2025', tier:'academic', info:'400,000+ family homes. TikTok 120 min/day vs Instagram 79 min/day among kids globally (2024 data).' },
+    { name:'Piper Sandler Taking Stock With Teens', tier:'academic', info:'10,969 U.S. teens, Fall 2025. TikTok 46% favorite vs Instagram 31%.' },
+    { name:'Morning Consult Q1 2025', tier:'academic', info:'Gen Z daily: TikTok 48% vs Instagram Reels 40%. Millennial Reels favorability 31→47 (2022–2024).' },
+    { name:'Pew Research Dec 2024', tier:'academic', info:'U.S. teens "almost constantly" on Instagram: 8% (2023) → 12% (2024). Depth rising, breadth stagnant.' },
+    { name:'eMarketer 2025 Projections', tier:'academic', info:'$83.6B Instagram ad revenue projected. >50% of Meta\'s US ad total for first time. Figures are projections.' },
+    { name:'NC State Poole Research', tier:'academic', info:'Gen Z: "I want to see posts. Not stories or reels." Directly contradicts video-everywhere assumption.' },
+    { name:'ResetEra Forum', tier:'user', info:'Primary user voice source. Complaint patterns A–H documented across 2022–2025.' },
+    { name:'X / Twitter (via news coverage)', tier:'user', info:'Dec 2025 DM-swipe UI complaint wave; 2024 disturbing content reports.' },
+    { name:'Substack Comments', tier:'user', info:'Anniki Sommerville 2024 — millennial commerce sameness. Om Malik Jan 1, 2026 analysis.' },
+    { name:'Quora', tier:'user', info:'Algorithm loop and friend-graph collapse. Longitudinal pattern 2022–2025.' },
+    { name:'Medium (user essays)', tier:'user', info:'Ashley K. and Jocelyn Quinlan — loop and over-curation personal accounts.' },
+    { name:'Capterra / Creator Forums', tier:'user', info:'Creator complaint pattern — under-shown while consumers feel mis-shown. Mirror-image complaint.' },
+    { name:'HuffPost (Feb 2025)', tier:'media', info:'Graphic violence flooding Reels — Meta public apology. Self-amplifying loop confirmed.' },
+    { name:'Vice (2022)', tier:'media', info:'"WTF is up with Suggested Reels?" — foundational Reels invasion documentation.' },
+    { name:'Search Engine Journal (2020)', tier:'media', info:'Earliest "suggested posts" complaint wave — establishes a 5-year pattern of the issue.' },
+    { name:'PiunikaWeb (Dec 2025)', tier:'media', info:'DM-swipe UI change complaint tracking. Real-time X complaint aggregation.' },
+    { name:'Cosmopolitan India / BuzzFeed News', tier:'media', info:'BeReal and Snapchat cited as offering "unedited, mundane" content Instagram lost.' },
+  ];
+  const tc = { primary:'tier-primary', academic:'tier-academic', user:'tier-user', media:'tier-media' };
+  const tl = { primary:'Primary', academic:'Research', user:'User Voice', media:'Media' };
+  document.getElementById('source-grid').innerHTML = S.map(s =>
+    `<div class="source-item">
+      <span class="source-tier ${tc[s.tier]}">${tl[s.tier]}</span>
+      <div class="source-info"><strong>${s.name}</strong><span>${s.info}</span></div>
+    </div>`).join('');
+}
+
+/* ── NAV SCROLL ── */
+const navTabs = document.querySelectorAll('.nav-tab');
+window.addEventListener('scroll', () => {
+  let cur = 'timeline';
+  ['timeline','overview','findings','competitors','impact','sources'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el && window.scrollY >= el.offsetTop - 130) cur = id;
+  });
+  navTabs.forEach(t => t.classList.toggle('active', t.getAttribute('href') === '#'+cur));
+});
+
+/* ── INIT ── */
+buildTimeline();
+buildIntensityChart();
+renderFindings();
+buildTimeChart();
+buildFeedChart();
+renderImpact();
+renderSources();
+</script>
+</body>
+</html>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
