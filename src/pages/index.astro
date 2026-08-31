@@ -73,26 +73,6 @@ const experience = [
     ],
   },
   {
-    role: "Data and Applied Analytics Trainee",
-    art: "split",
-    artLabel: "Two domains side by side, with awards heritage content shown where the site architecture placed it and where visitors actually went looking for it.",
-    org: "The Global Career Accelerator",
-    period: "June to August 2025",
-    place: "Remote",
-    tint: "method",
-    repo: { label: "Repository", href: "https://github.com/minminchudu/sql-python-analytics-portfolio" },
-    lines: [
-      "Queried 600,000+ enterprise hardware asset records for Intel in SQL, segmenting device lifecycle cohorts across global regions.",
-      "Investigated digital engagement metrics and web session logs for The Recording Academy using Python (pandas, Plotly), diagnosing post-split audience drop-offs to recommend cross-domain content reallocations that boosted user retention.",
-    ],
-    certs: [
-      { label: "Querying Data", img: "/media/badges/querying-data.png", href: "https://www.credential.net/c58faf09-1cb7-4272-8199-6444789a9997" },
-      { label: "Python and Data", img: "/media/badges/python-and-data.png", href: "https://www.credential.net/e73d0c7a-53f9-48f9-a8c0-2112d5df6a02" },
-      { label: "AI Professional Skills", img: "/media/badges/ai-professional.png", href: "https://www.credential.net/120cfe47-0375-46e9-bb79-69696d6d2d84" },
-      { label: "Intercultural Skills", img: "/media/badges/intercultural.png", href: "https://www.credential.net/5da605c5-3744-4899-b420-cbf2ffc39d1c" },
-    ],
-  },
-  {
     role: "Finance Assistant, Department of Radiology",
     art: "roster",
     artLabel: "A grid of budgeted positions where three ghost allocations are struck out and removed.",
@@ -210,10 +190,9 @@ const experience = [
         <p class="eyebrow">Selected projects</p>
         <h2 class="words" data-words>Numbers that looked settled</h2>
         <p class="section-note">
-          The finding comes first in each of these, and the method follows it. Most analyse public
-          companies from public data, done independently and with no affiliation to any of them.
-          Where the data came from somewhere else, or where a figure is a projection rather than a
-          measurement, the page says so.
+          The finding comes first in each of these, and the method follows it. All of the work
+          analyses public companies from public data, done independently and with no affiliation
+          to any of them, and where a figure is a projection rather than a measurement it says so.
         </p>
       </header>
 
@@ -357,7 +336,6 @@ const experience = [
           context="Website performance across two domains after a content split."
           role="Sole analyst"
           body="The Recording Academy split one site into two so that fans and industry professionals would each have their own. Awards heritage content was then being sought on the domain built for advocacy and membership, and bounce rose in exactly the categories whose adjacent content had moved away. What the data contradicted was the audience assumption underneath the split rather than the content itself."
-          note="Engagement data supplied under a client framing rather than published, so figures are not reproduced and the findings are reported as directional."
           links={[
             { label: "Read the case study", href: "/work/recording-academy/" },
             { label: "Repository", href: "https://github.com/minminchudu/sql-python-analytics-portfolio" },
@@ -415,21 +393,6 @@ const experience = [
                   <ul class="job-lines">
                     {job.lines.map((line) => <li>{line}</li>)}
                   </ul>
-                  {job.certs && (
-                    <div class="job-certs">
-                      <p class="job-certs-label">Certified by the programme</p>
-                      <ul class="badges">
-                        {job.certs.map((c) => (
-                          <li>
-                            <a href={c.href} target="_blank" rel="noopener" title={`${c.label} certification, verify on Credential.net`}>
-                              <img src={c.img} width="348" height="292" loading="lazy" decoding="async"
-                                   alt={`${c.label} certification from The Global Career Accelerator`} />
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
                   {(job.href || job.repo) && (
                     <p class="job-links">
                       {job.href && (
