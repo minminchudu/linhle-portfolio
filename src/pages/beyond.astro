@@ -16,27 +16,27 @@ const essays = [
     where: "Translingual, Issue 6, page 26",
     href: "/writing/reader-and-writer/",
     published: "https://ielp.ehe.osu.edu/files/2026/03/Translingual-Issue-6.pdf",
-    note: "The books came wrapped every birthday, and they were my brother’s. In a house that invested in the son, reading was the one thing nobody had assigned me, so I took it and made it the way I would be known.",
+    note: "Reading has blown to my lost soul a breath of fresh air, filling my vain mind with the generosity of language.",
   },
   {
     title: "A Film Analysis: Grave of the Fireflies",
     where: "Translingual, Issue 2, page 16",
     href: "/writing/grave-of-the-fireflies/",
     published: "https://ielp.ehe.osu.edu/files/2023/04/Translingual-V1.-I2.-Final.pdf",
-    note: "Two children and a war with no interest in them. Nothing in it ever jumps at you, and it takes years to put down. I watched it young and it has been with me since.",
+    note: "Tragically, when Seita finally manages to bring food home, little Setsuko has gone forever while her brother is attempting to cook their first hearty meal.",
   },
   {
     title: "Shades of Black",
     where: "Translingual, Issue 2, page 42",
     href: "/writing/shades-of-black/",
     published: "https://ielp.ehe.osu.edu/files/2023/04/Translingual-V1.-I2.-Final.pdf",
-    note: "The day I lost my grandpa I was already dressed for it, and I could not cry. I had worn black so long, and held the face that goes with it so well, that when the grief came I had no way left to show it.",
+    note: "I felt disturbed by the noise, which I better than anyone knew was not the loud Mexican music that dominated rain outside, but my inner scream of torment.",
   },
   {
     title: "Imprisonment in The Allegory of the Cave and The House of Asterion",
     where: "Unpublished",
     href: "/writing/imprisonment/",
-    note: "Imprisonment as the loss of feeling alive, which can happen with the door standing open. One man is chained facing a wall, another walks freely through a house where nothing is locked, and both of them call it the world.",
+    note: "I believe that the opposite of life is not death, but to exist without feeling alive.",
   },
 ];
 ---
@@ -64,15 +64,20 @@ const essays = [
     </header>
 
     <section class="band plated g-beige" style="--plate: var(--g-leaf);">
-      <div class="shell rough-split">
+      <div class="shell">
+        <div class="rough-title">
+          <p class="eyebrow">Matcha</p>
+          <h2 class="words" data-words>A morning ritual I have never wanted to shorten</h2>
+        </div>
+        <div class="rough-split">
         <div class="prose">
-        <p class="eyebrow">Matcha</p>
-        <h2 class="words" data-words>A morning ritual I have never wanted to shorten</h2>
+
 
         <p>
           Before anything else, twenty minutes. The bowl and the whisk live in the same corner of
           the kitchen and I go through the same sequence every morning, which is most of why it
-          works. Nothing has started yet. There is nothing to decide and nobody to answer.
+          works. The day is still ahead of me, and for those twenty minutes the only thing
+          asking anything of me is the bowl.
         </p>
         <p>
           I let the water stand off the boil for a minute, because full heat scorches the powder
@@ -85,8 +90,8 @@ const essays = [
           keep.
         </p>
         <p>
-          What I love is that the care did not start with me. It started in a field months earlier,
-          and every step of it was someone refusing to hurry. The plants are shaded for the last
+          What I love is how far back the care goes. It starts in a field months earlier, and every
+          step from there belongs to someone who took their time. The plants are shaded for the last
           twenty to forty days before harvest, and losing the light pushes them to make more
           chlorophyll and to turn their catechins into L-theanine, which is where both the colour
           and the sweetness come from. Only the youngest leaves are taken, steamed within hours so
@@ -112,14 +117,19 @@ const essays = [
                alt="A bamboo chasen lifted out of a white ceramic bowl, matcha whisked to a flat green surface." />
           <figcaption>The whisk is bamboo, cut into a hundred tines, and it is the only tool in the process I own.</figcaption>
         </figure>
+        </div>
       </div>
     </section>
 
     <section class="band plated g-leaf" style="--plate: var(--g-ivory);">
-      <div class="shell rough-split mirror">
+      <div class="shell">
+        <div class="rough-title">
+          <p class="eyebrow">Stones</p>
+          <h2 class="words" data-words>A beauty the price tag never touched</h2>
+        </div>
+        <div class="rough-split mirror">
         <div class="prose">
-        <p class="eyebrow">Stones</p>
-        <h2 class="words" data-words>A beauty the price tag never touched</h2>
+
 
         <p>
           I collect in seasons. Some months I am in and out of shops, other months I am not
@@ -164,6 +174,7 @@ const essays = [
                alt="Tumbled lapis lazuli stones, deep blue with white calcite veining and small flecks of gold pyrite." />
           <figcaption>Blue lazurite, white calcite, and the gold pyrite that tells it apart from sodalite.</figcaption>
         </figure>
+        </div>
       </div>
     </section>
 
@@ -172,15 +183,15 @@ const essays = [
         <p class="eyebrow">Writing</p>
         <h2 class="words" data-words>I learned to write before I learned to speak</h2>
         <p>
-          Speaking, I lose. Whatever is still half formed comes out with everything else and gets
-          judged before I have finished thinking it, and I spend the rest of the conversation
-          catching up to what I meant to say.
+          A spoken thought has to leave the moment it forms, still half made, and it gets answered
+          before I have finished having it. I have never been quick that way, and at some point I
+          stopped trying to be.
         </p>
         <p>
-          Writing lets me keep the thought until it is ready. I can weigh a word, take the sentence
-          apart, cut it back, set it down again, and nobody has to watch me do it. What finally
-          goes out is the version I meant, with the noise and the hurry taken out of it. That is a
-          kind of honesty I have never managed out loud at the same speed.
+          On the page every word gets time. I can weigh it, lift it out, set a truer one in its
+          place, and keep going until what is written is what I meant, with nobody watching me do
+          it. Whoever reads it gets only what survived that, which is the closest I come to being
+          understood exactly.
         </p>
 
         <ol class="essays">
@@ -193,7 +204,7 @@ const essays = [
                   <> &middot; <a href={e.published} target="_blank" rel="noopener">as published</a></>
                 )}
               </p>
-              <p class="essay-note">{e.note}</p>
+              <blockquote class="essay-note"><p>{e.note}</p></blockquote>
             </li>
           ))}
         </ol>
@@ -239,6 +250,12 @@ const essays = [
     max-width: 46ch;
     margin-top: 1rem;
     line-height: 1.55;
+  }
+
+  .rough-title { margin-bottom: clamp(1.2rem, 2.5vw, 1.9rem); }
+  .rough-title h2 {
+    font-size: var(--step-2); font-weight: 500; line-height: 1.15;
+    letter-spacing: -.015em; margin: .3rem 0 0; max-width: none; text-wrap: balance;
   }
 
   .rough-split {
@@ -330,7 +347,12 @@ const essays = [
     color: var(--accent-deep);
     margin-top: .3rem;
   }
-  .essay-note { color: var(--ink-soft); font-size: var(--step--1); margin-top: .45rem; line-height: 1.55; }
+  .essay-note { margin-top: .6rem; padding-left: .9rem; border-left: 2px solid var(--accent-line); }
+  .essay-note p {
+    font-family: var(--font-display); font-variation-settings: "SOFT" 50, "WONK" 1;
+    font-style: italic; font-size: var(--step-0); color: var(--accent-deep);
+    line-height: 1.5; margin: 0;
+  }
 
   .closing-out { margin-top: .8rem; }
   .cta {
