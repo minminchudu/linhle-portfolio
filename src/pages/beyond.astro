@@ -64,13 +64,10 @@ const essays = [
     </header>
 
     <section class="band plated g-beige" style="--plate: var(--g-leaf);">
-      <div class="shell">
-        <div class="rough-title">
-          <p class="eyebrow">Matcha</p>
-          <h2 class="words" data-words>A morning ritual I have never wanted to shorten</h2>
-        </div>
-        <div class="rough-split">
+      <div class="shell rough-split">
         <div class="prose">
+        <p class="eyebrow">Matcha</p>
+        <h2 class="words" data-words>A ritual I have never wanted to shorten</h2>
 
 
         <p>
@@ -117,18 +114,14 @@ const essays = [
                alt="A bamboo chasen lifted out of a white ceramic bowl, matcha whisked to a flat green surface." />
           <figcaption>The whisk is bamboo, cut into a hundred tines, and it is the only tool in the process I own.</figcaption>
         </figure>
-        </div>
       </div>
     </section>
 
     <section class="band plated g-leaf" style="--plate: var(--g-ivory);">
-      <div class="shell">
-        <div class="rough-title">
-          <p class="eyebrow">Stones</p>
-          <h2 class="words" data-words>A beauty the price tag never touched</h2>
-        </div>
-        <div class="rough-split mirror">
+      <div class="shell rough-split mirror">
         <div class="prose">
+        <p class="eyebrow">Stones</p>
+        <h2 class="words" data-words>A beauty the price tag never touched</h2>
 
 
         <p>
@@ -174,7 +167,6 @@ const essays = [
                alt="Tumbled lapis lazuli stones, deep blue with white calcite veining and small flecks of gold pyrite." />
           <figcaption>Blue lazurite, white calcite, and the gold pyrite that tells it apart from sodalite.</figcaption>
         </figure>
-        </div>
       </div>
     </section>
 
@@ -252,12 +244,6 @@ const essays = [
     line-height: 1.55;
   }
 
-  .rough-title { margin-bottom: clamp(1.2rem, 2.5vw, 1.9rem); }
-  .rough-title h2 {
-    font-size: var(--step-2); font-weight: 500; line-height: 1.15;
-    letter-spacing: -.015em; margin: .3rem 0 0; max-width: none; text-wrap: balance;
-  }
-
   .rough-split {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 23rem);
@@ -277,12 +263,13 @@ const essays = [
 
   .prose { max-width: var(--measure); }
   .prose h2 {
-    font-size: var(--step-2);
+    font-size: clamp(1.4rem, 1.15rem + 0.82vw, 1.85rem);
     font-weight: 500;
     line-height: 1.15;
     letter-spacing: -.015em;
     margin: .3rem 0 1.3rem;
-    max-width: 22ch;
+    max-width: none;
+    text-wrap: balance;
   }
   .prose p { margin-bottom: 1.05em; line-height: 1.62; }
   .rough-end { padding-block: clamp(2rem, 4vw, 3rem); }
