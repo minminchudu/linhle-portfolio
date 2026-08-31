@@ -14,22 +14,26 @@ const essays = [
   {
     title: "My Lifelong Career as a Reader and Writer",
     where: "Translingual, Issue 6, page 26",
-    href: "https://ielp.ehe.osu.edu/files/2026/03/Translingual-Issue-6.pdf",
+    href: "/writing/reader-and-writer/",
+    published: "https://ielp.ehe.osu.edu/files/2026/03/Translingual-Issue-6.pdf",
     note: "How reading arrived secondhand, from a brother whose books I was given after him, and what it took to make it mine.",
   },
   {
     title: "A Film Analysis: Grave of the Fireflies",
     where: "Translingual, Issue 2, April 2023",
+    href: "/writing/grave-of-the-fireflies/",
     note: "An antiwar film that haunts without a single scare, and why that stays with a person far longer than fright does.",
   },
   {
     title: "Shades of Black",
     where: "Translingual, Issue 2, April 2023",
+    href: "/writing/shades-of-black/",
     note: "Someone said I dressed like Dracula. The colour turned out to be doing more work than either of us assumed.",
   },
   {
     title: "Imprisonment in The Allegory of the Cave and The House of Asterion",
     where: "Unpublished",
+    href: "/writing/imprisonment/",
     note: "Plato and Borges arriving at the same question from opposite ends: whether someone who cannot see the walls is still imprisoned by them.",
   },
 ];
@@ -46,9 +50,13 @@ const essays = [
         <p class="eyebrow">Beyond work</p>
         <h1>The Rough</h1>
         <p class="rough-lede">
-          This site is green and its mark is a stone, and neither of those was settled at a desk.
-          Both arrived from the parts of my life nobody is paying for, and it seemed dishonest to
-          let the design imply otherwise.
+          Curious what shaped this site? The green and soft cream running through every page.
+          Fragments gathering into a cut stone the moment you land. Case studies that run longer
+          than they strictly need to. All of it is deliberate, though the intent was more instinct
+          than plan, and all of it came out of things I care about on my own time.
+        </p>
+        <p class="rough-sub">
+          Nothing below this line is professional. Each piece is a part of how I got here.
         </p>
       </div>
     </header>
@@ -60,15 +68,14 @@ const essays = [
 
         <p>
           I make it every morning. There is a full set at home, the bowl and the whisk, and a corner
-          of the kitchen that has been given over to nothing else, and the twenty minutes it takes
+          of the kitchen that belongs to it alone, and the twenty minutes it takes
           are the only part of the day I can predict. On the mornings I skip it, I am
           never calmer for the time I saved.
         </p>
         <p>
-          What holds me is not the drink waiting at the end of it. It is that almost everything
-          determining whether that drink is any good had been settled months earlier, in a field I
-          have never seen, by people whose names I will never know, through a sequence that offers no
-          way back.
+          What holds me is everything that happened before the drink. Almost all of it was settled
+          months earlier, in a field on the other side of the world, by people I will never meet,
+          through a sequence that only runs one way.
         </p>
 
         <figure class="fig">
@@ -96,9 +103,8 @@ const essays = [
           of light they overcompensate. They flood themselves with chlorophyll and convert their
           catechins into L-theanine, which is why the powder comes out that green and why the
           bitterness gives way to something closer to sweet. Only the youngest leaves of the
-          first harvest are taken. They are steamed within hours so the leaf cannot begin oxidizing,
-          then cooled, then dried, then stripped of stem and vein until nothing but leaf flesh
-          remains.
+          first harvest are taken. They are steamed within hours, which halts oxidation, then cooled,
+          then dried, then stripped of stem and vein until only leaf flesh remains.
         </p>
         <p>
           Then it passes between two granite stones turning slowly enough to yield thirty to forty
@@ -173,17 +179,21 @@ const essays = [
         <h2 class="words" data-words>Before any of the analysis, there was this</h2>
         <p>
           Three of the four below appeared in Translingual, the journal of Ohio State&rsquo;s
-          International English Language Programs. The fourth I never submitted anywhere, and it sits
-          here because I have not managed to stop liking it.
+          International English Language Programs. The fourth I never submitted anywhere. It sits
+          here because I still like it too much to leave it out. All four are readable here, set
+          from the manuscripts.
         </p>
 
         <ol class="essays">
           {essays.map((e) => (
             <li class="essay">
-              <h3 class="essay-title">
-                {e.href ? <a href={e.href} target="_blank" rel="noopener">{e.title}</a> : e.title}
-              </h3>
-              <p class="essay-where figure">{e.where}</p>
+              <h3 class="essay-title"><a href={e.href}>{e.title}</a></h3>
+              <p class="essay-where figure">
+                {e.where}
+                {e.published && (
+                  <> &middot; <a href={e.published} target="_blank" rel="noopener">as published</a></>
+                )}
+              </p>
               <p class="essay-note">{e.note}</p>
             </li>
           ))}
@@ -239,6 +249,15 @@ const essays = [
     letter-spacing: -.02em;
     line-height: 1;
     margin-top: .3rem;
+  }
+  .rough-sub {
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    color: var(--ink-faint);
+    margin-top: .9rem;
+    padding-top: .9rem;
+    border-top: 1px solid var(--rule-strong);
+    max-width: 46ch;
   }
   .rough-lede {
     font-size: var(--step-1);
