@@ -63,8 +63,9 @@ const essays = [
       </div>
     </header>
 
-    <section class="band plated g-leaf" style="--plate: var(--g-ivory);">
-      <div class="shell prose">
+    <section class="band plated g-beige" style="--plate: var(--g-leaf);">
+      <div class="shell rough-split">
+        <div class="prose">
         <p class="eyebrow">Matcha</p>
         <h2 class="words" data-words>The calm comes from how exacting it is</h2>
 
@@ -117,23 +118,25 @@ const essays = [
           low ceiling on how badly it can go, which is a rare combination and a restful one, and I
           have stopped trying to justify why twenty minutes of it resets me.
         </p>
-        <figure class="shot">
-          <img src="/media/rough/matcha-whisk.jpg" width="1400" height="933" loading="lazy" decoding="async"
-               alt="A bamboo chasen lifted out of a white ceramic bowl, matcha whisked to a flat green surface." />
-          <figcaption>The whisk is bamboo, cut into a hundred tines, and it is the only tool in the process I own.</figcaption>
-        </figure>
-
         <p>
           Then the drink does something coffee has never managed. Matcha carries L-theanine
           alongside its caffeine, so what arrives is clarity rather than a jolt: alert, level, and
           still level three hours later. Coffee lends me an hour and then collects on the debt,
           usually at the worst possible moment of the afternoon.
         </p>
+        </div>
+
+        <figure class="shot">
+          <img src="/media/rough/matcha-whisk.jpg" width="1400" height="933" loading="lazy" decoding="async"
+               alt="A bamboo chasen lifted out of a white ceramic bowl, matcha whisked to a flat green surface." />
+          <figcaption>The whisk is bamboo, cut into a hundred tines, and it is the only tool in the process I own.</figcaption>
+        </figure>
       </div>
     </section>
 
-    <section class="band plated g-beige" style="--plate: var(--g-ivory);">
-      <div class="shell prose">
+    <section class="band plated g-leaf" style="--plate: var(--g-ivory);">
+      <div class="shell rough-split mirror">
+        <div class="prose">
         <p class="eyebrow">Stones</p>
         <h2 class="words" data-words>I collect the ones nobody prices highly</h2>
 
@@ -164,12 +167,6 @@ const essays = [
           in direct light lapis throws small gold sparks that nothing else does.
         </p>
         <p class="beat">The pyrite is technically an impurity. It is also the entire reason it looks like a night sky.</p>
-        <figure class="shot">
-          <img src="/media/rough/lapis-lazuli.jpg" width="1400" height="933" loading="lazy" decoding="async"
-               alt="Tumbled lapis lazuli stones, deep blue with white calcite veining and small flecks of gold pyrite." />
-          <figcaption>Blue lazurite, white calcite, and the gold pyrite that tells it apart from sodalite.</figcaption>
-        </figure>
-
         <p>
           Which brings me to why I keep it on me rather than on a shelf. Lapis is called the stone of
           wisdom, and most versions of that claim stop at rational thinking, which is the part I can
@@ -183,10 +180,17 @@ const essays = [
           The mark on this site is rough gathering into a cut stone, then breaking apart and gathering
           again. That was not a metaphor I went looking for.
         </p>
+        </div>
+
+        <figure class="shot">
+          <img src="/media/rough/lapis-lazuli.jpg" width="1400" height="933" loading="lazy" decoding="async"
+               alt="Tumbled lapis lazuli stones, deep blue with white calcite veining and small flecks of gold pyrite." />
+          <figcaption>Blue lazurite, white calcite, and the gold pyrite that tells it apart from sodalite.</figcaption>
+        </figure>
       </div>
     </section>
 
-    <section class="band plated g-leaf" style="--plate: var(--g-ivory);">
+    <section class="band plated g-beige" style="--plate: var(--g-leaf);">
       <div class="shell prose">
         <p class="eyebrow">Writing</p>
         <h2 class="words" data-words>Before any of the analysis, there was this</h2>
@@ -214,7 +218,7 @@ const essays = [
       </div>
     </section>
 
-    <section class="band plated g-cream" style="--plate: var(--g-ivory);">
+    <section class="band plated g-leaf" style="--plate: var(--g-ivory);">
       <div class="shell prose">
         <p class="eyebrow">The throughline</p>
         <h2 class="words" data-words>Fluency in one language was never the point</h2>
@@ -247,8 +251,9 @@ const essays = [
           the number without being handed a translation.
         </p>
         <p class="beat">
-          I still write better than I speak. The difference now is that I have stopped treating that
-          as an achievement.
+          Which means the thing I actually do is none of those languages. It is the distance between
+          them. I started out fluent in one and hid there for years, and every choice since has been
+          learning to cross.
         </p>
         <p class="closing-out">
           <a class="cta ghost" href="/work/compass-ai/">The case that argument was built for</a>
@@ -283,6 +288,23 @@ const essays = [
     max-width: 46ch;
     margin-top: 1rem;
     line-height: 1.55;
+  }
+
+  .rough-split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 23rem);
+    gap: clamp(1.5rem, 3.5vw, 3.25rem);
+    align-items: start;
+  }
+  .rough-split.mirror { grid-template-columns: minmax(0, 23rem) minmax(0, 1fr); }
+  .rough-split.mirror .shot { grid-column: 1; grid-row: 1; }
+  .rough-split.mirror .prose { grid-column: 2; grid-row: 1; }
+  .rough-split .shot { position: sticky; top: 5.5rem; margin: 0; }
+  @media (max-width: 62rem) {
+    .rough-split, .rough-split.mirror { grid-template-columns: minmax(0, 1fr); }
+    .rough-split.mirror .shot, .rough-split .shot { grid-column: 1; grid-row: auto; position: static; }
+    .rough-split.mirror .prose { grid-column: 1; grid-row: auto; }
+    .rough-split .shot { max-width: 34rem; margin-top: 1.6rem; }
   }
 
   .prose { max-width: var(--measure); }

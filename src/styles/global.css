@@ -145,5 +145,9 @@ td.num, th.num { text-align: right; font-family: var(--font-mono); font-variant-
 /* ---------- Anchor landing ----------
    The header is sticky, so a bare anchor jump tucks the section top under it and
    crops whatever sits at the top of the block. Reserve the bar plus a gap. */
-html { scroll-padding-top: 4.75rem; }
-section[id], .band[id], [id].hero { scroll-margin-top: 4.75rem; }
+/* Land on the section's content, not its outer edge. The band carries
+   var(--gap-section) of top padding, so scrolling to the raw edge wastes a
+   whole screen of empty ground and crops whatever follows. */
+html { scroll-padding-top: 4.5rem; }
+section[id], .band[id] { scroll-margin-top: calc(4.5rem - var(--gap-section)); }
+[id].hero { scroll-margin-top: 4.5rem; }
