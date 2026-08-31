@@ -67,7 +67,7 @@ const experience = [
     repo: { label: "Repository", href: "https://github.com/minminchudu/ecommerce-recommendation-margin-analysis" },
     lines: [
       "Held full ownership of an e-commerce recommendation and logistics system modelled on Wayfair, working alongside AI agents against a real deliverable every week.",
-      "Analyzed unit economics across 500,000 transaction records in Python and DuckDB, isolating the product scoring and pricing rules that drove margin down while conversion climbed.",
+      "Analyzed unit economics across 500,000 transaction records in Python and DuckDB, modelling shipping cost, order value and margin per impression across twelve product categories.",
       "Directed AI coding agents to rebuild the shipping cost model on 93 pre-shipment features after the inherited version matched actuals at r = 0.9999, impossible before delivery.",
       "Built the executive Power BI dashboards and the controlled pilot framework that protected $977,000 in monthly recurring revenue.",
     ],
@@ -80,6 +80,7 @@ const experience = [
     period: "June to August 2025",
     place: "Remote",
     tint: "method",
+    href: "/work/recording-academy/",
     repo: { label: "Repository", href: "https://github.com/minminchudu/sql-python-analytics-portfolio" },
     lines: [
       "Queried 600,000+ enterprise hardware asset records for Intel in SQL, segmenting device lifecycle cohorts across global regions.",
@@ -416,7 +417,7 @@ const experience = [
                   {(job.href || job.repo) && (
                     <p class="job-links">
                       {job.href && (
-                        <a class="job-link" href={job.href}><span>Read the case study</span></a>
+                        <a class="job-link" href={job.href}><span>Case study from this role</span></a>
                       )}
                       {job.certs && (
                     <div class="job-certs">
