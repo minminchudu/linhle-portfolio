@@ -33,7 +33,12 @@ const {
       <img src={image} alt={imageAlt} loading="lazy" decoding="async" />
     </div>
   )}
-  {!image && (
+  {!image && Astro.slots.has("thumb") && (
+    <div class="thumb art">
+      <slot name="thumb" />
+    </div>
+  )}
+  {!image && !Astro.slots.has("thumb") && (
     <div class="thumb facets" aria-hidden="true">
       <svg viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice">
         <g stroke="var(--tint)" fill="var(--tint)" stroke-width="1.1" stroke-linejoin="round">
@@ -128,6 +133,8 @@ const {
   }
   .card:hover .thumb img { transform: scale(1.025); }
   .thumb.facets svg { width: 100%; height: 100%; display: block; }
+  .thumb.art { display: grid; place-items: center; padding: .5rem; }
+  .thumb.art :global(svg) { display: block; width: 100%; height: auto; max-height: 100%; }
 
   .card-body {
     display: flex; flex-direction: column; gap: .7rem;

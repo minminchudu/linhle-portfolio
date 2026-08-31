@@ -81,6 +81,7 @@ const experience = [
     place: "Remote",
     tint: "method",
     href: "/work/recording-academy/",
+    hrefLabel: "Case study: The Recording Academy",
     repo: { label: "Repository", href: "https://github.com/minminchudu/sql-python-analytics-portfolio" },
     lines: [
       "Queried 600,000+ enterprise hardware asset records for Intel in SQL, segmenting device lifecycle cohorts across global regions.",
@@ -361,7 +362,30 @@ const experience = [
             { label: "Read the case study", href: "/work/recording-academy/" },
             { label: "Notebook", href: "https://github.com/minminchudu/sql-python-analytics-portfolio/blob/main/python-analysis/grammys-site-split.ipynb" },
           ]}
-        />
+        >
+          <svg slot="thumb" class="ra-thumb" viewBox="0 0 320 176" preserveAspectRatio="xMidYMid meet" role="img"
+               aria-label="Awards heritage content shown dashed on grammy.com where the site split placed it, and solid on recordingacademy.com where visitors actually went looking for it.">
+            <text class="rt-cap" x="16" y="14">Awards heritage</text>
+
+            <rect class="rt-dom" x="16" y="26" width="128" height="94" rx="5"></rect>
+            <text class="rt-dom-l" x="80" y="44">grammy.com</text>
+            <rect class="rt-chip ghost" x="32" y="60" width="96" height="26" rx="3"></rect>
+            <text class="rt-chip-l ghost" x="80" y="77">heritage</text>
+            <text class="rt-sub" x="80" y="106">where the split put it</text>
+
+            <path class="rt-flow" d="M150 73 L170 73"></path>
+            <path class="rt-flow" d="M170 73 l-6 -4 m6 4 l-6 4"></path>
+
+            <rect class="rt-dom" x="176" y="26" width="128" height="94" rx="5"></rect>
+            <text class="rt-dom-l" x="240" y="44">recordingacademy.com</text>
+            <rect class="rt-chip on" x="192" y="60" width="96" height="26" rx="3"></rect>
+            <text class="rt-chip-l on" x="240" y="77">heritage</text>
+            <text class="rt-sub on" x="240" y="106">where visitors went</text>
+
+            <line class="rt-rule" x1="16" y1="140" x2="304" y2="140"></line>
+            <text class="rt-cap" x="16" y="160">Bounce rose where the split broke the path between them</text>
+          </svg>
+        </WorkCard>
 
         <WorkCard
           project="Decision Sciences and Operations Analysis"
@@ -417,7 +441,7 @@ const experience = [
                   {(job.href || job.repo) && (
                     <p class="job-links">
                       {job.href && (
-                        <a class="job-link" href={job.href}><span>Case study from this role</span></a>
+                        <a class="job-link" href={job.href}><span>{job.hrefLabel || "Case study from this role"}</span></a>
                       )}
                       {job.certs && (
                     <div class="job-certs">
@@ -1041,4 +1065,29 @@ const experience = [
     .narrative-rail { display: none; }
     .narrative-aside { grid-column: 1; }
   }
+
+  .ra-thumb { max-width: 100%; }
+  .ra-thumb .rt-cap {
+    font-family: var(--font-mono); font-size: 8px; letter-spacing: .07em;
+    text-transform: uppercase; fill: var(--ink-faint);
+  }
+  .ra-thumb .rt-dom { fill: none; stroke: var(--rule-strong); stroke-width: 1; }
+  .ra-thumb .rt-dom-l {
+    font-family: var(--font-mono); font-size: 8px; text-anchor: middle; fill: var(--ink);
+  }
+  .ra-thumb .rt-chip { fill: none; stroke: var(--rule-strong); stroke-width: 1; }
+  .ra-thumb .rt-chip.ghost { stroke-dasharray: 3 3; }
+  .ra-thumb .rt-chip.on { fill: var(--tint-wash); stroke: var(--tint); stroke-width: 1.5; }
+  .ra-thumb .rt-chip-l {
+    font-family: var(--font-mono); font-size: 8.5px; letter-spacing: .05em;
+    text-transform: uppercase; text-anchor: middle; fill: var(--ink-faint);
+  }
+  .ra-thumb .rt-chip-l.on { fill: var(--tint); }
+  .ra-thumb .rt-sub {
+    font-family: var(--font-mono); font-size: 7px; letter-spacing: .06em;
+    text-transform: uppercase; text-anchor: middle; fill: var(--ink-faint);
+  }
+  .ra-thumb .rt-sub.on { fill: var(--tint); }
+  .ra-thumb .rt-flow { fill: none; stroke: var(--tint); stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+  .ra-thumb .rt-rule { stroke: var(--rule); stroke-width: 1; }
 </style>
