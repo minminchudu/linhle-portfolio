@@ -151,12 +151,22 @@ const year = new Date().getFullYear();
 
         /* --- count the figures up when they arrive --- */
         var nums = document.querySelectorAll(".metric-value, .band-value");
+        /* boot() runs once on load and again on astro:page-load. Capture the
+           true figure into the element before anything animates, so a second
+           pass can never mistake a mid-count value for the target. */
+        [].forEach.call(nums, function (el) {
+          if (!el.getAttribute("data-count-raw")) {
+            el.setAttribute("data-count-raw", el.textContent.trim());
+          }
+        });
         if (!reduce && "IntersectionObserver" in window) {
           var numIO = new IntersectionObserver(function (entries) {
             entries.forEach(function (e) {
               if (!e.isIntersecting) return;
               var el = e.target; numIO.unobserve(el);
-              var raw = el.textContent.trim();
+              if (el.getAttribute("data-counted") === "1") return;
+              el.setAttribute("data-counted", "1");
+              var raw = el.getAttribute("data-count-raw") || el.textContent.trim();
               var m = raw.match(/^([^0-9-]*)(-?[\d,]+(?:\.\d+)?)(.*)$/);
               if (!m) return;
               var pre = m[1], target = parseFloat(m[2].replace(/,/g, "")), post = m[3];
