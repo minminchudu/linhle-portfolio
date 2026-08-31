@@ -141,3 +141,9 @@ td.num, th.num { text-align: right; font-family: var(--font-mono); font-variant-
    section does not read as the cream one with a filter over it. */
 .g-leaf, .g-leaf-deep { --rule: #c3d3ad; --rule-strong: #a8bd8d; --paper-sunk: #eaf2df; }
 .g-ivory { --rule: #e4ddca; }
+
+/* ---------- Anchor landing ----------
+   The header is sticky, so a bare anchor jump tucks the section top under it and
+   crops whatever sits at the top of the block. Reserve the bar plus a gap. */
+html { scroll-padding-top: 4.75rem; }
+section[id], .band[id], [id].hero { scroll-margin-top: 4.75rem; }
