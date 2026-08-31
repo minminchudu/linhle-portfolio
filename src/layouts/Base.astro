@@ -427,7 +427,6 @@ const year = new Date().getFullYear();
     justify-content: space-between;
     gap: 1.5rem;
     padding-block: 0.85rem;
-    max-width: 82rem;
   }
   .wordmark {
     display: inline-flex;
@@ -443,6 +442,13 @@ const year = new Date().getFullYear();
   .wordmark svg { flex: none; color: var(--accent); opacity: .9; transition: transform .25s ease, opacity .25s ease; }
   .wordmark:hover { color: var(--accent-deep); }
   .wordmark:hover svg { opacity: 1; transform: translateY(-1px); }
+
+  @media (min-width: 84rem) {
+    .topbar nav { margin-right: -3.5rem; }
+  }
+  @media (min-width: 100rem) {
+    .topbar nav { margin-right: -6rem; }
+  }
 
   .topbar nav .nav-resume {
     color: var(--accent-deep);
