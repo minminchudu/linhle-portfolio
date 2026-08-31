@@ -1,43 +1,40 @@
-# Astro Starter Kit: Minimal
+# Portfolio site
+
+Source for the analyst portfolio of Linh Le. Case studies across healthcare finance,
+payments, e-commerce, retail and product research, plus the work behind them.
+
+Astro, static output, plain CSS. No framework runtime ships to the browser.
+
+## Running it
 
 ```sh
-npm create astro@latest -- --template minimal
+npm install
+npm run dev      # localhost:4321
+npm run build    # static output to dist/
+npm run preview  # serve the built output
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Requires Node 22.12 or newer.
 
-## 🚀 Project Structure
+## Where things are
 
-Inside of your Astro project, you'll see the following folders and files:
+| Path | What it holds |
+| :--- | :--- |
+| `src/pages/index.astro` | The single-page front: hero, narrative, projects, experience, education, toolkit, contact |
+| `src/pages/work/` | One case study per project |
+| `src/pages/beyond.astro` | Rough to Cut, the personal page |
+| `src/pages/writing/` | Essay reading pages, generated from `src/content/essays.json` |
+| `src/components/` | Work cards, role diagrams, figures, the header mark |
+| `src/layouts/` | `Base.astro` for the shell, `CaseStudy.astro` for the case study frame |
+| `src/styles/tokens.css` | Colour, type scale and spacing tokens, light and dark |
+| `public/media/` | Decks, dashboards, resume, certification badges |
+| `public/figures/` | Charts used inside case studies |
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+## Adding a case study
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+Copy an existing file in `src/pages/work/`, change the `CaseStudy` props, and add a
+matching `WorkCard` to the projects section of `src/pages/index.astro`. The route comes
+from the filename.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Every figure quoted on a page traces to a source deliverable: a notebook, a workbook, or
+a report. Nothing is estimated for effect.
