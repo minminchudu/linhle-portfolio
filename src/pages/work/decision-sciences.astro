@@ -1,0 +1,223 @@
+---
+import CaseStudy from "../../layouts/CaseStudy.astro";
+import Figure from "../../components/Figure.astro";
+
+const metrics = [
+  { value: "$1.6M", label: "Annual fare leakage, upper bound" },
+  { value: "78.2%", label: "Defects the cheaper control rule misses" },
+  { value: "0.7363", label: "Adjusted R-squared, selected model" },
+  { value: "6", label: "Decisions, six different methods" },
+];
+---
+
+<CaseStudy
+  title="The regression did not support the complaint it was built to test"
+  description="Six business decisions across three analyses: fare evasion sizing, a manufacturing control rule, two loyalty incentive questions, a tool ergonomics test, a workspace layout comparison and a severance pay dispute. Case study by Linh (Min) Le."
+  project="Decision Sciences and Operations Analysis"
+  period="Fall 2023"
+  tint="ai"
+  hook="An employee said her severance offer was too low. The analysis was commissioned to test that, and the honest answer was that the data did not back her. Getting to a finding a client does not want is the part of this work that transfers."
+  metrics={metrics}
+>
+
+  <section class="section">
+    <div class="shell">
+      <div class="prose">
+        <h2 class="h-sub">The decision this informed</h2>
+        <p>
+          An employee at ABC Inc. was offered seven weeks of severance and believed that was below
+          what comparably situated colleagues had received. She was prepared to say so formally, which
+          put the company in a position where an informal answer would not do. The question handed to
+          our team was narrow and had to stay narrow: given what the company pays people with her age,
+          tenure and salary, is seven weeks anomalous.
+        </p>
+        <p>
+          A question with legal exposure has a property most analysis does not. It has to survive
+          challenge from whichever side the answer disappoints, which rules out choosing a model
+          because it produced a convenient result.
+        </p>
+        <p>
+          This was one of six business problems across the term, each from a different operating
+          context and each ending in a written recommendation rather than a statistic. The other five
+          are below.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="prose">
+        <h2 class="h-sub">The finding</h2>
+        <p>
+          An employee at ABC Inc. was offered seven weeks of severance and believed that was below what
+          comparable colleagues received. The question had legal weight, so the analysis had to be able
+          to survive challenge in either direction.
+        </p>
+        <p>
+          We built three competing regressions predicting weeks of severance from some combination of
+          age, years at the company, pay and gender, then compared them on adjusted R-squared rather
+          than raw R-squared, since raw R-squared rises whenever a predictor is added whether or not it
+          earns its place.
+        </p>
+        <div class="cs-table-wrap">
+          <table>
+            <caption>Three candidate models on 50 employee records. The selected model is the one that keeps the most explanatory power with the fewest predictors.</caption>
+            <thead>
+              <tr><th>Model</th><th>Predictors</th><th>Adjusted R&sup2;</th><th>Contains 7 weeks</th></tr>
+            </thead>
+            <tbody>
+              <tr><th>A</th><td>Age, Years, Pay, Female</td><td>0.7316</td><td>Yes</td></tr>
+              <tr><th>B</th><td>Years, Pay, Female, Pay &times; Female</td><td>0.7340</td><td>Yes</td></tr>
+              <tr class="pick"><th>C, selected</th><td>Years, Pay, Female</td><td>0.7363</td><td>Yes</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          Model C wins on the measure that matters and it is also the most defensible. Age and years at
+          the company correlate at 0.81 in this dataset, which is unsurprising because older employees
+          tend to have longer tenure, and carrying both means carrying the same information twice. Once
+          years is in the model, age stops adding anything, so dropping it makes the model more stable
+          without costing explanatory power. Model B goes the other way and adds an interaction term
+          between pay and gender, which does not reach significance and buys a lower adjusted
+          R-squared for the complexity.
+        </p>
+        <p>
+          The answer was then straightforward and unwelcome. The interval within which a severance
+          offer for someone with her age, tenure and pay would be expected to fall contains seven weeks
+          under all three models, not just the selected one. Her offer sits inside the range the data
+          predicts for her characteristics, so the analysis does not support the complaint. Reporting
+          that clearly, to a client who commissioned the work, is the whole point of having run it.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="prose">
+        <h2 class="h-sub">Five more decisions, and the limit each one had to state</h2>
+        <p>
+          The severance question is the one with stakes attached, but it is not the one that taught the
+          most. Across all six problems the analytical work sat in the same two places every time.
+          Choosing which instrument the question actually called for, since none of them arrived with a
+          method attached. And then deciding how far the answer was allowed to reach, which is a
+          judgement the statistics cannot make for you.
+        </p>
+
+        <h3 class="h-min">A manufacturer wanted to be told which rule to adopt</h3>
+        <p>
+          Fisher Inc. casts parts to a target length of 8.05 inches with a standard deviation of 0.180,
+          measuring the mean of every batch of sixteen, and halts the line when a batch drifts too far.
+          They were split between two sets of control limits and wanted a recommendation.
+        </p>
+        <p>
+          A control limit is a hypothesis test wearing different clothes, so the two rules can be
+          compared directly on the two ways they fail. A Type I error stops a line that was running
+          fine. A Type II error lets a genuinely drifting process keep producing.
+        </p>
+        <Figure
+          src="/figures/decision-control-rule-tradeoff.png"
+          alt="Grouped bars comparing the two control rules on their two failure modes. The wide rule almost never halts a healthy line but misses 78.2% of real drifts. The tight rule halts unnecessarily 22.65% of the time and misses only 13.3%."
+          caption="The two failure modes trade places between the rules. Choosing one is choosing which error you would rather make."
+          wide
+        />
+        <p>
+          The wide rule almost never stops the line without cause and misses more than three quarters
+          of real problems. The tight rule catches nearly nine in ten and shuts the line down
+          unnecessarily on close to a quarter of batches. There is no version of this where one rule is
+          simply better, so the memo did not pretend there was. It handed the trade-off back quantified,
+          with the question that actually decides it: which costs Fisher more, an hour of unnecessary
+          downtime or a defective casting reaching a customer. That number is theirs, and they had never
+          put it on paper.
+        </p>
+
+        <h3 class="h-min">A transit authority needed a number it could budget against</h3>
+        <p>
+          A sample of 500 riders on a route carrying a million people a year at $7.50 a ticket, of whom
+          90 boarded without paying. A one-sample z-interval on that proportion gives 14.63% to 21.37%
+          at 95% confidence, which converts to roughly $1.1M to $1.6M of annual revenue walking through
+          the gates. A range is the right shape of answer for a budget decision, and the memo said
+          plainly that it describes this route rather than the network.
+        </p>
+
+        <h3 class="h-min">A marketing executive asked two questions that needed two methods</h3>
+        <p>
+          The first was whether a free flight offer beat free insurance. A two-sample z-interval on the
+          difference in enrollment rates returns 0.128% to 2.396%, and because the interval excludes
+          zero the difference is real rather than noise. Free flight wins, though the whole interval
+          sits under two and a half points, which is worth saying out loud before anyone plans around it.
+        </p>
+        <p>
+          The second was whether one campaign would do for everyone. That is an independence question,
+          not a difference question, so it takes a chi-square test rather than another interval.
+          Enrollment against prior-year spending category returns p below 0.0001. Customers in different
+          spending categories do not behave alike, which is what justifies segment-targeted messaging
+          over a single uniform campaign, and it changes where the budget goes.
+        </p>
+
+        <h3 class="h-min">A tool design question that only the pairing could answer</h3>
+        <p>
+          Twenty-five right-handed students each used a right-threaded and a left-threaded instrument.
+          Because every person used both, a paired t-test compares each person against themselves and
+          removes the variation in individual dexterity that would otherwise drown the effect being
+          measured. Right-handed threads were faster at p = 0.013, with the true mean advantage between
+          7.10 and 21.94 seconds at 90% confidence.
+        </p>
+        <p>
+          Then the boundary, which is the part that matters. This holds for right-handed operators,
+          because they are the only people tested. A tool standard for a whole workforce would need the
+          left-handed test nobody ran, and the memo said so rather than letting the result quietly
+          generalise.
+        </p>
+
+        <h3 class="h-min">A shop floor choosing between three layouts</h3>
+        <p>
+          Thirty observations of flow time, ten per design. One-way ANOVA rather than three separate
+          t-tests, because running the comparisons separately inflates the false positive rate across
+          the set. Overall p = 0.0058, so at least one design differs, though ANOVA will not say which.
+          Tukey HSD identifies the pairs while holding the error rate across all three comparisons:
+          design 1 against 2 at p = 0.0145 and design 1 against 3 at p = 0.0118 are both real, and
+          design 2 against 3 at p = 0.996 is not.
+        </p>
+        <p>
+          Designs 2 and 3 both beat design 1, at means of 3.47 and 3.45 days against 4.18, and are
+          statistically indistinguishable from each other. So the recommendation was to adopt either and
+          to choose between them on cost or floor space, since the data gives no reason to prefer one.
+          Saying that the analysis stops here, and the decision continues elsewhere, is a more useful
+          answer than manufacturing a winner.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="prose">
+        <h2 class="h-sub">Assumptions and limitations</h2>
+        <p>
+          Random sampling was not explicitly confirmed in any of the six datasets. Every memo states
+          this and proceeds with the caveat attached rather than assuming it away, because the
+          inference each method licenses depends on it. Where a specific condition could not be
+          verified, the conclusion was scoped to match.
+        </p>
+        <p>
+          The fare evasion figure describes one route and should not be read as a network total. The
+          workspace comparison covers three designs that were tested, not the space of layouts that
+          exist. The ergonomics result covers right-handed operators only. The severance analysis rests
+          on 50 employee records from one company, and it establishes that a seven-week offer is inside
+          the predicted range for those characteristics, which is a narrower claim than saying the
+          process that produced it was fair.
+        </p>
+        <p>
+          The control rule comparison assumes measurements within a batch of sixteen are independent
+          and that batch size is under 10% of the population, neither of which the brief confirms.
+          Temperature, humidity and raw material quality all move casting length, so the standard
+          deviation the whole calculation runs on is itself a quantity worth monitoring rather than a
+          constant.
+        </p>
+      </div>
+    </div>
+  </section>
+
+</CaseStudy>

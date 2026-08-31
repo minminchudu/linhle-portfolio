@@ -63,6 +63,7 @@ const experience = [
     place: "Remote, internship",
     tint: "code",
     href: "/work/iterlight/",
+    repo: { label: "Repository", href: "https://github.com/minminchudu/ecommerce-recommendation-margin-analysis" },
     lines: [
       "Held full ownership of an e-commerce recommendation and logistics system modelled on Wayfair, working alongside AI agents against a real deliverable every week.",
       "Analyzed unit economics across 500,000 transaction records in Python and DuckDB, tracing a $4.24M monthly gross margin deficit to misaligned product scoring and pricing rules.",
@@ -78,9 +79,16 @@ const experience = [
     period: "June to August 2025",
     place: "Remote",
     tint: "method",
+    repo: { label: "Repository", href: "https://github.com/minminchudu/sql-python-analytics-portfolio" },
     lines: [
       "Queried 600,000+ enterprise hardware asset records for Intel in SQL, segmenting device lifecycle cohorts across global regions.",
       "Evaluated 862,000+ transit ride records, identified data quality anomalies across 126,000 rows, and moved the trip duration benchmark to the median.",
+    ],
+    certs: [
+      { label: "Querying Data", img: "/media/badges/querying-data.png", href: "https://www.credential.net/c58faf09-1cb7-4272-8199-6444789a9997" },
+      { label: "Python and Data", img: "/media/badges/python-and-data.png", href: "https://www.credential.net/e73d0c7a-53f9-48f9-a8c0-2112d5df6a02" },
+      { label: "AI Professional Skills", img: "/media/badges/ai-professional.png", href: "https://www.credential.net/120cfe47-0375-46e9-bb79-69696d6d2d84" },
+      { label: "Intercultural Skills", img: "/media/badges/intercultural.png", href: "https://www.credential.net/5da605c5-3744-4899-b420-cbf2ffc39d1c" },
     ],
   },
   {
@@ -199,7 +207,7 @@ const experience = [
     <div class="shell">
       <header class="section-head">
         <p class="eyebrow">Selected work</p>
-        <h2 class="words" data-words>Six projects, most recent first</h2>
+        <h2 class="words" data-words>Seven projects, most recent first</h2>
         <p class="section-note">
           Each one states its finding before its method. All of them analyse public companies
           from public data, independently, with no affiliation to the companies involved. Every
@@ -216,7 +224,7 @@ const experience = [
           image="/figures/compass-conversion-decline.png"
           imageAlt="Time series of Spotify's quarterly free-to-paid conversion rate declining across the analysis window."
           finding="The best next action is sometimes to say nothing at all"
-          context="Viet Career Conference Think-A-Thon, Seattle. Second place. Lead quantitative analyst."
+          context="Viet Career Conference Think-A-Thon, Seattle. Second place. Diagnostic and quantitative analyst lead."
           body="Most conversion tooling asks which offer to show. Compass AI scores staying silent as a candidate action that every other option has to beat, which turns promotion fatigue from a side effect into a modelled cost. Built a 32-quarter financial database from Spotify SEC filings, separated subscriber churn from conversion flow, and sized the case on a persuadability segmentation rather than on the raw size of the free base."
           metrics={[
             { value: "63%", label: "Conversion decline" },
@@ -228,6 +236,7 @@ const experience = [
           links={[
             { label: "Read the case study", href: "/work/compass-ai/" },
             { label: "Deck (PDF)", href: "/media/Linh_Le_Compass_AI_Spotify_Conversion.pdf" },
+            { label: "Certificate (PDF)", href: "/media/Linh_Le_ThinkAThon_Runner_Up_Certificate.pdf" },
           ]}
         />
 
@@ -248,6 +257,7 @@ const experience = [
           links={[
             { label: "Read the case study", href: "/work/iterlight/" },
             { label: "Repository", href: "https://github.com/minminchudu/ecommerce-recommendation-margin-analysis" },
+            { label: "Dashboard (PDF)", href: "/media/Linh_Le_IterLight_PowerBI_Dashboard.pdf" },
           ]}
         />
 
@@ -267,6 +277,7 @@ const experience = [
           ]}
           links={[
             { label: "Read the case study", href: "/work/contactless/" },
+            { label: "Repository", href: "https://github.com/minminchudu/contactless-enablement-priority-model" },
             { label: "Live dashboard", href: "/media/Linh_Le_Contactless_Priority_Dashboard.html" },
           ]}
         />
@@ -329,7 +340,27 @@ const experience = [
             { label: "Deck (PDF)", href: "/media/Linh_Le_Publisher_Selection_Analysis.pdf" },
           ]}
         />
+
+        <WorkCard
+          project="Decision Sciences and Operations Analysis"
+          period="Fall 2023"
+          tint="ai"
+          image="/figures/decision-control-rule-tradeoff.png"
+          imageAlt="Grouped bars comparing two manufacturing control rules on their two failure modes, showing the error rates trading places between them."
+          finding="The regression did not support the complaint it was built to test"
+          context="Six business decisions, six methods. Co-analyst."
+          body="An employee said her severance offer was too low. Three competing regressions were compared on adjusted R-squared, age was dropped for collinearity with tenure, and the selected model put her seven weeks inside the predicted range. The other five covered fare evasion sizing, a manufacturing control rule where the answer was a quantified trade-off rather than a winner, two loyalty incentive questions, a paired ergonomics test and a three-way layout comparison."
+          metrics={[
+            { value: "$1.1M", label: "Annual fare leakage, low end" },
+            { value: "78.2%", label: "Defects the cheap rule misses" },
+            { value: "0.7363", label: "Adjusted R-squared" },
+          ]}
+          links={[
+            { label: "Read the case study", href: "/work/decision-sciences/" },
+          ]}
+        />
       </div>
+
     </div>
   </section>
 
@@ -360,7 +391,29 @@ const experience = [
                   <ul class="job-lines">
                     {job.lines.map((line) => <li>{line}</li>)}
                   </ul>
-                  {job.href && <a class="job-link" href={job.href}>Read the case study</a>}
+                  {job.certs && (
+                    <div class="job-certs">
+                      <p class="job-certs-label">Certified by the programme</p>
+                      <ul class="badges">
+                        {job.certs.map((c) => (
+                          <li>
+                            <a href={c.href} target="_blank" rel="noopener" title={`${c.label} certification, verify on Credential.net`}>
+                              <img src={c.img} width="348" height="292" loading="lazy" decoding="async"
+                                   alt={`${c.label} certification from The Global Career Accelerator`} />
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {(job.href || job.repo) && (
+                    <p class="job-links">
+                      {job.href && <a class="job-link" href={job.href}>Read the case study</a>}
+                      {job.repo && (
+                        <a class="job-link" href={job.repo.href} target="_blank" rel="noopener">{job.repo.label}</a>
+                      )}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -508,6 +561,7 @@ const experience = [
     content: "";
     position: absolute;
     inset: -1.1rem clamp(-2.5rem, -2vw, -1rem);
+    /* on narrow screens the negative inset would push it off the page */
     background: var(--g-leaf);
     border: 1px solid var(--rule);
     border-radius: 14px;
@@ -674,6 +728,45 @@ const experience = [
   .section-head { display: flex; flex-direction: column; gap: .6rem; margin-bottom: clamp(1.75rem, 3vw, 2.75rem); max-width: var(--measure); }
   .section-note { color: var(--ink-soft); font-size: var(--step--1); }
 
+  /* Sits under the cards without competing with them: a rule and a column,
+     no card chrome, so it reads as a footnote to the set rather than a seventh
+     entry in it. */
+  .also {
+    margin-top: clamp(1.4rem, 3vw, 2.25rem);
+    padding-top: 1.1rem;
+    border-top: 1px solid var(--rule-strong);
+    display: grid;
+    grid-template-columns: minmax(0, 11rem) minmax(0, 1fr);
+    gap: clamp(.6rem, 2vw, 2rem);
+    align-items: start;
+  }
+  .also-label {
+    font-family: var(--font-mono);
+    font-size: var(--step--2);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--tint);
+  }
+  .also-title {
+    font-family: var(--font-display);
+    font-variation-settings: "SOFT" 40;
+    font-size: var(--step-0);
+    font-weight: 600;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: .3rem .7rem;
+  }
+  .also-meta {
+    font-family: var(--font-mono);
+    font-size: var(--step--2);
+    font-weight: 400;
+    letter-spacing: .05em;
+    color: var(--ink-faint);
+  }
+  .also-note { color: var(--ink-soft); font-size: var(--step--1); line-height: 1.6; margin-top: .4rem; max-width: var(--measure); }
+  @media (max-width: 46rem) { .also { grid-template-columns: 1fr; } }
+
   .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 26rem), 1fr)); gap: clamp(1rem, 2vw, 1.6rem); }
 
   .tk-lead { margin-top: -.9rem; margin-bottom: 1.1rem; }
@@ -815,11 +908,45 @@ const experience = [
     width: 6px; height: 6px; background: var(--tint); opacity: .65;
     clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
   }
+  .job-certs { margin-top: .85rem; }
+  .job-certs-label {
+    font-family: var(--font-mono);
+    font-size: var(--step--2);
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: .5rem;
+  }
+  .badges {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+  }
+  .badges a {
+    display: block;
+    background: #fff;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: .3rem .35rem;
+    transition: border-color .3s ease, transform .3s var(--ease-soft), box-shadow .3s ease;
+  }
+  .badges a:hover {
+    border-color: var(--tint);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+  .badges a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .badges img { display: block; width: 74px; height: auto; }
+
+  .job-links { display: flex; flex-wrap: wrap; gap: .45rem .9rem; margin-top: .45rem; }
   .job-link {
     font-family: var(--font-mono); font-size: var(--step--2);
     letter-spacing: .07em; text-transform: uppercase; text-decoration: none;
     color: var(--tint); border-bottom: 1px solid var(--tint);
-    width: fit-content; margin-top: .45rem; padding-bottom: .12rem;
+    width: fit-content; padding-bottom: .12rem;
   }
   .job-link:hover { color: var(--ink); border-color: var(--ink); }
 
@@ -828,8 +955,8 @@ const experience = [
     margin: 0;
     padding: 0;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
-    gap: clamp(1rem, 2.4vw, 2rem);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14.25rem), 1fr));
+    gap: clamp(1rem, 2vw, 1.75rem);
   }
   .cred {
     position: relative;
@@ -863,6 +990,30 @@ const experience = [
   }
   .cred-org { color: var(--ink-soft); font-size: var(--step--1); }
   .cred-note { color: var(--ink-faint); font-size: var(--step--1); line-height: 1.5; margin-top: .35rem; }
+  .cred-list {
+    list-style: none;
+    margin: .45rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+  }
+  .cred-list li {
+    position: relative;
+    padding-left: .95rem;
+    color: var(--ink-faint);
+    font-size: var(--step--1);
+    line-height: 1.4;
+  }
+  .cred-list li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: .52em;
+    width: 6px; height: 5px;
+    background: var(--tint);
+    opacity: .7;
+    clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
+  }
 
   .tint-code    { --tint: var(--t-code);     --tint-wash: var(--t-code-wash);     --tint-soft: var(--t-code-soft); }
   .tint-method  { --tint: var(--t-method);   --tint-wash: var(--t-method-wash);   --tint-soft: var(--t-method-soft); }
@@ -882,6 +1033,9 @@ const experience = [
   @media (max-width: 62rem) {
     .narrative-inner { grid-template-columns: 22px minmax(0, 1fr); }
     .narrative-aside { grid-column: 2; margin-top: 1.6rem; }
+  }
+  @media (max-width: 46rem) {
+    .hero-mark::before { inset: -.8rem -.6rem; }
   }
   @media (max-width: 34rem) {
     .narrative-inner { grid-template-columns: 1fr; }

@@ -156,6 +156,9 @@ const year = new Date().getFullYear();
               var decimals = (m[2].split(".")[1] || "").length;
               var grouped = m[2].indexOf(",") > -1;
               var t0 = null, dur = 900;
+              /* If frames stop arriving, a throttled tab would strand a wrong
+                 figure on screen. This guarantees the exact value lands. */
+              var settle = setTimeout(function () { el.textContent = raw; }, dur + 500);
               function fmt(v) {
                 var out = decimals ? v.toFixed(decimals) : String(Math.round(v));
                 if (grouped) out = Number(out).toLocaleString("en-US");
@@ -166,7 +169,8 @@ const year = new Date().getFullYear();
                 var p = Math.min(1, (ts - t0) / dur);
                 var eased = 1 - Math.pow(1 - p, 3);
                 el.textContent = fmt(target * eased);
-                if (p < 1) requestAnimationFrame(tick); else el.textContent = raw;
+                if (p < 1) { requestAnimationFrame(tick); }
+                else { clearTimeout(settle); el.textContent = raw; }
               }
               requestAnimationFrame(tick);
             });
@@ -438,6 +442,9 @@ const year = new Date().getFullYear();
 
   .topbar nav {
     display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    row-gap: .45rem;
     gap: clamp(0.9rem, 2.2vw, 1.9rem);
     font-family: var(--font-mono);
     font-size: var(--step--2);
@@ -481,7 +488,12 @@ const year = new Date().getFullYear();
   .muted { color: var(--ink-soft); }
   .small { font-family: var(--font-mono); font-size: var(--step--2); }
 
+  @media (max-width: 46rem) {
+    .topbar nav { gap: .8rem; row-gap: .45rem; }
+  }
   @media (max-width: 34rem) {
     .topbar-inner { flex-direction: column; align-items: flex-start; gap: .6rem; }
+    .topbar nav { width: 100%; gap: .7rem; }
+    .topbar nav .nav-resume { margin-right: 0; }
   }
 </style>

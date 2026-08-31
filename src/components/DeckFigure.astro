@@ -1,0 +1,147 @@
+---
+/* Two diagrams redrawn from the submitted deck in the site's own palette.
+   The originals carry Spotify's mark and brand green, which does not belong on
+   a page that states no affiliation, so the structure is reproduced and the
+   styling is not. Content matches the deck exactly. */
+interface Props {
+  kind: "segmentation" | "decision";
+  caption: string;
+}
+const { kind, caption } = Astro.props;
+
+const screen1 = [
+  { x: 0, y: 0, t: "Satisfied free", s: "Protect", on: false },
+  { x: 1, y: 0, t: "Prime target", s: "Evaluate", on: true },
+  { x: 0, y: 1, t: "Out of scope", s: "", on: false },
+  { x: 1, y: 1, t: "Out of scope", s: "", on: false },
+];
+const screen2 = [
+  { x: 0, y: 0, t: "Persuadable", s: "Intervene", on: true },
+  { x: 1, y: 0, t: "Sure thing", s: "Don't incentivise", on: false },
+  { x: 0, y: 1, t: "Lost cause", s: "Stay silent", on: false },
+  { x: 1, y: 1, t: "Sleeping dog", s: "Do not contact", on: false },
+];
+
+const stages = [
+  { n: "01", t: "Observe",  s: ["Build the user", "context"],           w: "Nightly" },
+  { n: "02", t: "Detect",   s: ["Recognise a", "relevant moment"],      w: "In session" },
+  { n: "03", t: "Generate", s: ["Build the eligible", "action set"],    w: "Nightly" },
+  { n: "04", t: "Evaluate", s: ["Compare every action", "against silence"], w: "Nightly" },
+  { n: "05", t: "Act",      s: ["Serve, or", "stay silent"],            w: "In session" },
+];
+---
+
+<figure class="deckfig reveal-chart">
+  <div class="frame">
+    {kind === "segmentation" && (
+      <svg viewBox="0 0 664 248" preserveAspectRatio="xMidYMid meet" role="img"
+           aria-label="A two step screen. Engagement against friction produces the prime target, then a persuadability screen produces four groups of which only one is acted on.">
+        <text class="step" x="8" y="14">1 &middot; Who is worth evaluating</text>
+        <text class="ax" x="118" y="38">Low friction</text>
+        <text class="ax" x="230" y="38">High friction</text>
+        <text class="ax rot" transform="translate(22 79) rotate(-90)" x="0" y="0">High engagement</text>
+        <text class="ax rot" transform="translate(22 157) rotate(-90)" x="0" y="0">Low engagement</text>
+        {screen1.map((c) => (
+          <g class={c.on ? "cell on" : "cell"}>
+            <rect x={66 + c.x * 112} y={46 + c.y * 78} width="104" height="66" rx="6"/>
+            <text class="ct" x={118 + c.x * 112} y={74 + c.y * 78}>{c.t}</text>
+            {c.s && <text class="cs" x={118 + c.x * 112} y={91 + c.y * 78}>{c.s}</text>}
+          </g>
+        ))}
+
+        <g class="link">
+          <line x1="290" y1="112" x2="306" y2="112"/>
+          <circle cx="326" cy="112" r="19"/>
+          <text class="pool" x="326" y="110">Candidate</text>
+          <text class="pool" x="326" y="119">pool</text>
+          <line x1="346" y1="112" x2="362" y2="112"/>
+        </g>
+
+        <text class="step" x="368" y="14">2 &middot; Whose decision can change</text>
+        <text class="ax" x="466" y="38">Won&rsquo;t upgrade alone</text>
+        <text class="ax" x="596" y="38">Would upgrade anyway</text>
+        <text class="ax rot" transform="translate(382 79) rotate(-90)" x="0" y="0">We can move them</text>
+        <text class="ax rot" transform="translate(382 157) rotate(-90)" x="0" y="0">We cannot</text>
+        {screen2.map((c) => (
+          <g class={c.on ? "cell on" : "cell"}>
+            <rect x={402 + c.x * 130} y={46 + c.y * 78} width="122" height="66" rx="6"/>
+            <text class="ct" x={463 + c.x * 130} y={74 + c.y * 78}>{c.t}</text>
+            <text class="cs" x={463 + c.x * 130} y={91 + c.y * 78}>{c.s}</text>
+          </g>
+        ))}
+        <text class="foot" x="8" y="238">Three of the four resolve to some form of silence.</text>
+      </svg>
+    )}
+
+    {kind === "decision" && (
+      <svg viewBox="0 0 700 216" preserveAspectRatio="xMidYMid meet" role="img"
+           aria-label="Five stages: observe, detect, generate, evaluate against silence, then act or suppress, with outcomes feeding back into the next cycle.">
+        {stages.map((s, i) => (
+          <g class={s.t === "Evaluate" ? "stage on" : "stage"}>
+            <rect x={12 + i * 136} y="30" width="122" height="104" rx="7"/>
+            <text class="sn" x={24 + i * 136} y="50">{s.n}</text>
+            <text class="st" x={24 + i * 136} y="70">{s.t}</text>
+            {s.s.map((ln, k) => <text class="ss" x={24 + i * 136} y={88 + k * 11}>{ln}</text>)}
+            <text class="sw" x={24 + i * 136} y="122">{s.w}</text>
+            {i < 4 && (
+              <path class="arrow" d={`M${134 + i * 136} 82 l10 0 m-4 -4 l4 4 l-4 4`}/>
+            )}
+          </g>
+        ))}
+        <path class="loop" d="M665 134 L665 168 L73 168 L73 140"/>
+        <path class="arrow" d="M73 140 l-4 -6 m4 6 l4 -6"/>
+        <text class="lp" x="369" y="182">Outcomes refresh the state the next cycle observes</text>
+        <text class="foot" x="12" y="206">Silence is a member of the action set, scored like any other option.</text>
+      </svg>
+    )}
+  </div>
+  <figcaption>{caption}</figcaption>
+</figure>
+
+<style>
+  .deckfig { margin: 2rem 0 0; max-width: 100%; display: flex; flex-direction: column; gap: .7rem; }
+  .frame {
+    border: 1px solid var(--rule);
+    background: var(--paper-raised);
+    padding: .9rem;
+    border-radius: var(--radius);
+    overflow-x: auto;
+  }
+  svg { display: block; width: 100%; min-width: 30rem; height: auto; }
+
+  text { font-family: var(--font-mono); fill: var(--ink-soft); }
+  .step { font-size: 9px; letter-spacing: .1em; text-transform: uppercase; fill: var(--tint); }
+  .ax { font-size: 7.5px; letter-spacing: .06em; text-transform: uppercase; fill: var(--ink-faint); text-anchor: middle; }
+  .ax.rot { text-anchor: middle; font-size: 6.5px; }
+  .foot { font-size: 8px; letter-spacing: .04em; fill: var(--ink-faint); }
+
+  .cell rect { fill: none; stroke: var(--rule-strong); stroke-width: 1; }
+  .cell.on rect { fill: var(--tint-wash); stroke: var(--tint); stroke-width: 1.5; }
+  .ct { font-size: 10px; text-anchor: middle; fill: var(--ink); }
+  .cell.on .ct { fill: var(--tint); }
+  .cs { font-size: 7.5px; text-anchor: middle; fill: var(--ink-faint); letter-spacing: .04em; }
+
+  .link line { stroke: var(--rule-strong); stroke-width: 1; }
+  .link circle { fill: var(--paper-raised); stroke: var(--tint); stroke-width: 1.2; }
+  .pool { font-size: 7px; text-anchor: middle; fill: var(--tint); }
+
+  .stage rect { fill: none; stroke: var(--rule-strong); stroke-width: 1; }
+  .stage.on rect { fill: var(--tint-wash); stroke: var(--tint); stroke-width: 1.5; }
+  .sn { font-size: 8px; fill: var(--ink-faint); letter-spacing: .1em; }
+  .st { font-size: 12px; fill: var(--ink); }
+  .stage.on .st { fill: var(--tint); }
+  .ss { font-size: 7.5px; fill: var(--ink-soft); }
+  .sw { font-size: 7px; letter-spacing: .1em; text-transform: uppercase; fill: var(--tint); }
+  .arrow { fill: none; stroke: var(--tint); stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+  .loop { fill: none; stroke: var(--rule-strong); stroke-width: 1; stroke-dasharray: 3 3; }
+  .lp { font-size: 7.5px; text-anchor: middle; fill: var(--ink-faint); letter-spacing: .04em; }
+
+  figcaption {
+    font-family: var(--font-mono);
+    font-size: var(--step--2);
+    line-height: 1.6;
+    color: var(--ink-faint);
+    padding-left: .75rem;
+    border-left: 2px solid var(--tint, var(--accent));
+  }
+</style>

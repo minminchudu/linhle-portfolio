@@ -1,6 +1,7 @@
 ---
 import CaseStudy from "../../layouts/CaseStudy.astro";
 import Figure from "../../components/Figure.astro";
+import DeckFigure from "../../components/DeckFigure.astro";
 
 const metrics = [
   { value: "63%", label: "Decline in quarterly conversion" },
@@ -11,6 +12,7 @@ const metrics = [
 
 const links = [
   { label: "Deck (PDF)", href: "/media/Linh_Le_Compass_AI_Spotify_Conversion.pdf" },
+  { label: "Certificate (PDF)", href: "/media/Linh_Le_ThinkAThon_Runner_Up_Certificate.pdf" },
 ];
 ---
 
@@ -18,7 +20,7 @@ const links = [
   title="The best next action is sometimes to say nothing at all"
   description="Spotify's free-to-paid conversion fell 63% while its margins improved. Compass AI, a behavioural decision layer that scores silence as a candidate action. Case study by Linh (Min) Le."
   project="Compass AI, Spotify"
-  period="July 2026"
+  period="August 2026"
   tint="finance"
   hook="Spotify repaired its income statement by starving the engine that fills it, and the repair looked like a turnaround right up until you separated the two things it was doing at once."
   metrics={metrics}
@@ -33,14 +35,45 @@ const links = [
           Sixty-two percent of Spotify's monthly listeners, some 468 million people, sit on the
           free tier. The company has said publicly that it wants a billion users by 2030 with the
           majority of them still free, which rules out the easiest way to push people toward
-          Premium, namely making the free experience worse. The question on the table at the Viet
-          Career Conference Think-A-Thon was how to convert more of that base without touching it.
+          Premium, namely making the free experience worse. The question on the table at the Think-A-Thon,
+          run by Viet Career Guide at their annual Viet Career Conference, was how to convert more
+          of that base without touching it.
         </p>
         <p>
-          Our team's deliverable was an investment recommendation with a number attached: how much
-          to commit, against what return, and under which conditions to stop. I led the quantitative
-          work, which meant the diagnosis, the financial model, and the measurement design that would
-          have to hold up if anyone actually spent the money.
+          Our team, Wink-N-Win, had to deliver an investment recommendation with a number attached:
+          how much to commit, against what return, and under which conditions to stop. I led the
+          problem diagnosis and the quantitative work behind it, which meant the financial model and
+          the measurement design that would have to hold up if anyone actually spent the money.
+        </p>
+        <p>
+          The other half of the job was translation. Behavioural science, product design and
+          financial modelling each turned up with their own vocabulary and their own idea of what
+          counted as evidence. Left to themselves the three would have produced a psychology
+          argument, a feature concept and a spreadsheet that happened to share a deck.
+        </p>
+        <p>
+          Most of that work was unglamorous. The behavioural claim at the centre of the case is that
+          somebody hitting the skip limit while putting a playlist together five minutes before
+          friends arrive is in a different state from the same person scrolling on a Tuesday
+          morning. That only becomes an investment case once someone decides what share of the base
+          is ever in that state, how often you can actually reach them there, and how far their
+          decision moves when you do. Those three questions became the 40% persuadable share, the
+          90% delivery reach and the 2.0 point conditional lift, and the moment they were parameters
+          they could be argued with, stress-tested and priced. Every figure quoted anywhere in the
+          deck resolves back to one assumptions tab, which is the thing that kept three sections
+          from drifting into three versions of the same story.
+        </p>
+        <p>
+          It had to run in the other direction as well. Splitting the conversion decline into
+          acquisition and cancellation turned a retention conversation into a targeting one, and a
+          targeting problem is won by deciding who to leave alone, which became the sentence the
+          product design was built on. Choosing net conversion flow over subscribers divided by
+          monthly actives came out of the same instinct, since one is a lever a manager can pull and
+          the other is an outcome that moves on its own. Then every behavioural assumption had to be
+          handed the number that would prove it wrong: the lift can fall to 1.33 points, the
+          persuadable share to 26.6%, reach to 59.8%, and below any of those the recommendation
+          stops clearing. Writing them down in advance was how the soft half of the argument was
+          made answerable to the hard half. We finished runner-up.
         </p>
       </div>
     </div>
@@ -151,10 +184,103 @@ const links = [
           The part I would defend hardest is the stopping rule. Each load-bearing assumption carries a
           published break-even and a cushion: the lift can fall to 1.33 points, the persuadable share
           to 26.6%, and reach to 59.8% before the case stops clearing, each roughly a 1.5x margin.
-          Six pre-committed triggers state in advance what would falsify the recommendation and what
-          happens when one fires, including pausing spend if measured lift sits below break-even for
-          two consecutive quarters. Writing those down before the pilot runs is what separates an
-          investment case from a pitch.
+          Six assumptions carry the business case in total, and each one is listed with the evidence
+          that would replace it, so the pilot is designed to turn modelled inputs into observed ones
+          before scale capital is released. Writing that down before the pilot runs is what separates
+          an investment case from a pitch.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="prose">
+        <h2 class="h-sub">Who it acts on</h2>
+        <p>
+          Targeting runs as two screens rather than one, because the two questions underneath it are
+          different questions. The first asks who is worth evaluating at all, on engagement against
+          friction. High engagement with repeated friction is the prime target and the only quadrant
+          that goes forward. High engagement without friction is a satisfied free user, and the
+          instruction there is to protect the experience rather than sell into it. Everything at low
+          engagement falls out of scope, because a person who barely uses the product has not yet
+          formed the need Premium answers.
+        </p>
+        <p>
+          The second screen is the one that decides spend, and it asks whether the intervention would
+          change the outcome at all. Four groups come out of it and only one is worth acting on. The
+          persuadable would be more likely to upgrade because of the intervention, so the engine acts.
+          The sure thing would have upgraded anyway, so paying to convince them buys nothing. The lost
+          cause would still decline, so the spend is wasted. The sleeping dog is the group that makes
+          this worth doing carefully, because contacting them makes the experience worse than leaving
+          them alone. Three of the four resolve to some version of silence, which is why silence had
+          to be a decision the system could take on purpose.
+        </p>
+        <DeckFigure
+          kind="segmentation"
+          caption="The two screens, redrawn from the deck. Engagement against friction finds the candidate pool, then persuadability decides who is worth acting on."
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="prose">
+        <h2 class="h-sub">How the decision gets made</h2>
+        <p>
+          The engine runs in five stages. It observes, building user state from listening behaviour,
+          engagement patterns, friction events, offer history and subscription context. It detects a
+          relevant moment, which is a specific event rather than a mood: the skip limit reached,
+          repeated skips, a high-intent session, a dismissed offer. It generates the set of actions
+          that are eligible right then, and staying silent is a member of that set rather than the
+          fallback when nothing fires. It evaluates every candidate on persuadability, timing,
+          relevance and salience, resolving each to an expected incremental value net of cost. Then it
+          acts only when the best available action beats silence, and suppresses when it does not.
+        </p>
+        <p>
+          Two details make it implementable rather than aspirational. The scoring happens nightly in
+          batch, so the live session only has to recognise the trigger, run the eligibility check and
+          serve a decision that already exists, which is what keeps it inside a real latency budget.
+          And the loop closes: subscribe, dismiss, ignore, churn or retain all feed back into the user
+          state that the next cycle observes, so the system is corrected by what actually happened
+          rather than by what the model expected.
+        </p>
+        <DeckFigure
+          kind="decision"
+          caption="The decision path, redrawn from the deck appendix. Scoring happens nightly, the session detects the trigger and serves a precomputed action, and outcomes return to the state the next cycle reads."
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="prose">
+        <h2 class="h-sub">What we actually asked for, and what would stop it</h2>
+        <p>
+          The recommendation was deliberately smaller than the build. Spotify was asked to approve
+          &euro;4.5M, not the &euro;6.0M the full programme costs, released in three tranches against
+          three gates. The first quarter spends &euro;1.5M on the data pipeline and feature store and
+          has to prove only that the thing can be measured, with reliable friction triggers, verified
+          exposure logging and a valid randomised holdout. The second spends &euro;2.0M on the uplift
+          model and has to show an early control-adjusted causal lift in a small live test. The third
+          spends &euro;1.0M on a powered multi-market randomised pilot. The final &euro;1.5M rollout
+          tranche is not authorised at all until the third gate clears, and running it at scale costs
+          about &euro;4.0M a year after that.
+        </p>
+        <p>
+          The third gate is the one that matters, and it is deliberately joint. Observed lift,
+          persuadable share and delivery reach have to support positive forward economics together,
+          which stops a strong result on one input covering for a weak result on another. Underneath
+          it sits a register of five ways the case could fail, each with the measurement that would
+          catch it and the action that follows. If measured lift against the holdout comes in under
+          1.33 points, the instruction is to not scale. If the persuadable share falls below 33% or
+          delivery reach below 80%, retarget and fix delivery. If free-tier listening or ad revenue
+          drops more than 1% against control, throttle, because the whole case depends on not
+          damaging the base it draws from. If the cohort the engine converted churns faster than 2.0%
+          a month, the offer or the targeting is wrong. And nothing ships on sensitive attributes,
+          with policy and eligibility checks clearing before any action is served.
         </p>
       </div>
     </div>
