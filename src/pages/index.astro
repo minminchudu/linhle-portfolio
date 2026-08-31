@@ -513,44 +513,6 @@ const experience = [
 </Base>
 
 <style>
-  /* Five grounds, lightest to deepest. Which one a section gets is a question
-     of fitness: sections holding white cards sit on a deeper tone so the cards
-     read as raised, and text-only sections take a flatter one. */
-  .band {
-    border-block: 1px solid var(--rule);
-    padding-block: var(--gap-section);
-  }
-  .band { position: relative; }
-  .band > .shell { position: relative; z-index: 1; }
-
-  /* The plate: a panel of the counter tone sitting under the section content,
-     so cream and green are both on screen wherever the reader stops. Its top
-     corner is chamfered, which is the same cut as the mark. */
-  .plated::before {
-    content: "";
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    width: min(100% - 1.5rem, calc(var(--shell) + 3.5rem));
-    top: clamp(1.1rem, 2vw, 2rem);
-    bottom: clamp(1.1rem, 2vw, 2rem);
-    background: var(--plate);
-    border: 1px solid var(--rule);
-    border-radius: 14px;
-    clip-path: polygon(0 34px, 34px 0, 100% 0, 100% calc(100% - 34px), calc(100% - 34px) 100%, 0 100%);
-    z-index: 0;
-  }
-
-  .g-ivory     { background: var(--g-ivory); }
-  .g-beige     { background: var(--g-beige); }
-  .g-cream     { background: var(--g-cream); }
-  .g-leaf      { background: var(--g-leaf); }
-  .g-leaf-deep { background: var(--g-leaf-deep); }
-
-  /* On the green grounds the rule and the figure frames warm up, so a green
-     section does not read as the cream one with a filter over it. */
-  .g-leaf, .g-leaf-deep { --rule: #c3d3ad; --rule-strong: #a8bd8d; --paper-sunk: #eaf2df; }
-  .g-ivory { --rule: #e4ddca; }
 
   .hero {
     padding-block: clamp(1.25rem, 2.4vw, 2.1rem) clamp(1.5rem, 3vw, 2.4rem);

@@ -1,0 +1,222 @@
+---
+import Base from "../layouts/Base.astro";
+
+const steps = [
+  { n: "01", t: "Shade",    s: ["Covered for the last", "20 to 40 days"] },
+  { n: "02", t: "Pick",     s: ["Youngest leaves,", "first harvest only"] },
+  { n: "03", t: "Steam",    s: ["Within hours,", "to stop oxidation"] },
+  { n: "04", t: "Dry",      s: ["Cooled, then", "dried flat"] },
+  { n: "05", t: "Destem",   s: ["Stem and vein out.", "This is tencha"] },
+  { n: "06", t: "Grind",    s: ["Granite, slowly.", "30 to 40g an hour"] },
+];
+
+const essays = [
+  {
+    title: "My Lifelong Career as a Reader and Writer",
+    where: "Translingual, Issue 6, page 26",
+    href: "https://ielp.ehe.osu.edu/files/2026/03/Translingual-Issue-6.pdf",
+    note: "On reading as something inherited before it was chosen, and what it cost to keep.",
+  },
+  {
+    title: "A Film Analysis: Grave of the Fireflies",
+    where: "Translingual, Issue 2, April 2023",
+    note: "How an antiwar film does its damage without a single scare, and why that lasts longer.",
+  },
+  {
+    title: "Shades of Black",
+    where: "Translingual, Issue 2, April 2023",
+    note: "A remark about always wearing black, followed further than the person making it intended.",
+  },
+  {
+    title: "Imprisonment in The Allegory of the Cave and The House of Asterion",
+    where: "Unpublished",
+    note: "Plato and Borges on the same question: whether a prisoner who cannot see the walls is still one.",
+  },
+];
+---
+
+<Base
+  title="The Rough"
+  description="Where the green and the stone on this site came from. Matcha as a morning ritual, and four essays. By Linh (Min) Le."
+>
+  <article class="rough">
+
+    <header class="band g-ivory rough-head">
+      <div class="shell">
+        <p class="eyebrow">Beyond work</p>
+        <h1>The Rough</h1>
+        <p class="rough-lede">
+          This site is green and its mark is a stone, and neither of those was chosen at a desk.
+          Both come from things I do when nobody is paying me to.
+        </p>
+      </div>
+    </header>
+
+    <section class="band plated g-leaf" style="--plate: var(--g-beige);">
+      <div class="shell prose">
+        <p class="eyebrow">Matcha</p>
+        <h2 class="words" data-words>Everything that decides whether it is good happened before I touched it</h2>
+
+        <p>
+          I make it every morning. There is a full set at home, bowl and whisk, and a corner of the
+          kitchen that exists for nothing else. The twenty minutes it takes are the part of the day
+          I am most reliably calm, and on the days I skip it I notice.
+        </p>
+        <p>
+          What holds my attention is not the drink at the end. It is that almost every decision
+          determining whether the drink is any good was made months earlier, by someone else, in a
+          sequence that does not allow going backwards.
+        </p>
+
+        <figure class="fig">
+          <div class="fig-frame">
+            <svg viewBox="0 0 760 150" preserveAspectRatio="xMidYMid meet" role="img"
+                 aria-label="Six stages of matcha production, from shading in the field through to stone grinding.">
+              {steps.map((st, i) => (
+                <g class={st.t === "Grind" ? "st on" : "st"}>
+                  <rect x={8 + i * 124} y="26" width="112" height="86" rx="7"/>
+                  <text class="sn" x={20 + i * 124} y="44">{st.n}</text>
+                  <text class="stt" x={20 + i * 124} y="63">{st.t}</text>
+                  {st.s.map((ln, k) => (
+                    <text class="sss" x={20 + i * 124} y={81 + k * 11}>{ln}</text>
+                  ))}
+                  {i < 5 && <path class="arw" d={`M${120 + i * 124} 69 l9 0 m-3.5 -3.5 l3.5 3.5 l-3.5 3.5`}/>}
+                </g>
+              ))}
+              <text class="cap" x="8" y="136">Only after 05 is it tencha, which means tea for grinding. It is not matcha until 06.</text>
+            </svg>
+          </div>
+        </figure>
+
+        <p>
+          The plants are covered for the last twenty to forty days before picking. Starved of light
+          they push out chlorophyll and convert catechins into L-theanine, which is why the powder is
+          that green and why the taste moves from bitter toward sweet. Only the youngest leaves of the
+          first harvest are taken. They are steamed within hours to stop oxidation, then cooled and
+          dried, then stripped of stem and vein until only leaf flesh is left.
+        </p>
+        <p>
+          Then it goes between two granite stones turning slowly enough to produce thirty to forty
+          grams in an hour. The slowness is the whole point. Grinding faster makes heat, and heat
+          takes the aroma with it.
+        </p>
+        <p class="beat">By the time it reaches me, none of that is recoverable.</p>
+        <p>
+          What I control is the last four minutes. Water temperature, the ratio, how the whisk moves.
+          Everything upstream has already set the ceiling, and no amount of care at my end raises it.
+        </p>
+        <p>
+          I like work that behaves this way, where quality is decided early and quietly and the
+          visible part at the end is small. It is also, if I am honest, part of why I distrust a
+          number that arrives looking finished.
+        </p>
+        <p>
+          It is the only caffeine that agrees with me, too. Coffee gives me a spike and then takes it
+          back with interest. Matcha carries L-theanine alongside the caffeine and the lift is flatter
+          and lasts, which suits a morning that starts with reading something carefully.
+        </p>
+      </div>
+    </section>
+
+    <section class="band plated g-cream" style="--plate: var(--g-ivory);">
+      <div class="shell prose">
+        <p class="eyebrow">Writing</p>
+        <h2 class="words" data-words>Four essays, three of them published</h2>
+        <p>
+          Before any of the analysis, this. Three of these appeared in Translingual, the journal of
+          Ohio State's International English Language Programs. The fourth was never submitted
+          anywhere and is here because I still like it.
+        </p>
+
+        <ol class="essays">
+          {essays.map((e) => (
+            <li class="essay">
+              <h3 class="essay-title">
+                {e.href ? <a href={e.href} target="_blank" rel="noopener">{e.title}</a> : e.title}
+              </h3>
+              <p class="essay-where figure">{e.where}</p>
+              <p class="essay-note">{e.note}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+  </article>
+</Base>
+
+<style>
+  .rough-head { padding-block: clamp(2.5rem, 5vw, 4rem) clamp(2rem, 4vw, 3rem); }
+  .rough-head h1 {
+    font-size: var(--step-4);
+    font-weight: 500;
+    letter-spacing: -.02em;
+    line-height: 1;
+    margin-top: .3rem;
+  }
+  .rough-lede {
+    font-size: var(--step-1);
+    color: var(--ink-soft);
+    max-width: 46ch;
+    margin-top: 1rem;
+    line-height: 1.55;
+  }
+
+  .prose { max-width: var(--measure); }
+  .prose h2 {
+    font-size: var(--step-2);
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -.015em;
+    margin: .3rem 0 1.3rem;
+    max-width: 22ch;
+  }
+  .prose p { margin-bottom: 1.05em; line-height: 1.62; }
+  .prose .beat {
+    font-family: var(--font-display);
+    font-variation-settings: "SOFT" 60, "WONK" 1;
+    font-style: italic;
+    font-size: var(--step-1);
+    color: var(--accent-deep);
+    line-height: 1.3;
+  }
+
+  .fig { margin: 1.6rem 0 1.8rem; }
+  .fig-frame {
+    border: 1px solid var(--rule);
+    background: var(--paper-raised);
+    border-radius: var(--radius);
+    padding: .8rem;
+    overflow-x: auto;
+  }
+  .fig-frame svg { display: block; width: 100%; min-width: 34rem; height: auto; }
+  .st rect { fill: none; stroke: var(--rule-strong); stroke-width: 1; }
+  .st.on rect { fill: var(--accent-wash); stroke: var(--accent); stroke-width: 1.5; }
+  .sn  { font-family: var(--font-mono); font-size: 8px; fill: var(--ink-faint); letter-spacing: .1em; }
+  .stt { font-family: var(--font-display); font-size: 13px; font-weight: 600; fill: var(--ink); }
+  .st.on .stt { fill: var(--accent-deep); }
+  .sss { font-family: var(--font-mono); font-size: 7.5px; fill: var(--ink-soft); }
+  .cap { font-family: var(--font-mono); font-size: 8px; fill: var(--ink-faint); letter-spacing: .04em; }
+  .arw { fill: none; stroke: var(--accent); stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+
+  .essays { list-style: none; margin: 1.4rem 0 0; padding: 0; display: flex; flex-direction: column; }
+  .essay { padding: 1.1rem 0; border-top: 1px solid var(--rule); }
+  .essay:first-child { border-top: 1px solid var(--rule-strong); }
+  .essay-title {
+    font-family: var(--font-display);
+    font-variation-settings: "SOFT" 40;
+    font-size: var(--step-1);
+    font-weight: 600;
+    line-height: 1.25;
+  }
+  .essay-title a { color: inherit; text-decoration: none; border-bottom: 1px solid var(--accent-line); }
+  .essay-title a:hover { color: var(--accent-deep); border-color: var(--accent); }
+  .essay-where {
+    font-family: var(--font-mono);
+    font-size: var(--step--2);
+    letter-spacing: .05em;
+    color: var(--accent-deep);
+    margin-top: .3rem;
+  }
+  .essay-note { color: var(--ink-soft); font-size: var(--step--1); margin-top: .45rem; line-height: 1.55; }
+</style>
