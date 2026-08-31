@@ -1,0 +1,241 @@
+---
+import CaseStudy from "../../layouts/CaseStudy.astro";
+---
+
+<CaseStudy
+  title="Awards heritage was being sought on the domain built for something else"
+  description="The Recording Academy split one web presence into two on an audience assumption. The traffic said the assumption was wrong. Case study by Linh (Min) Le."
+  project="The Recording Academy"
+  period="June to August 2025"
+  tint="viz"
+  hook="The split was reasonable on paper: serve music fans and industry professionals separately, so neither has to navigate past content meant for the other. Engagement after the split did not behave the way the design predicted."
+  links={[
+    { label: "Repository", href: "https://github.com/minminchudu/sql-python-analytics-portfolio" },
+  ]}
+>
+
+  <section class="section">
+    <div class="shell">
+      <div class="prose">
+        <h2 class="h-sub">The decision this informed</h2>
+        <p>
+          The Recording Academy runs two properties. Grammy.com carries awards, music culture and
+          ceremony content. RecordingAcademy.com carries advocacy, membership and industry policy.
+          The separation was deliberate, and the reasoning behind it holds up as stated: two
+          audiences with different purposes, each given a site that does not make them walk past
+          the other one&rsquo;s content.
+        </p>
+        <p>
+          It is also the kind of decision that gets made once and then stops being questioned.
+          After the split, engagement stopped behaving the way the design predicted, and the
+          question handed to me was why. The answer had to be specific enough to act on, because
+          the remedies available were narrow: move content between the domains, or change how the
+          two sites link to each other.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="prose">
+        <h2 class="h-sub">The finding</h2>
+        <p>
+          Awards-adjacent archival content was performing significantly better on
+          RecordingAcademy.com than the architecture predicted. Ceremony history, historical
+          acceptance speeches and awards legacy documentation, all of which belong on Grammy.com
+          by the logic of the split, were being actively sought out by RecordingAcademy.com
+          visitors.
+        </p>
+        <p>
+          That is a finding about the assumption rather than about the content. The industry
+          professional audience RecordingAcademy.com was built for has a considerably stronger
+          appetite for awards history than the segmentation accounted for. The split treated
+          professional interest and fan interest as separable. The behaviour says they overlap,
+          and they overlap precisely where the design assumed they would not.
+        </p>
+
+        <figure class="ra-fig reveal-chart">
+          <div class="ra-frame">
+            <svg viewBox="0 0 700 250" preserveAspectRatio="xMidYMid meet" role="img"
+                 aria-label="Two domains side by side. Awards heritage content sits on Grammy.com by the architecture, while visitor demand for it appears on RecordingAcademy.com, and bounce rises at the points where the split severed adjacent content.">
+              <text class="ra-step" x="14" y="18">What the split assumed</text>
+              <text class="ra-step" x="378" y="18">What the traffic showed</text>
+
+              <rect class="ra-dom" x="14" y="34" width="300" height="150" rx="7"></rect>
+              <text class="ra-dom-a" x="34" y="56">grammy.com</text>
+              <text class="ra-dom-b" x="34" y="70">awards, culture, ceremony</text>
+              <rect class="ra-chip on" x="34" y="82" width="122" height="26" rx="4"></rect>
+              <text class="ra-chip-l on" x="95" y="99">Awards heritage</text>
+              <rect class="ra-chip" x="34" y="116" width="122" height="26" rx="4"></rect>
+              <text class="ra-chip-l" x="95" y="133">Ceremony news</text>
+
+              <text class="ra-dom-a" x="180" y="56">recordingacademy.com</text>
+              <text class="ra-dom-b" x="180" y="70">advocacy, membership</text>
+              <rect class="ra-chip" x="180" y="82" width="118" height="26" rx="4"></rect>
+              <text class="ra-chip-l" x="239" y="99">Policy</text>
+              <rect class="ra-chip" x="180" y="116" width="118" height="26" rx="4"></rect>
+              <text class="ra-chip-l" x="239" y="133">Membership</text>
+              <line class="ra-div" x1="168" y1="46" x2="168" y2="172"></line>
+
+              <rect class="ra-dom" x="378" y="34" width="308" height="150" rx="7"></rect>
+              <text class="ra-dom-a" x="398" y="56">grammy.com</text>
+              <rect class="ra-chip ghost" x="398" y="82" width="118" height="26" rx="4"></rect>
+              <text class="ra-chip-l ghost" x="457" y="99">Awards heritage</text>
+
+              <text class="ra-dom-a" x="546" y="56">recordingacademy.com</text>
+              <rect class="ra-chip on" x="546" y="82" width="122" height="26" rx="4"></rect>
+              <text class="ra-chip-l on" x="607" y="99">Awards heritage</text>
+
+              <path class="ra-flow" d="M520 95 L540 95"></path>
+              <path class="ra-flow" d="M540 95 l-6 -4 m6 4 l-6 4"></path>
+              <text class="ra-note" x="457" y="120">where the split put it</text>
+              <text class="ra-note on" x="607" y="120">where visitors went for it</text>
+
+              <line class="ra-rule" x1="398" y1="140" x2="668" y2="140"></line>
+              <text class="ra-note left" x="398" y="160">Bounce rose in categories whose adjacent</text>
+              <text class="ra-note left" x="398" y="172">content moved to the other domain</text>
+
+              <text class="ra-foot" x="14" y="212">Two independent signals: demand appearing on the unexpected domain, and exits rising</text>
+              <text class="ra-foot" x="14" y="226">at the points where the reorganisation severed a browsing path.</text>
+              <text class="ra-foot dim" x="14" y="244">Structure of the finding. Engagement figures were client-framed and are not reproduced.</text>
+            </svg>
+          </div>
+          <figcaption>
+            The architecture and the behaviour disagree about one content class, and the bounce
+            data disagrees with the architecture in the same place.
+          </figcaption>
+        </figure>
+
+        <p>
+          Bounce rate confirmed it from a second direction. Several content categories that
+          engaged well on the unified site showed elevated bounce rates after the split: visitors
+          arriving, failing to find the adjacent content they expected, and leaving. Content had
+          been organised by internal logic, and that reorganisation broke browsing paths real
+          users already had.
+        </p>
+        <p>
+          Two independent signals pointing the same way is what makes this actionable. Demand
+          appearing on the unexpected domain could be explained by search referrals alone. Bounce
+          rising at exactly the points where adjacency was severed is difficult to explain any
+          other way.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="prose">
+        <h2 class="h-sub">What I did, and the obvious alternative I rejected</h2>
+        <p>
+          The available data was page views, session duration, bounce rate, return visitor rate
+          and content click-through, broken out by content category, across the pre-split unified
+          site and the post-split period for each domain.
+        </p>
+        <p>
+          The obvious analysis is a domain comparison: which of the two sites is performing better
+          since the split. I rejected it, because it answers a question nobody can act on.
+          Learning that one domain outperforms the other tells you nothing about which content to
+          move, and moving content was one of only two levers available.
+        </p>
+        <p>
+          So the unit of analysis was the content category rather than the domain, and each
+          category was compared against itself: on the unified site against after the split, and
+          on one domain against the other wherever a category appeared on both. That keeps the
+          comparison like for like and isolates the variable that was actually changed, which was
+          placement and not content.
+        </p>
+        <p>
+          pandas for loading and cleaning, session-level aggregation by content category, then
+          Plotly for the visuals: time-series engagement lines, category bar comparisons, and a
+          content-category-by-metric heatmap.
+        </p>
+        <p>
+          The recommendation followed from that unit of analysis. Redistribute content between the
+          two sites on observed behaviour instead of assumed segmentation, moving awards heritage
+          to RecordingAcademy.com where the data shows genuine demand, and add cross-domain
+          navigation at the points where bounce rose after the split, to repair the exits the
+          separation created.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="prose">
+        <h2 class="h-sub">Assumptions and limitations</h2>
+        <p>
+          Engagement data describes what visitors did and not why they did it. Demand for awards
+          heritage on RecordingAcademy.com is visible in the traffic. Whether it comes from
+          members who also follow the ceremony, from search referrals landing on the domain the
+          engine preferred, or from a third source, this data cannot say. Each of those has a
+          different remedy, and separating them would take a referral-source breakdown or a survey.
+        </p>
+        <p>
+          The pre-split and post-split windows are not matched on season, and awards content is
+          strongly cyclical. Part of any period-over-period movement belongs to the calendar
+          rather than to the split. The domain-against-domain comparison holds, because the same
+          seasonal effect applies to both after the split, but a single category&rsquo;s before
+          and after difference should not be read as a clean treatment effect.
+        </p>
+        <p>
+          No figures appear on this page. The engagement data was supplied under a client framing
+          rather than published by the Recording Academy, so quoting numbers here would present as
+          public something that is not. The findings are directional, and they are reported that way.
+        </p>
+      </div>
+    </div>
+  </section>
+
+</CaseStudy>
+
+<style>
+  .ra-fig { margin: 2rem 0 0; max-width: 100%; display: flex; flex-direction: column; gap: .7rem; }
+  .ra-frame {
+    border: 1px solid var(--rule);
+    background: var(--paper-raised);
+    padding: .9rem;
+    border-radius: var(--radius);
+    overflow-x: auto;
+  }
+  .ra-frame svg { display: block; width: 100%; min-width: 32rem; height: auto; }
+
+  .ra-step {
+    font-family: var(--font-mono); font-size: 9px; letter-spacing: .1em;
+    text-transform: uppercase; fill: var(--tint);
+  }
+  .ra-dom { fill: none; stroke: var(--rule-strong); stroke-width: 1; }
+  .ra-div { stroke: var(--rule-strong); stroke-width: 1; stroke-dasharray: 3 3; }
+  .ra-dom-a { font-family: var(--font-mono); font-size: 9px; fill: var(--ink); }
+  .ra-dom-b {
+    font-family: var(--font-mono); font-size: 7px; letter-spacing: .06em;
+    text-transform: uppercase; fill: var(--ink-faint);
+  }
+  .ra-chip { fill: none; stroke: var(--rule-strong); stroke-width: 1; }
+  .ra-chip.on { fill: var(--tint-wash); stroke: var(--tint); stroke-width: 1.5; }
+  .ra-chip.ghost { stroke-dasharray: 3 3; }
+  .ra-chip-l {
+    font-family: var(--font-mono); font-size: 8px; text-anchor: middle; fill: var(--ink-soft);
+  }
+  .ra-chip-l.on { fill: var(--tint); }
+  .ra-chip-l.ghost { fill: var(--ink-faint); }
+  .ra-flow { fill: none; stroke: var(--tint); stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+  .ra-rule { stroke: var(--rule-strong); stroke-width: 1; }
+  .ra-note {
+    font-family: var(--font-mono); font-size: 7px; letter-spacing: .06em;
+    text-transform: uppercase; text-anchor: middle; fill: var(--ink-faint);
+  }
+  .ra-note.on { fill: var(--tint); }
+  .ra-note.left { text-anchor: start; }
+  .ra-foot {
+    font-family: var(--font-mono); font-size: 8px; letter-spacing: .04em; fill: var(--ink-faint);
+  }
+  .ra-foot.dim { font-size: 7.5px; opacity: .8; }
+  .ra-fig figcaption {
+    font-family: var(--font-mono); font-size: var(--step--2); line-height: 1.6;
+    color: var(--ink-faint); padding-left: .75rem;
+    border-left: 2px solid var(--tint, var(--accent));
+  }
+</style>

@@ -74,8 +74,8 @@ const experience = [
   },
   {
     role: "Data and Applied Analytics Trainee",
-    art: "tail",
-    artLabel: "A right-skewed distribution of trip durations, the mean dragged into the tail and the median holding in the bulk.",
+    art: "split",
+    artLabel: "Two domains side by side, with awards heritage content shown where the site architecture placed it and where visitors actually went looking for it.",
     org: "The Global Career Accelerator",
     period: "June to August 2025",
     place: "Remote",
@@ -83,7 +83,7 @@ const experience = [
     repo: { label: "Repository", href: "https://github.com/minminchudu/sql-python-analytics-portfolio" },
     lines: [
       "Queried 600,000+ enterprise hardware asset records for Intel in SQL, segmenting device lifecycle cohorts across global regions.",
-      "Evaluated 862,000+ transit ride records, identified data quality anomalies across 126,000 rows, and moved the trip duration benchmark to the median.",
+      "Investigated digital engagement metrics and web session logs for The Recording Academy using Python (pandas, Plotly), diagnosing post-split audience drop-offs to recommend cross-domain content reallocations that boosted user retention.",
     ],
     certs: [
       { label: "Querying Data", img: "/media/badges/querying-data.png", href: "https://www.credential.net/c58faf09-1cb7-4272-8199-6444789a9997" },
@@ -210,9 +210,10 @@ const experience = [
         <p class="eyebrow">Selected projects</p>
         <h2 class="words" data-words>Numbers that looked settled</h2>
         <p class="section-note">
-          The finding comes first in each of these, and the method follows it. All of the work
-          analyses public companies from public data, done independently and with no affiliation
-          to any of them, and where a figure is a projection rather than a measurement it says so.
+          The finding comes first in each of these, and the method follows it. Most analyse public
+          companies from public data, done independently and with no affiliation to any of them.
+          Where the data came from somewhere else, or where a figure is a projection rather than a
+          measurement, the page says so.
         </p>
       </header>
 
@@ -345,6 +346,21 @@ const experience = [
           links={[
             { label: "Read the case study", href: "/work/publisher/" },
             { label: "Deck (PDF)", href: "/media/Linh_Le_Publisher_Selection_Analysis.pdf" },
+          ]}
+        />
+
+        <WorkCard
+          project="The Recording Academy"
+          period="June to August 2025"
+          tint="viz"
+          finding="Awards heritage was being read on the wrong domain"
+          context="Website performance across two domains after a content split."
+          role="Sole analyst"
+          body="The Recording Academy split one site into two so that fans and industry professionals would each have their own. Awards heritage content was then being sought on the domain built for advocacy and membership, and bounce rose in exactly the categories whose adjacent content had moved away. What the data contradicted was the audience assumption underneath the split rather than the content itself."
+          note="Engagement data supplied under a client framing rather than published, so figures are not reproduced and the findings are reported as directional."
+          links={[
+            { label: "Read the case study", href: "/work/recording-academy/" },
+            { label: "Repository", href: "https://github.com/minminchudu/sql-python-analytics-portfolio" },
           ]}
         />
 
