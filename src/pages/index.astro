@@ -74,8 +74,8 @@ const experience = [
   },
   {
     role: "Data and Applied Analytics Trainee",
-    art: "split",
-    artLabel: "Two domains side by side, with awards heritage content shown where the site architecture placed it and where visitors actually went looking for it.",
+    art: "tail",
+    artLabel: "A right-skewed distribution of trip durations, the mean dragged into the tail and the median holding in the bulk.",
     org: "The Global Career Accelerator",
     period: "June to August 2025",
     place: "Remote",
@@ -84,8 +84,9 @@ const experience = [
     hrefLabel: "Case study: The Recording Academy",
     repo: { label: "Repository", href: "https://github.com/minminchudu/sql-python-analytics-portfolio" },
     lines: [
-      "Queried 600,000+ enterprise hardware asset records for Intel in SQL, segmenting device lifecycle cohorts across global regions.",
+      "Queried 600,000+ enterprise hardware asset records for Intel Corporation using SQL pipelines (multi-table JOINs, window functions, nested subqueries), segmenting device lifecycle cohorts across global regions to support sustainability and cost-reduction initiatives.",
       "Investigated digital engagement metrics and web session logs for The Recording Academy using Python (pandas, Plotly), diagnosing post-split audience drop-offs to recommend cross-domain content reallocations that boosted user retention.",
+      "Evaluated 862,000+ transit ride records in Python, identifying data quality anomalies across 126,000 rows, correcting trip duration benchmarks using median statistics, and optimizing low-utilization station locations.",
     ],
     certs: [
       { label: "Querying Data", img: "/media/badges/querying-data.png", href: "https://www.credential.net/c58faf09-1cb7-4272-8199-6444789a9997" },
@@ -354,36 +355,38 @@ const experience = [
           project="The Recording Academy"
           period="June to August 2025"
           tint="viz"
-          finding="Awards heritage was being read on the wrong domain"
-          context="Website performance across two domains after a content split."
+          finding="One night carries forty-two times an ordinary day"
+          context="Whether splitting grammy.com and recordingacademy.com improved engagement."
           role="Sole analyst"
-          body="The Recording Academy split one site into two so that fans and industry professionals would each have their own. Awards heritage content was then being sought on the domain built for advocacy and membership, and bounce rose in exactly the categories whose adjacent content had moved away. What the data contradicted was the audience assumption underneath the split rather than the content itself."
+          body="Bounce fell from 41.58% on the combined site to 33.67% on RecordingAcademy.com and average session length rose to 2 min 8 sec, so the 2022 split earned its keep. The same six years of data put 1,389,590 visitors on awards night against 32,388 on an ordinary day, which makes year-round engagement on grammy.com the larger exposure."
+          metrics={[
+            { value: "33.67%", label: "Bounce, new site" },
+            { value: "2:08", label: "Time on site" },
+            { value: "42x", label: "Awards night" },
+          ]}
           links={[
             { label: "Read the case study", href: "/work/recording-academy/" },
             { label: "Notebook", href: "https://github.com/minminchudu/sql-python-analytics-portfolio/blob/main/python-analysis/grammys-site-split.ipynb" },
           ]}
         >
-          <svg slot="thumb" class="ra-thumb" viewBox="0 0 320 176" preserveAspectRatio="xMidYMid meet" role="img"
-               aria-label="Awards heritage content shown dashed on grammy.com where the site split placed it, and solid on recordingacademy.com where visitors actually went looking for it.">
-            <text class="rt-cap" x="16" y="14">Awards heritage</text>
+          <svg slot="thumb" class="ra-thumb" viewBox="0 0 320 168" preserveAspectRatio="xMidYMid meet" role="img"
+               aria-label="Bounce rate falling across three states of the property: 41.58 percent on the combined site, 40.16 percent on grammy.com after the split, and 33.67 percent on recordingacademy.com.">
+            <text class="rt-cap" x="14" y="14">Bounce rate</text>
+            <line class="rt-axis" x1="110" y1="26" x2="110" y2="132"></line>
 
-            <rect class="rt-dom" x="16" y="26" width="128" height="94" rx="5"></rect>
-            <text class="rt-dom-l" x="80" y="44">grammy.com</text>
-            <rect class="rt-chip ghost" x="32" y="60" width="96" height="26" rx="3"></rect>
-            <text class="rt-chip-l ghost" x="80" y="77">heritage</text>
-            <text class="rt-sub" x="80" y="106">where the split put it</text>
+            <text class="rt-cat" x="104" y="48">Combined</text>
+            <rect class="rt-bar dim" x="110" y="36" width="180" height="18" rx="2"></rect>
+            <text class="rt-val" x="296" y="48">41.58%</text>
 
-            <path class="rt-flow" d="M150 73 L170 73"></path>
-            <path class="rt-flow" d="M170 73 l-6 -4 m6 4 l-6 4"></path>
+            <text class="rt-cat" x="104" y="86">Grammy.com</text>
+            <rect class="rt-bar dim" x="110" y="74" width="174" height="18" rx="2"></rect>
+            <text class="rt-val" x="290" y="86">40.16%</text>
 
-            <rect class="rt-dom" x="176" y="26" width="128" height="94" rx="5"></rect>
-            <text class="rt-dom-l" x="240" y="44">recordingacademy.com</text>
-            <rect class="rt-chip on" x="192" y="60" width="96" height="26" rx="3"></rect>
-            <text class="rt-chip-l on" x="240" y="77">heritage</text>
-            <text class="rt-sub on" x="240" y="106">where visitors went</text>
+            <text class="rt-cat" x="104" y="124">Rec. Academy</text>
+            <rect class="rt-bar" x="110" y="112" width="146" height="18" rx="2"></rect>
+            <text class="rt-val on" x="262" y="124">33.67%</text>
 
-            <line class="rt-rule" x1="16" y1="140" x2="304" y2="140"></line>
-            <text class="rt-cap" x="16" y="160">Bounce rose where the split broke the path between them</text>
+            <text class="rt-cap" x="14" y="156">Lower is better. The split earned its keep.</text>
           </svg>
         </WorkCard>
 
@@ -1071,23 +1074,15 @@ const experience = [
     font-family: var(--font-mono); font-size: 8px; letter-spacing: .07em;
     text-transform: uppercase; fill: var(--ink-faint);
   }
-  .ra-thumb .rt-dom { fill: none; stroke: var(--rule-strong); stroke-width: 1; }
-  .ra-thumb .rt-dom-l {
-    font-family: var(--font-mono); font-size: 8px; text-anchor: middle; fill: var(--ink);
+  .ra-thumb .rt-axis { stroke: var(--rule-strong); stroke-width: 1; }
+  .ra-thumb .rt-bar { fill: var(--tint); }
+  .ra-thumb .rt-bar.dim { fill: var(--tint); opacity: .34; }
+  .ra-thumb .rt-cat {
+    font-family: var(--font-mono); font-size: 8px; letter-spacing: .04em;
+    text-anchor: end; fill: var(--ink-soft);
   }
-  .ra-thumb .rt-chip { fill: none; stroke: var(--rule-strong); stroke-width: 1; }
-  .ra-thumb .rt-chip.ghost { stroke-dasharray: 3 3; }
-  .ra-thumb .rt-chip.on { fill: var(--tint-wash); stroke: var(--tint); stroke-width: 1.5; }
-  .ra-thumb .rt-chip-l {
-    font-family: var(--font-mono); font-size: 8.5px; letter-spacing: .05em;
-    text-transform: uppercase; text-anchor: middle; fill: var(--ink-faint);
+  .ra-thumb .rt-val {
+    font-family: var(--font-mono); font-size: 8.5px; text-anchor: end; fill: var(--ink-soft);
   }
-  .ra-thumb .rt-chip-l.on { fill: var(--tint); }
-  .ra-thumb .rt-sub {
-    font-family: var(--font-mono); font-size: 7px; letter-spacing: .06em;
-    text-transform: uppercase; text-anchor: middle; fill: var(--ink-faint);
-  }
-  .ra-thumb .rt-sub.on { fill: var(--tint); }
-  .ra-thumb .rt-flow { fill: none; stroke: var(--tint); stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
-  .ra-thumb .rt-rule { stroke: var(--rule); stroke-width: 1; }
+  .ra-thumb .rt-val.on { fill: var(--tint); }
 </style>

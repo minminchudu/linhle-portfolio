@@ -4,7 +4,7 @@
    the role's own copy beside it. All colour comes from the tint tokens, so
    these follow the palette without edits. */
 interface Props {
-  kind: "labs" | "scissor" | "roster" | "split";
+  kind: "labs" | "scissor" | "tail" | "roster";
   label: string;
 }
 const { kind, label } = Astro.props;
@@ -70,33 +70,32 @@ const { kind, label } = Astro.props;
     </svg>
   )}
 
-  {kind === "split" && (
+  {kind === "tail" && (
     <svg viewBox="0 0 260 180" preserveAspectRatio="xMidYMid meet">
-      <text class="tag" x="20" y="20">One audience assumption, two domains</text>
+      <line class="axis" x1="24" y1="132" x2="240" y2="132" />
+      <g class="hist">
+        {[10, 26, 54, 78, 66, 46, 32, 22, 16, 12, 9, 7, 6, 5, 4, 4, 3, 3].map((h, i) => (
+          <rect
+            class={i >= 10 ? "col tailcol" : "col"}
+            x={26 + i * 12}
+            y={132 - h}
+            width="9"
+            height={h}
+            rx="1"
+            style={`--i:${i}`}
+          />
+        ))}
+      </g>
 
-      <rect class="dom" x="18" y="30" width="100" height="78" rx="4" />
-      <text class="domlab" x="68" y="45">grammy.com</text>
-      <text class="domsub" x="68" y="57">awards and culture</text>
+      <line class="median" x1="80" y1="28" x2="80" y2="138" />
+      <text class="marklab median-lab" x="80" y="24">median</text>
 
-      <rect class="dom" x="142" y="30" width="100" height="78" rx="4" />
-      <text class="domlab" x="192" y="45">recordingacademy.com</text>
-      <text class="domsub" x="192" y="57">advocacy and membership</text>
+      <line class="mean" x1="150" y1="40" x2="150" y2="138" />
+      <text class="marklab mean-lab" x="150" y="36">mean</text>
 
-      <rect class="chip ghost" x="30" y="70" width="76" height="22" rx="3" />
-      <text class="chiplab ghost-lab" x="68" y="84">awards heritage</text>
-
-      <rect class="chip live" x="154" y="70" width="76" height="22" rx="3" />
-      <text class="chiplab live-lab" x="192" y="84">awards heritage</text>
-
-      <path class="cross" d="M108 81 L136 81" />
-      <path class="cross" d="M136 81 l-5 -3 m5 3 l-5 3" />
-
-      <text class="note ghost-lab" x="68" y="122">where the split put it</text>
-      <text class="note live-lab" x="192" y="122">where visitors went for it</text>
-
-      <line class="axis" x1="18" y1="140" x2="242" y2="140" />
-      <text class="tag" x="18" y="156">Bounce rose where the split broke</text>
-      <text class="tag" x="18" y="168">the browsing path between them</text>
+      <path class="tailbrace" d="M150 146 L240 146" />
+      <text class="tag" x="152" y="160">126k rows flagged</text>
+      <text class="tag" x="24" y="176">862k transit rides</text>
     </svg>
   )}
 
@@ -229,31 +228,7 @@ const { kind, label } = Astro.props;
     50%      { r: 7;   opacity: .35; }
   }
 
-/* ============ split: two domains, one wrong assumption ================== */
-  .dom { fill: var(--paper-raised); stroke: var(--rule-strong); stroke-width: 1; }
-  .domlab {
-    font-family: var(--font-mono); font-size: 7.5px; letter-spacing: .04em;
-    text-anchor: middle; fill: var(--ink);
-  }
-  .domsub {
-    font-family: var(--font-mono); font-size: 6.5px; letter-spacing: .06em;
-    text-transform: uppercase; text-anchor: middle; fill: var(--ink-faint);
-  }
-  .chip.ghost { fill: none; stroke: var(--rule-strong); stroke-width: 1; stroke-dasharray: 3 3; }
-  .chip.live  { fill: var(--tint-wash); stroke: var(--tint); stroke-width: 1.5; }
-  .chiplab {
-    font-family: var(--font-mono); font-size: 7px; letter-spacing: .05em;
-    text-transform: uppercase; text-anchor: middle;
-  }
-  .ghost-lab { fill: var(--ink-faint); }
-  .live-lab  { fill: var(--tint); }
-  .cross { fill: none; stroke: var(--tint); stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
-  .note {
-    font-family: var(--font-mono); font-size: 6.5px; letter-spacing: .06em;
-    text-transform: uppercase; text-anchor: middle;
-  }
-
-  /* ============ roster: ghost positions leaving the allocation ============ */
+/* ============ roster: ghost positions leaving the allocation ============ */
   .slot rect { fill: var(--tint); opacity: 0; }
   .slot circle { fill: var(--paper-raised); opacity: 0; }
   .strike {

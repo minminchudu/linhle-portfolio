@@ -1,14 +1,22 @@
 ---
 import CaseStudy from "../../layouts/CaseStudy.astro";
+
+const metrics = [
+  { value: "33.67%", label: "Bounce rate, RecordingAcademy.com" },
+  { value: "2:08", label: "Average time on site there" },
+  { value: "42x", label: "Awards night against an ordinary day" },
+  { value: "1,857", label: "Days of pre-split baseline" },
+];
 ---
 
 <CaseStudy
-  title="Awards heritage was being sought on the domain built for something else"
-  description="The Recording Academy split one web presence into two on an audience assumption. The traffic said the assumption was wrong. Case study by Linh (Min) Le."
+  title="Keep the sites split, and treat the one night that carries the year as the real exposure"
+  description="The Recording Academy split grammy.com and recordingacademy.com in 2022. The engagement data says the split worked, and says something more uncomfortable about the business underneath it. Case study by Linh (Min) Le."
   project="The Recording Academy"
   period="June to August 2025"
   tint="viz"
-  hook="The split was reasonable on paper: serve music fans and industry professionals separately, so neither has to navigate past content meant for the other. Engagement after the split did not behave the way the design predicted."
+  hook="Bounce fell and sessions ran longer on the new site, so the split earned its keep. The same data put 1,389,590 visitors on awards night against 32,388 on an ordinary day."
+  metrics={metrics}
   links={[
     { label: "Notebook", href: "https://github.com/minminchudu/sql-python-analytics-portfolio/blob/main/python-analysis/grammys-site-split.ipynb" },
     { label: "Repository", href: "https://github.com/minminchudu/sql-python-analytics-portfolio" },
@@ -20,18 +28,17 @@ import CaseStudy from "../../layouts/CaseStudy.astro";
       <div class="prose">
         <h2 class="h-sub">The decision this informed</h2>
         <p>
-          The Recording Academy runs two properties. Grammy.com carries awards, music culture and
-          ceremony content. RecordingAcademy.com carries advocacy, membership and industry policy.
-          The separation was deliberate, and the reasoning behind it holds up as stated: two
-          audiences with different purposes, each given a site that does not make them walk past
-          the other one&rsquo;s content.
+          In 2022 the Recording Academy split one web presence into two. Grammy.com would carry
+          awards, music culture and ceremony content. RecordingAcademy.com would carry advocacy,
+          membership and industry policy. The reasoning was that two audiences with different
+          purposes should each get a site that does not make them walk past the other one&rsquo;s
+          content.
         </p>
         <p>
-          It is also the kind of decision that gets made once and then stops being questioned.
-          After the split, engagement stopped behaving the way the design predicted, and the
-          question handed to me was why. The answer had to be specific enough to act on, because
-          the remedies available were narrow: move content between the domains, or change how the
-          two sites link to each other.
+          The question put to me was whether that had worked, and the answer had to resolve to one
+          of three actions: keep the sites separate, merge them back, or do something else. A
+          verdict with no action attached would have been useless, so every metric I chose had to
+          be one capable of moving a decision between those three.
         </p>
       </div>
     </div>
@@ -42,83 +49,72 @@ import CaseStudy from "../../layouts/CaseStudy.astro";
       <div class="prose">
         <h2 class="h-sub">The finding</h2>
         <p>
-          Awards-adjacent archival content was performing significantly better on
-          RecordingAcademy.com than the architecture predicted. Ceremony history, historical
-          acceptance speeches and awards legacy documentation, all of which belong on Grammy.com
-          by the logic of the split, were being actively sought out by RecordingAcademy.com
-          visitors.
+          The split worked, and the evidence is engagement quality rather than traffic volume.
+          Visitors to RecordingAcademy.com bounce less often than visitors to the old combined
+          site did, and they stay materially longer once they arrive.
+        </p>
+
+        <div class="cs-table-wrap">
+          <table>
+            <caption>
+              Engagement across the three states of the property. The combined site is the
+              pre-split baseline, 1,857 days of it, captured the same way throughout.
+            </caption>
+            <thead>
+              <tr><th>Site</th><th>Bounce rate</th><th>Average time on site</th></tr>
+            </thead>
+            <tbody>
+              <tr><th>Combined site, before the split</th><td>41.58%</td><td>1 min 42 sec</td></tr>
+              <tr><th>Grammy.com, after</th><td>40.16%</td><td>1 min 22 sec</td></tr>
+              <tr class="pick"><th>RecordingAcademy.com, after</th><td>33.67%</td><td>2 min 8 sec</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          Age composition points the same way. RecordingAcademy.com draws a higher share of
+          visitors aged 25 to 44, while grammy.com holds more of the 55 to 64 and 65 plus
+          brackets, so the two sites are reaching genuinely different rooms rather than dividing
+          one audience in half.
         </p>
         <p>
-          That is a finding about the assumption rather than about the content. The industry
-          professional audience RecordingAcademy.com was built for has a considerably stronger
-          appetite for awards history than the segmentation accounted for. The split treated
-          professional interest and fan interest as separable. The behaviour says they overlap,
-          and they overlap precisely where the design assumed they would not.
+          The more consequential finding was not about the split at all. Grammy.com averages
+          1,389,590 visitors on the night of the ceremony against 32,388 on an ordinary day, more
+          than forty times the traffic, concentrated into a single night once a year. Secondary
+          spikes cluster a few weeks earlier, around nomination announcements and line-up reveals.
         </p>
 
         <figure class="ra-fig reveal-chart">
           <div class="ra-frame">
-            <svg viewBox="0 0 700 250" preserveAspectRatio="xMidYMid meet" role="img"
-                 aria-label="Two domains side by side. Awards heritage content sits on Grammy.com by the architecture, while visitor demand for it appears on RecordingAcademy.com, and bounce rises at the points where the split severed adjacent content.">
-              <text class="ra-step" x="14" y="18">What the split assumed</text>
-              <text class="ra-step" x="378" y="18">What the traffic showed</text>
+            <svg viewBox="0 0 700 210" preserveAspectRatio="xMidYMid meet" role="img"
+                 aria-label="A bar for an ordinary day at 32,388 visitors is barely visible beside a bar for awards night at 1,389,590 visitors, more than forty times taller.">
+              <text class="ra-step" x="14" y="18">Average daily visitors, grammy.com</text>
 
-              <rect class="ra-dom" x="14" y="34" width="300" height="150" rx="7"></rect>
-              <text class="ra-dom-a" x="34" y="56">grammy.com</text>
-              <text class="ra-dom-b" x="34" y="70">awards, culture, ceremony</text>
-              <rect class="ra-chip on" x="34" y="82" width="122" height="26" rx="4"></rect>
-              <text class="ra-chip-l on" x="95" y="99">Awards heritage</text>
-              <rect class="ra-chip" x="34" y="116" width="122" height="26" rx="4"></rect>
-              <text class="ra-chip-l" x="95" y="133">Ceremony news</text>
+              <line class="ra-axis" x1="150" y1="46" x2="150" y2="168"></line>
 
-              <text class="ra-dom-a" x="180" y="56">recordingacademy.com</text>
-              <text class="ra-dom-b" x="180" y="70">advocacy, membership</text>
-              <rect class="ra-chip" x="180" y="82" width="118" height="26" rx="4"></rect>
-              <text class="ra-chip-l" x="239" y="99">Policy</text>
-              <rect class="ra-chip" x="180" y="116" width="118" height="26" rx="4"></rect>
-              <text class="ra-chip-l" x="239" y="133">Membership</text>
-              <line class="ra-div" x1="168" y1="46" x2="168" y2="172"></line>
+              <text class="ra-cat" x="142" y="76">Ordinary day</text>
+              <rect class="ra-bar dim" x="150" y="60" width="15" height="22" rx="1"></rect>
+              <text class="ra-val" x="175" y="76">32,388</text>
 
-              <rect class="ra-dom" x="378" y="34" width="308" height="150" rx="7"></rect>
-              <text class="ra-dom-a" x="398" y="56">grammy.com</text>
-              <rect class="ra-chip ghost" x="398" y="82" width="118" height="26" rx="4"></rect>
-              <text class="ra-chip-l ghost" x="457" y="99">Awards heritage</text>
+              <text class="ra-cat" x="142" y="140">Awards night</text>
+              <rect class="ra-bar" x="150" y="108" width="500" height="46" rx="1"></rect>
+              <text class="ra-val on" x="640" y="136">1,389,590</text>
 
-              <text class="ra-dom-a" x="546" y="56">recordingacademy.com</text>
-              <rect class="ra-chip on" x="546" y="82" width="122" height="26" rx="4"></rect>
-              <text class="ra-chip-l on" x="607" y="99">Awards heritage</text>
-
-              <path class="ra-flow" d="M520 95 L540 95"></path>
-              <path class="ra-flow" d="M540 95 l-6 -4 m6 4 l-6 4"></path>
-              <text class="ra-note" x="457" y="120">where the split put it</text>
-              <text class="ra-note on" x="607" y="120">where visitors went for it</text>
-
-              <line class="ra-rule" x1="398" y1="140" x2="668" y2="140"></line>
-              <text class="ra-note left" x="398" y="160">Bounce rose in categories whose adjacent</text>
-              <text class="ra-note left" x="398" y="172">content moved to the other domain</text>
-
-              <text class="ra-foot" x="14" y="212">Two independent signals: demand appearing on the unexpected domain, and exits rising</text>
-              <text class="ra-foot" x="14" y="226">at the points where the reorganisation severed a browsing path.</text>
+              <text class="ra-foot" x="14" y="192">Bars to scale. One night draws more than forty times an ordinary day, and it</text>
+              <text class="ra-foot" x="14" y="204">arrives once a year.</text>
             </svg>
           </div>
           <figcaption>
-            The architecture and the behaviour disagree about one content class, and the bounce
-            data disagrees with the architecture in the same place.
+            The engagement question was worth answering. This is the one that decides whether the
+            property has a year.
           </figcaption>
         </figure>
 
         <p>
-          Bounce rate confirmed it from a second direction. Several content categories that
-          engaged well on the unified site showed elevated bounce rates after the split: visitors
-          arriving, failing to find the adjacent content they expected, and leaving. Content had
-          been organised by internal logic, and that reorganisation broke browsing paths real
-          users already had.
-        </p>
-        <p>
-          Two independent signals pointing the same way is what makes this actionable. Demand
-          appearing on the unexpected domain could be explained by search referrals alone. Bounce
-          rising at exactly the points where adjacency was severed is difficult to explain any
-          other way.
+          So the recommendation was to keep the two sites separate and keep tailoring each to the
+          audience it now demonstrably has, while treating year-round engagement on grammy.com as
+          the open problem. The site is excellent at converting one night and has no established
+          reason for anyone to return in the eleven months that follow.
         </p>
       </div>
     </div>
@@ -129,34 +125,36 @@ import CaseStudy from "../../layouts/CaseStudy.astro";
       <div class="prose">
         <h2 class="h-sub">What I did, and the obvious alternative I rejected</h2>
         <p>
-          The available data was page views, session duration, bounce rate, return visitor rate
-          and content click-through, broken out by content category, across the pre-split unified
-          site and the post-split period for each domain.
+          The data was daily web analytics for both properties: visitors, pageviews, sessions,
+          bounced sessions, average session duration, and flags for awards week and awards night.
+          Six years of it for grammy.com from January 2017, and RecordingAcademy.com from the
+          split date of 1 February 2022.
         </p>
         <p>
-          The obvious analysis is a domain comparison: which of the two sites is performing better
-          since the split. I rejected it, because it answers a question nobody can act on.
-          Learning that one domain outperforms the other tells you nothing about which content to
-          move, and moving content was one of only two levers available.
+          The obvious analysis is traffic. Did visitors go up after the split. I rejected it,
+          because on this property traffic measures the ceremony calendar and almost nothing else.
+          A single night moves the annual figure by more than forty times an ordinary day, so any
+          before-and-after comparison of visitor counts mostly reports which side of the window
+          caught more Grammy nights.
         </p>
         <p>
-          So the unit of analysis was the content category rather than the domain, and each
-          category was compared against itself: on the unified site against after the split, and
-          on one domain against the other wherever a category appeared on both. That keeps the
-          comparison like for like and isolates the variable that was actually changed, which was
-          placement and not content.
+          Engagement rates survive that problem, because they are ratios within a session rather
+          than counts of sessions. So the comparison ran on bounce rate, pages per session and
+          average time on site, each computed the same way across all three states of the
+          property, with the pre-split combined site as the baseline. Data capture on grammy.com
+          was unchanged across the split, which is what makes that baseline usable at all.
         </p>
         <p>
-          pandas for loading and cleaning, session-level aggregation by content category, then
-          Plotly for the visuals: time-series engagement lines, category bar comparisons, and a
-          content-category-by-metric heatmap.
+          Of the three, I put the weight on average time on site. Pages per session did move, but
+          it moved in spikes rather than shifting to a new level, and a spike is an event where a
+          level shift is a change in behaviour. Reporting a spiky metric as evidence of permanent
+          improvement is the easiest way to overstate a result, so it was reported and then set
+          aside.
         </p>
         <p>
-          The recommendation followed from that unit of analysis. Redistribute content between the
-          two sites on observed behaviour instead of assumed segmentation, moving awards heritage
-          to RecordingAcademy.com where the data shows genuine demand, and add cross-domain
-          navigation at the points where bounce rose after the split, to repair the exits the
-          separation created.
+          pandas for loading, cleaning and the period splits, and Plotly for the visuals: a daily
+          visitor time series, pages-per-session lines per domain, and a grouped bar of age
+          composition across the two sites.
         </p>
       </div>
     </div>
@@ -167,18 +165,28 @@ import CaseStudy from "../../layouts/CaseStudy.astro";
       <div class="prose">
         <h2 class="h-sub">Assumptions and limitations</h2>
         <p>
-          Engagement data describes what visitors did and not why they did it. Demand for awards
-          heritage on RecordingAcademy.com is visible in the traffic. Whether it comes from
-          members who also follow the ceremony, from search referrals landing on the domain the
-          engine preferred, or from a third source, this data cannot say. Each of those has a
-          different remedy, and separating them would take a referral-source breakdown or a survey.
+          The pre-split baseline is one audience by construction, because the combined site served
+          both. Some of RecordingAcademy.com&rsquo;s better engagement is therefore the arithmetic
+          of a narrower, self-selected audience rather than of a better site. The finding that the
+          split helped is sound. The size of the help is not separable from that selection effect
+          with this data.
         </p>
         <p>
-          The pre-split and post-split windows are not matched on season, and awards content is
-          strongly cyclical. Part of any period-over-period movement belongs to the calendar
-          rather than to the split. The domain-against-domain comparison holds, because the same
-          seasonal effect applies to both after the split, but a single category&rsquo;s before
-          and after difference should not be read as a clean treatment effect.
+          Spikes that do not align with the ceremony calendar are treated as data-collection
+          abnormalities, which is the brief&rsquo;s own instruction. That is a defensible rule and
+          it is still a rule that discards observations, so a real anomaly falling in the same
+          window would have been discarded with them.
+        </p>
+        <p>
+          Age demographics are percentage shares rather than counts, so they describe who each
+          site&rsquo;s visitors are and say nothing about how many. A site can skew younger while
+          reaching fewer young people in total.
+        </p>
+        <p>
+          Nothing here explains why engagement improved. These are session-level aggregates with
+          no content dimension, so the analysis can establish that visitors to
+          RecordingAcademy.com stay longer without identifying what holds them. Answering that
+          would take page-level or category-level data the project did not include.
         </p>
       </div>
     </div>
@@ -195,39 +203,24 @@ import CaseStudy from "../../layouts/CaseStudy.astro";
     border-radius: var(--radius);
     overflow-x: auto;
   }
-  .ra-frame svg { display: block; width: 100%; min-width: 32rem; height: auto; }
+  .ra-frame svg { display: block; width: 100%; min-width: 30rem; height: auto; }
 
   .ra-step {
     font-family: var(--font-mono); font-size: 9px; letter-spacing: .1em;
     text-transform: uppercase; fill: var(--tint);
   }
-  .ra-dom { fill: none; stroke: var(--rule-strong); stroke-width: 1; }
-  .ra-div { stroke: var(--rule-strong); stroke-width: 1; stroke-dasharray: 3 3; }
-  .ra-dom-a { font-family: var(--font-mono); font-size: 9px; fill: var(--ink); }
-  .ra-dom-b {
-    font-family: var(--font-mono); font-size: 7px; letter-spacing: .06em;
-    text-transform: uppercase; fill: var(--ink-faint);
+  .ra-axis { stroke: var(--rule-strong); stroke-width: 1; }
+  .ra-bar { fill: var(--tint); }
+  .ra-bar.dim { fill: var(--tint); opacity: .38; }
+  .ra-cat {
+    font-family: var(--font-mono); font-size: 8.5px; letter-spacing: .05em;
+    text-anchor: end; fill: var(--ink-soft);
   }
-  .ra-chip { fill: none; stroke: var(--rule-strong); stroke-width: 1; }
-  .ra-chip.on { fill: var(--tint-wash); stroke: var(--tint); stroke-width: 1.5; }
-  .ra-chip.ghost { stroke-dasharray: 3 3; }
-  .ra-chip-l {
-    font-family: var(--font-mono); font-size: 8px; text-anchor: middle; fill: var(--ink-soft);
-  }
-  .ra-chip-l.on { fill: var(--tint); }
-  .ra-chip-l.ghost { fill: var(--ink-faint); }
-  .ra-flow { fill: none; stroke: var(--tint); stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
-  .ra-rule { stroke: var(--rule-strong); stroke-width: 1; }
-  .ra-note {
-    font-family: var(--font-mono); font-size: 7px; letter-spacing: .06em;
-    text-transform: uppercase; text-anchor: middle; fill: var(--ink-faint);
-  }
-  .ra-note.on { fill: var(--tint); }
-  .ra-note.left { text-anchor: start; }
+  .ra-val { font-family: var(--font-mono); font-size: 9px; fill: var(--ink-soft); }
+  .ra-val.on { text-anchor: end; fill: var(--g-ivory); }
   .ra-foot {
     font-family: var(--font-mono); font-size: 8px; letter-spacing: .04em; fill: var(--ink-faint);
   }
-  .ra-foot.dim { font-size: 7.5px; opacity: .8; }
   .ra-fig figcaption {
     font-family: var(--font-mono); font-size: var(--step--2); line-height: 1.6;
     color: var(--ink-faint); padding-left: .75rem;
