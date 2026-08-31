@@ -155,11 +155,12 @@ const essays = [
         </p>
         <p class="beat">Its blue is the colour of a night that still has something in it.</p>
         <p>
-          It is called the stone of wisdom, and the half of that claim I have taken to heart is the
-          narrower one. The usual version has it sharpening rational thought, which is the part any
-          competent person can already do. The version I keep is about what comes afterwards: saying
-          the thing you worked out, carrying enough weight that somebody acts on it. Whether or not a
-          person believes a word of that, it is the harder half of the job.
+          It is called the stone of wisdom, and the half of that claim I hold onto is the narrower
+          one. The usual version has it sharpening rational thought, which is the part I already
+          trust myself with. What I keep it for is what comes afterwards, the point at which a
+          finding has to stop belonging to whoever ran the numbers and become something a room will
+          act on. Whether or not a person believes a stone has any bearing on that, it is the harder
+          half, and it is the half I keep choosing.
         </p>
         <p>
           The mark on this site is a stone being cut, and rough gathering into something finished and
@@ -189,6 +190,43 @@ const essays = [
             </li>
           ))}
         </ol>
+      </div>
+    </section>
+
+    <section class="band plated g-beige" style="--plate: var(--g-leaf);">
+      <div class="shell prose">
+        <p class="eyebrow">The throughline</p>
+        <h2 class="words" data-words>I did not set out to have these agree with each other</h2>
+        <p>
+          Matcha taught me to be wary of a result that arrives already looking finished, because I
+          know how much of it was settled long before anyone could see it. The stone I carry is kept
+          for the part that comes after the thinking, when the worked-out thing has to be said with
+          enough weight that somebody moves. And the writing came before any of the analysis, years
+          of learning that a well-made sentence with nothing behind it is worse company than a plain
+          one that means something.
+        </p>
+        <p>
+          Which is more or less a description of what I do for a living. My degree is in Information
+          Systems and my foundation is accounting, and the work I keep choosing sits at the place
+          where a technical system has to turn into a decision a person can act on.
+        </p>
+        <p>
+          In the Spotify case the part I cared most about was never the financial model, and I built
+          the financial model. It was standing between behavioural science, product design and
+          finance, three domains that turned up speaking different languages and disagreeing about
+          what even counted as evidence, and carrying one argument across all of them until a
+          stakeholder could follow it in a single sitting.
+        </p>
+        <p class="beat">
+          I would rather be the person who makes a finding usable than the person who found it first.
+        </p>
+        <p>
+          These three habits are where that came from, and I would keep all of them whether or not
+          anybody was hiring.
+        </p>
+        <p class="closing-out">
+          <a class="cta ghost" href="/work/compass-ai/">The case that argument was built for</a>
+        </p>
       </div>
     </section>
 
@@ -269,4 +307,17 @@ const essays = [
     margin-top: .3rem;
   }
   .essay-note { color: var(--ink-soft); font-size: var(--step--1); margin-top: .45rem; line-height: 1.55; }
+
+  .closing-out { margin-top: .8rem; }
+  .cta {
+    font-family: var(--font-mono); font-size: var(--step--2);
+    letter-spacing: .08em; text-transform: uppercase; text-decoration: none;
+    background: var(--accent-deep); color: var(--g-ivory);
+    border: 1px solid var(--accent-deep); border-radius: 7px;
+    padding: .6rem .95rem; display: inline-block;
+    transition: background .25s ease, border-color .25s ease, color .25s ease;
+  }
+  .cta.ghost { background: transparent; color: var(--ink); border-color: color-mix(in srgb, var(--ink) 34%, transparent); }
+  .cta.ghost:hover { background: var(--accent-wash); border-color: var(--accent); color: var(--accent-deep); }
+  .cta:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 </style>
