@@ -73,6 +73,26 @@ const experience = [
     ],
   },
   {
+    role: "Data and Applied Analytics Trainee",
+    art: "split",
+    artLabel: "Two domains side by side, with awards heritage content shown where the site architecture placed it and where visitors actually went looking for it.",
+    org: "The Global Career Accelerator",
+    period: "June to August 2025",
+    place: "Remote",
+    tint: "method",
+    repo: { label: "Repository", href: "https://github.com/minminchudu/sql-python-analytics-portfolio" },
+    lines: [
+      "Queried 600,000+ enterprise hardware asset records for Intel in SQL, segmenting device lifecycle cohorts across global regions.",
+      "Investigated digital engagement metrics and web session logs for The Recording Academy using Python (pandas, Plotly), diagnosing post-split audience drop-offs to recommend cross-domain content reallocations that boosted user retention.",
+    ],
+    certs: [
+      { label: "Querying Data", img: "/media/badges/querying-data.png", href: "https://www.credential.net/c58faf09-1cb7-4272-8199-6444789a9997" },
+      { label: "Python and Data", img: "/media/badges/python-and-data.png", href: "https://www.credential.net/e73d0c7a-53f9-48f9-a8c0-2112d5df6a02" },
+      { label: "AI Professional Skills", img: "/media/badges/ai-professional.png", href: "https://www.credential.net/120cfe47-0375-46e9-bb79-69696d6d2d84" },
+      { label: "Intercultural Skills", img: "/media/badges/intercultural.png", href: "https://www.credential.net/5da605c5-3744-4899-b420-cbf2ffc39d1c" },
+    ],
+  },
+  {
     role: "Finance Assistant, Department of Radiology",
     art: "roster",
     artLabel: "A grid of budgeted positions where three ghost allocations are struck out and removed.",
@@ -398,7 +418,22 @@ const experience = [
                       {job.href && (
                         <a class="job-link" href={job.href}><span>Read the case study</span></a>
                       )}
-                      {job.repo && (
+                      {job.certs && (
+                    <div class="job-certs">
+                      <p class="job-certs-label">Certified by the programme</p>
+                      <ul class="badges">
+                        {job.certs.map((c) => (
+                          <li>
+                            <a href={c.href} target="_blank" rel="noopener" title={`${c.label} certification, verify on Credential.net`}>
+                              <img src={c.img} width="348" height="292" loading="lazy" decoding="async"
+                                   alt={`${c.label} certification from The Global Career Accelerator`} />
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {job.repo && (
                         <a class="job-link" href={job.repo.href} target="_blank" rel="noopener">
                           <ActionIcon href={job.repo.href} />
                           <span>{job.repo.label}</span>
