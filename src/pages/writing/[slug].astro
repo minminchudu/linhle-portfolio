@@ -22,7 +22,7 @@ const meta = {
   },
   "grave-of-the-fireflies": {
     title: "A Film Analysis: Grave of the Fireflies",
-    standfirst: "Two children and a war with no interest in them. Nothing in it ever jumps at you, and it takes years to put down.",
+    standfirst: "Two siblings surviving the firebombing of Kobe, and the small light they keep going in the shelter.",
     where: "Published in Translingual, Issue 2",
     year: "2022",
   },
@@ -61,9 +61,11 @@ const refs = entry.refs;
     <section class="band plated g-beige" style="--plate: var(--g-ivory);">
       <div class="shell">
         <div class="ep-body">
-          {prose.map((p, i) => (
-            <p class={i === 0 && !/^[“"]/.test(p) ? "first" : (i === 0 ? "epigraph" : undefined)}>{p}</p>
-          ))}
+          {prose.map((p, i) => {
+            const epi = i === 0 && /^[“"]/.test(p);
+            const lead = i === (/^[“"]/.test(prose[0]) ? 1 : 0);
+            return <p class={epi ? "epigraph" : (lead ? "first" : undefined)}>{p}</p>;
+          })}
         </div>
 
         {refs.length > 0 && (
