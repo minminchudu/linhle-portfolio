@@ -117,6 +117,12 @@ const essays = [
           low ceiling on how badly it can go, which is a rare combination and a restful one, and I
           have stopped trying to justify why twenty minutes of it resets me.
         </p>
+        <figure class="shot">
+          <img src="/media/rough/matcha-whisk.jpg" width="1400" height="933" loading="lazy" decoding="async"
+               alt="A bamboo chasen lifted out of a white ceramic bowl, matcha whisked to a flat green surface." />
+          <figcaption>The whisk is bamboo, cut into a hundred tines, and it is the only tool in the process I own.</figcaption>
+        </figure>
+
         <p>
           Then the drink does something coffee has never managed. Matcha carries L-theanine
           alongside its caffeine, so what arrives is clarity rather than a jolt: alert, level, and
@@ -158,6 +164,12 @@ const essays = [
           in direct light lapis throws small gold sparks that nothing else does.
         </p>
         <p class="beat">The pyrite is technically an impurity. It is also the entire reason it looks like a night sky.</p>
+        <figure class="shot">
+          <img src="/media/rough/lapis-lazuli.jpg" width="1400" height="933" loading="lazy" decoding="async"
+               alt="Tumbled lapis lazuli stones, deep blue with white calcite veining and small flecks of gold pyrite." />
+          <figcaption>Blue lazurite, white calcite, and the gold pyrite that tells it apart from sodalite.</figcaption>
+        </figure>
+
         <p>
           Which brings me to why I keep it on me rather than on a shelf. Lapis is called the stone of
           wisdom, and most versions of that claim stop at rational thinking, which is the part I can
@@ -290,6 +302,20 @@ const essays = [
     font-size: var(--step-1);
     color: var(--accent-deep);
     line-height: 1.3;
+  }
+
+  .shot { margin: 1.8rem 0 2rem; display: flex; flex-direction: column; gap: .7rem; }
+  .shot img {
+    width: 100%; height: auto; display: block;
+    border: 1px solid var(--rule); border-radius: var(--radius);
+  }
+  .shot figcaption {
+    font-family: var(--font-mono);
+    font-size: var(--step--2);
+    line-height: 1.6;
+    color: var(--ink-faint);
+    padding-left: .75rem;
+    border-left: 2px solid var(--accent-line);
   }
 
   .fig { margin: 1.6rem 0 1.8rem; }
