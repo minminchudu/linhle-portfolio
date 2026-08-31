@@ -49,16 +49,15 @@ const year = new Date().getFullYear();
 
   <header class="topbar">
     <div class="shell topbar-inner">
-      <a class="wordmark" href="/">Linh (Min) Le</a>
+      <a class="wordmark" href="/">
+        <svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true" focusable="false"
+             fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2.4 6.9 8 2.3l5.6 4.6"/>
+          <path d="M3.8 8v5.3h8.4V8"/>
+        </svg>
+        <span>Linh (Min) Le</span>
+      </a>
       <nav aria-label="Sections">
-        <a class="nav-home" href="/" aria-label="Home">
-          <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true" focusable="false"
-               fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M2.4 6.9 8 2.3l5.6 4.6"/>
-            <path d="M3.8 8v5.3h8.4V8"/>
-          </svg>
-          <span>Home</span>
-        </a>
         <a class="nav-resume" href="/media/Linh_Le_Resume.pdf" target="_blank" rel="noopener">Resume</a>
         <a href="/#work">Projects</a>
         <a href="/#experience">Experience</a>
@@ -424,12 +423,16 @@ const year = new Date().getFullYear();
   }
   .topbar-inner {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     justify-content: space-between;
     gap: 1.5rem;
     padding-block: 0.85rem;
+    max-width: 82rem;
   }
   .wordmark {
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
     font-family: var(--font-display);
     font-size: var(--step-0);
     font-weight: 500;
@@ -437,21 +440,9 @@ const year = new Date().getFullYear();
     color: var(--ink);
     text-decoration: none;
   }
+  .wordmark svg { flex: none; color: var(--accent); opacity: .9; transition: transform .25s ease, opacity .25s ease; }
   .wordmark:hover { color: var(--accent-deep); }
-
-  .topbar nav .nav-home {
-    display: inline-flex;
-    align-items: center;
-    gap: .34rem;
-    color: var(--ink);
-    border: 1px solid color-mix(in srgb, var(--ink) 26%, transparent);
-    border-radius: 5px;
-    padding: .22rem .55rem;
-    margin-right: .25rem;
-  }
-  .topbar nav .nav-home:hover { color: var(--accent-deep); border-color: var(--accent); background: var(--accent-wash); }
-  .topbar nav .nav-home::after { display: none; }
-  .topbar nav .nav-home svg { flex: none; opacity: .85; }
+  .wordmark:hover svg { opacity: 1; transform: translateY(-1px); }
 
   .topbar nav .nav-resume {
     color: var(--accent-deep);
@@ -517,8 +508,6 @@ const year = new Date().getFullYear();
   @media (max-width: 34rem) {
     .topbar-inner { flex-direction: column; align-items: flex-start; gap: .6rem; }
     .topbar nav { width: 100%; gap: .7rem; }
-    .topbar nav .nav-resume, .topbar nav .nav-home { margin-right: 0; }
-    .topbar nav .nav-home span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
-    .topbar nav .nav-home { padding: .22rem .4rem; }
+    .topbar nav .nav-resume { margin-right: 0; }
   }
 </style>
