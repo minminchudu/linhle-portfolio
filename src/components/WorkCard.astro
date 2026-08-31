@@ -9,6 +9,7 @@ interface Props {
   finding: string;
   project: string;
   context: string;
+  role?: string;
   period: string;
   tint: "code" | "method" | "ai" | "viz" | "finance" | "research";
   body: string;
@@ -21,7 +22,7 @@ interface Props {
 }
 
 const {
-  finding, project, context, period, tint, body,
+  finding, project, context, role, period, tint, body,
   image, imageAlt = "", metrics = [], links = [], note, featured = false,
 } = Astro.props;
 ---
@@ -58,6 +59,7 @@ const {
 
     <h3 class="finding">{finding}</h3>
     <p class="context">{context}</p>
+    {role && <p class="role"><span>{role}</span></p>}
     <p class="body">{body}</p>
 
     {metrics.length > 0 && (
@@ -142,7 +144,20 @@ const {
   .period { color: var(--ink-faint); }
 
   .finding { font-size: var(--step-1); line-height: 1.2; }
-  .context { color: var(--ink-soft); font-size: var(--step--1); font-style: italic; }
+  .context { color: var(--ink-soft); font-size: var(--step--1); }
+  .role { margin-top: .3rem; }
+  .role span {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: var(--step--2);
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--tint);
+    background: var(--tint-wash);
+    border: 1px solid color-mix(in srgb, var(--tint) 40%, transparent);
+    border-radius: 5px;
+    padding: .22rem .55rem;
+  }
   .body { color: var(--ink-soft); font-size: var(--step--1); }
 
   .metrics {
