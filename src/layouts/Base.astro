@@ -25,12 +25,19 @@ const year = new Date().getFullYear();
   <meta property="og:type" content="website" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <script is:inline>
-    (function () {
+    /* A client-side navigation swaps <html>'s attributes to match the newly
+       fetched page's markup, which carries no data-theme since it is only
+       ever set here. That wiped a chosen theme back to the OS default on
+       every in-app link. astro:after-swap fires before the new page paints,
+       so reapplying there corrects it with no visible flash. */
+    function applyStoredTheme() {
       try {
         var t = localStorage.getItem("theme");
         if (t === "dark" || t === "light") document.documentElement.setAttribute("data-theme", t);
       } catch (e) {}
-    })();
+    }
+    applyStoredTheme();
+    document.addEventListener("astro:after-swap", applyStoredTheme);
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -134,10 +141,15 @@ const year = new Date().getFullYear();
   </script>
 
   <script is:inline>
-    (function () {
+    /* The button is a fresh DOM node after every client-side navigation
+       (it lives in the swapped body), so a listener bound once at initial
+       load stopped firing after the first in-app link. Rebind on
+       astro:page-load, same as the reveal/count-up script below. */
+    function initThemeToggle() {
       var root = document.documentElement;
       var btn = document.getElementById("theme-toggle");
-      if (!btn) return;
+      if (!btn || btn.dataset.themeBound === "1") return;
+      btn.dataset.themeBound = "1";
       function label() {
         var dark = root.getAttribute("data-theme") === "dark";
         btn.setAttribute("aria-label", dark ? "Switch to light theme" : "Switch to dark theme");
@@ -150,7 +162,9 @@ const year = new Date().getFullYear();
         try { localStorage.setItem("theme", next); } catch (e) {}
         label();
       });
-    })();
+    }
+    initThemeToggle();
+    document.addEventListener("astro:page-load", initThemeToggle);
   </script>
 
   <script is:inline>
