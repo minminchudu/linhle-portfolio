@@ -145,11 +145,14 @@ const links = [
             origin region and service level returned nothing significant, which supported treating the
             <strong>4.68%</strong> of missing values as missing completely at random and imputing them
             from actual cost behind a transparency flag.
- Three distinct leakage routes came out of the
-            feature set, and the price of removing them is visible in the numbers. A model retaining the
-            proxy scored <strong>RMSE $41.33</strong>; the clean 93-feature production model scored
-            <strong>$61.55</strong> with <strong>R&sup2; 0.9024</strong>. The version that looked worse
-            on paper was the only one that would survive live traffic.
+          </p>
+          <p>
+            Three distinct leakage routes came out of the feature set. Rebuilding around them meant
+            directing AI coding agents through the fix rather than writing every line by hand, then
+            checking each version against the same diagnostic tests before trusting it. A model
+            retaining the proxy scored <strong>RMSE $41.33</strong>; the clean 93-feature production
+            model scored <strong>$61.55</strong> with <strong>R&sup2; 0.9024</strong>. The version
+            that looked worse on paper was the only one that would survive live traffic.
           </p>
           <Figure
             src="/figures/iterlight-residuals-by-segment.png"

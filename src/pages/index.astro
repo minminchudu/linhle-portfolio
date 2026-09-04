@@ -28,7 +28,7 @@ const toolkit = [
     body: "OLS and fixed-effects regression, experiment design and pre-registration, power analysis, Bonferroni correction, difference-in-differences, k-means clustering, forecasting with holdout validation.",
     tags: ["Regression", "A/B testing", "Causal inference", "Clustering"] },
   { tint: "ai", label: "AI workflow",
-    body: "Framing the question and choosing the method before delegating, defining what counts as a result in advance, and verifying output against the data.",
+    body: "Directing AI coding agents on real deliverables, then checking their output the way any other analysis gets checked. On IterLight, that caught a shipping-cost model computed after the fact, at an impossible r = 0.9999.",
     tags: ["Claude Code", "ChatGPT", "Antigravity"] },
   { tint: "viz", label: "Visualization",
     body: "Power BI with DAX, Tableau, Google Looker with LookML, Plotly, and hand-built HTML and JavaScript dashboards.",
@@ -129,6 +129,8 @@ const experience = [
         <p class="lead">
           Analysis across healthcare finance, payments, e-commerce and retail, with an
           accounting foundation underneath it and information systems training on top.
+          Some of that work runs through AI agents I direct, and none of it ships until
+          I have checked what they produced against the data myself.
         </p>
         <div class="chips">
           {domains.map((d) => <span class={`chip tint-${d.tint}`}>{d.label}</span>)}
