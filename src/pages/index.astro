@@ -131,8 +131,7 @@ const experience = [
           Accounting taught me to look closely at what sits behind a number.
           Information systems widened that view to the people, processes, and decisions
           around it. AI gives me more ways to investigate a question, compare
-          possibilities, and find connections I might otherwise miss. I know a finding
-          is ready when I can show the evidence and assumptions behind it.
+          possibilities, and find connections I might otherwise miss.
         </p>
         <div class="chips">
           {domains.map((d) => <span class={`chip tint-${d.tint}`}>{d.label}</span>)}
@@ -571,7 +570,7 @@ const experience = [
 
   .hero {
     --hero-col: min(58rem, 100%);
-    padding-block: clamp(.3rem, .5vw, .5rem) clamp(.35rem, .6vw, .55rem);
+    padding-block: clamp(.9rem, 1.5vw, 1.3rem) clamp(1rem, 1.8vw, 1.5rem);
     min-height: calc(100svh - 3.6rem);
     display: flex;
     align-items: center;
@@ -643,20 +642,20 @@ const experience = [
   /* the plate bleeds 1.1rem past the mark's own box on a fixed rem, not vw,
      so this floor has to clear that regardless of viewport width or the
      eyebrow collides with the decorative plate underneath it. */
-  .hero-text { display: flex; flex-direction: column; gap: .12rem; margin-top: clamp(1.7rem, 1.5vw, 1.9rem); }
+  .hero-text { display: flex; flex-direction: column; gap: .4rem; margin-top: clamp(1.9rem, 1.7vw, 2.2rem); }
   .hero-text h1 { font-weight: 400; }
   .lead-hook {
     max-width: var(--hero-col);
     font-family: var(--font-display);
     font-weight: 500;
     font-size: clamp(1.32rem, 1.14rem + 0.6vw, 1.7rem);
-    line-height: 1.22;
+    line-height: 1.32;
     color: var(--ink);
     letter-spacing: -.01em;
   }
-  .lead { max-width: var(--hero-col); color: var(--ink-soft); font-size: var(--step-1); line-height: 1.22; }
+  .lead { max-width: var(--hero-col); color: var(--ink-soft); font-size: var(--step-1); line-height: 1.42; }
 
-  .chips { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .05rem; }
+  .chips { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .25rem; }
   .chip {
     font-family: var(--font-mono); font-size: var(--step--2);
     letter-spacing: .05em;
@@ -665,7 +664,7 @@ const experience = [
     border: 1px solid var(--tint-wash);
   }
 
-  .hero-cta { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .12rem; }
+  .hero-cta { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .4rem; }
 
   .narrative { position: relative; }
   .narrative-inner {
