@@ -545,14 +545,17 @@ const experience = [
     <div class="shell">
       <div class="closing">
         <p class="eyebrow">Get in touch</p>
-        <h2 class="words" data-words>Available for analyst internships and co-ops from Summer 2027.</h2>
+        <h2 class="words closing-h2" data-words>Available for analyst internships and co-ops from Summer 2027.</h2>
         <p class="closing-note">
           Accounting taught me to look closely at what sits behind a number. Information Systems
-          widened that view to the people, processes, and decisions around it. So far the work
-          has been in healthcare finance, payments, e-commerce, retail and product research. The
-          assignment has been the same in each: a number was about to drive a decision, and
-          someone had to establish whether it deserved to. That is the question I ask first, and
-          in healthcare and finance it is the one that costs the most to leave unasked.
+          widened that view to the people, processes, and decisions around it.
+        </p>
+        <p class="closing-note">
+          So far the work has been in healthcare finance, payments, e-commerce, retail and
+          product research. The assignment has been the same in each: a number was about to drive
+          a decision, and someone had to establish whether it deserved to. That is the question I
+          ask first, and in healthcare and finance it is the one that costs the most to leave
+          unasked.
         </p>
         <div class="closing-links">
           <a class="cta" href="mailto:minalystem@gmail.com">minalystem@gmail.com</a>
@@ -613,6 +616,10 @@ const experience = [
   .cta.ghost:hover { background: var(--accent-wash); border-color: var(--accent); color: var(--accent-deep); }
 
   .closing { display: flex; flex-direction: column; gap: .75rem; max-width: var(--measure); }
+  /* the closing copy stays at a comfortable reading measure, but the headline
+     is display type and reads better spread wider than that column, so it
+     opts out of the flex stretch and takes its own width. */
+  .closing-h2 { align-self: flex-start; width: min(56rem, 82vw); max-width: none; }
   .closing-note { color: var(--ink-soft); }
   .closing-links { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .5rem; }
 
