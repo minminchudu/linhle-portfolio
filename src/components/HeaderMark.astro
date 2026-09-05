@@ -63,14 +63,17 @@ const frags = targets.map(([tx, ty], i) => ({
   hot: i % 6 === 0,
 }));
 
-/* the tail: a row of points closing up toward the stone, and the line in */
-const tailDots = Array.from({ length: 16 }, (_, i) => {
-  const t = i / 15;
+/* the tail: a scattered field closing up toward the stone, and the line in.
+   Wide and loose at the start, the same way the data itself starts as noise,
+   narrowing to a single thread by the time it reaches the cut. */
+const tailDots = Array.from({ length: 30 }, (_, i) => {
+  const t = i / 29;
+  const spread = 62 * Math.pow(1 - t, 1.6) + 2;
   return {
-    x: Math.round(96 + Math.pow(t, 0.72) * 452),
-    y: Math.round(113 + Math.sin(i * 1.9) * (16 - t * 15)),
-    r: (2.6 - t * 1.1).toFixed(2),
-    o: (0.3 + t * 0.55).toFixed(2),
+    x: Math.round(40 + Math.pow(t, 0.78) * 540),
+    y: Math.round(113 + (rnd() - 0.5) * 2 * spread),
+    r: (1.7 + rnd() * 1.1 - t * 0.5).toFixed(2),
+    o: Math.min(0.85, 0.22 + t * 0.42 + rnd() * 0.16).toFixed(2),
   };
 });
 ---
