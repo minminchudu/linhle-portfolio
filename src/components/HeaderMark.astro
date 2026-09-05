@@ -63,15 +63,19 @@ const frags = targets.map(([tx, ty], i) => ({
   hot: i % 6 === 0,
 }));
 
-/* the tail: a scattered field closing up toward the stone, and the line in.
-   Wide and loose at the start, the same way the data itself starts as noise,
-   narrowing to a single thread by the time it reaches the cut. */
+/* the tail: two mirrored streams closing up toward the stone, and the line
+   in. Points alternate above and below center rather than scattering freely,
+   which is what reads as flow instead of noise; each side's distance from
+   center still decays as it nears the cut, so the two threads converge into
+   one point right where the stone begins. */
 const tailDots = Array.from({ length: 30 }, (_, i) => {
   const t = i / 29;
-  const spread = 62 * Math.pow(1 - t, 1.6) + 2;
+  const envelope = 62 * Math.pow(1 - t, 1.6) + 2;
+  const side = i % 2 === 0 ? 1 : -1;
+  const reach = 0.35 + rnd() * 0.65;
   return {
     x: Math.round(40 + Math.pow(t, 0.78) * 540),
-    y: Math.round(113 + (rnd() - 0.5) * 2 * spread),
+    y: Math.round(113 + side * envelope * reach),
     r: (1.7 + rnd() * 1.1 - t * 0.5).toFixed(2),
     o: Math.min(0.85, 0.22 + t * 0.42 + rnd() * 0.16).toFixed(2),
   };
