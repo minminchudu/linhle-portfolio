@@ -93,9 +93,9 @@ const tailDots = Array.from({ length: 30 }, (_, i) => {
 
   <g class="tail">
     {tailDots.map((d) => (
-      <circle cx={d.x} cy={d.y} r={d.r} fill="var(--accent-mid)" opacity={d.o}/>
+      <circle cx={d.x} cy={d.y} r={d.r} fill="var(--line-deep)" opacity={d.o}/>
     ))}
-    <line x1="556" y1="113" x2="580" y2="113" stroke="var(--accent-mid)" stroke-width="1.1" opacity=".6"/>
+    <line x1="556" y1="113" x2="580" y2="113" stroke="var(--line-deep)" stroke-width="1.1" opacity=".7"/>
   </g>
 
   <g class="field" font-family="var(--font-mono)">
@@ -148,7 +148,10 @@ const tailDots = Array.from({ length: 30 }, (_, i) => {
   .mark { width: 100%; height: auto; overflow: visible; --cycle: 18s; }
 
   /* The tail never leaves. It is the line the work travels along. */
-  .tail { opacity: .8; }
+  /* line-deep against the pale plate is what gives the outline its contrast;
+     the tail borrows the same color for the same reason, rather than the
+     mid-tone accent, which reads as barely-there against this background. */
+  .tail { opacity: 1; }
 
   /* ---------- the data ---------- */
   .frag {
