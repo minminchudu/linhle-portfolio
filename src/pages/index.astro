@@ -118,14 +118,6 @@ const experience = [
   description="Data, business and BI analysis across healthcare finance, payments, e-commerce and retail. Python, SQL, Power BI, Tableau."
 >
   <section class="hero g-ivory">
-    <div id="_debug-size" style="position:fixed;top:8px;right:8px;z-index:9999;background:#000;color:#0f0;font:14px monospace;padding:6px 10px;border-radius:6px;"></div>
-    <script>
-      (function(){
-        var el = document.getElementById('_debug-size');
-        function upd(){ if (el) el.textContent = innerWidth + ' x ' + innerHeight; }
-        upd(); addEventListener('resize', upd);
-      })();
-    </script>
     <div class="shell">
       <div class="hero-mark" data-float="14"><HeaderMark /></div>
       <div class="hero-text">
@@ -134,12 +126,9 @@ const experience = [
         <p class="typer" data-typer={JSON.stringify(typedLines)}>
           <span class="typed">{typedLines[0]}</span><span class="tcaret" aria-hidden="true"></span>
         </p>
-        <p class="lead-hook">I use data and AI to look beyond the first answer.</p>
         <p class="lead">
-          Accounting taught me to look closely at what sits behind a number.
-          Information systems widened that view to the people, processes, and decisions
-          around it. AI gives me more ways to investigate a question, compare
-          possibilities, and find connections I might otherwise miss.
+          Analysis across healthcare finance, payments, e-commerce and retail, with an
+          accounting foundation underneath it and information systems training on top.
         </p>
         <div class="chips">
           {domains.map((d) => <span class={`chip tint-${d.tint}`}>{d.label}</span>)}
@@ -577,8 +566,7 @@ const experience = [
 <style>
 
   .hero {
-    --hero-col: min(58rem, 100%);
-    padding-block: clamp(.9rem, 1.5vw, 1.3rem) clamp(1rem, 1.8vw, 1.5rem);
+    padding-block: clamp(1.25rem, 2.4vw, 2.1rem) clamp(1.5rem, 3vw, 2.4rem);
     min-height: calc(100svh - 3.6rem);
     display: flex;
     align-items: center;
@@ -646,24 +634,12 @@ const experience = [
     vertical-align: -.16em;
     background: var(--accent);
   }
-  .hero-mark { max-width: var(--hero-col); margin-inline: 0; opacity: .95; }
-  /* the plate bleeds 1.1rem past the mark's own box on a fixed rem, not vw,
-     so this floor has to clear that regardless of viewport width or the
-     eyebrow collides with the decorative plate underneath it. */
-  .hero-text { display: flex; flex-direction: column; gap: .4rem; margin-top: clamp(1.9rem, 1.7vw, 2.2rem); }
+  .hero-mark { max-width: min(46rem, 100%); margin-inline: 0; opacity: .95; }
+  .hero-text { display: flex; flex-direction: column; gap: .6rem; margin-top: clamp(.9rem, 2vw, 1.5rem); }
   .hero-text h1 { font-weight: 400; }
-  .lead-hook {
-    max-width: var(--hero-col);
-    font-family: var(--font-display);
-    font-weight: 500;
-    font-size: clamp(1.32rem, 1.14rem + 0.6vw, 1.7rem);
-    line-height: 1.32;
-    color: var(--ink);
-    letter-spacing: -.01em;
-  }
-  .lead { max-width: var(--hero-col); color: var(--ink-soft); font-size: var(--step-1); line-height: 1.42; }
+  .lead { max-width: 54ch; color: var(--ink-soft); font-size: var(--step-1); line-height: 1.5; }
 
-  .chips { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .25rem; }
+  .chips { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .2rem; }
   .chip {
     font-family: var(--font-mono); font-size: var(--step--2);
     letter-spacing: .05em;
@@ -672,7 +648,7 @@ const experience = [
     border: 1px solid var(--tint-wash);
   }
 
-  .hero-cta { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .4rem; }
+  .hero-cta { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .5rem; }
 
   .narrative { position: relative; }
   .narrative-inner {
