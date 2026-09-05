@@ -118,6 +118,14 @@ const experience = [
   description="Data, business and BI analysis across healthcare finance, payments, e-commerce and retail. Python, SQL, Power BI, Tableau."
 >
   <section class="hero g-ivory">
+    <div id="_debug-size" style="position:fixed;top:8px;right:8px;z-index:9999;background:#000;color:#0f0;font:14px monospace;padding:6px 10px;border-radius:6px;"></div>
+    <script>
+      (function(){
+        var el = document.getElementById('_debug-size');
+        function upd(){ if (el) el.textContent = innerWidth + ' x ' + innerHeight; }
+        upd(); addEventListener('resize', upd);
+      })();
+    </script>
     <div class="shell">
       <div class="hero-mark" data-float="14"><HeaderMark /></div>
       <div class="hero-text">
