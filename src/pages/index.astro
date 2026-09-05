@@ -570,7 +570,8 @@ const experience = [
 <style>
 
   .hero {
-    padding-block: clamp(.7rem, 1.1vw, 1.05rem) clamp(.8rem, 1.4vw, 1.2rem);
+    --hero-col: min(58rem, 100%);
+    padding-block: clamp(.55rem, .9vw, .85rem) clamp(.65rem, 1.1vw, 1rem);
     min-height: calc(100svh - 3.6rem);
     display: flex;
     align-items: center;
@@ -638,14 +639,14 @@ const experience = [
     vertical-align: -.16em;
     background: var(--accent);
   }
-  .hero-mark { max-width: min(46rem, 100%); margin-inline: 0; opacity: .95; }
+  .hero-mark { max-width: var(--hero-col); margin-inline: 0; opacity: .95; }
   /* the plate bleeds 1.1rem past the mark's own box on a fixed rem, not vw,
      so this floor has to clear that regardless of viewport width or the
      eyebrow collides with the decorative plate underneath it. */
-  .hero-text { display: flex; flex-direction: column; gap: .34rem; margin-top: clamp(1.65rem, 1.5vw, 1.9rem); }
+  .hero-text { display: flex; flex-direction: column; gap: .26rem; margin-top: clamp(1.65rem, 1.5vw, 1.9rem); }
   .hero-text h1 { font-weight: 400; }
   .lead-hook {
-    max-width: 60ch;
+    max-width: var(--hero-col);
     font-family: var(--font-display);
     font-weight: 500;
     font-size: clamp(1.32rem, 1.14rem + 0.6vw, 1.7rem);
@@ -653,7 +654,7 @@ const experience = [
     color: var(--ink);
     letter-spacing: -.01em;
   }
-  .lead { max-width: 78ch; color: var(--ink-soft); font-size: var(--step-1); line-height: 1.36; }
+  .lead { max-width: var(--hero-col); color: var(--ink-soft); font-size: var(--step-1); line-height: 1.3; }
 
   .chips { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .1rem; }
   .chip {
